@@ -1,3 +1,59 @@
+# Build outputs
 build/
-.vscode/
+build-*/
+cmake-build-*/
+out/
+dist/
+
+# CMake / Ninja
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+compile_commands.json
+build.ninja
+.ninja_deps
+.ninja_log
+
+# Pico SDK generated
+*.uf2
+*.elf
+*.bin
+*.hex
+*.dis
+*.map
+*.pio
+
+# Tool artifacts
+*.log
+*.tmp
+*.bak
 *.swp
+*.swo
+*.orig
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# VS Code / IDE
+.vscode/
+.idea/
+*.code-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Experiment raw dumps / local captures
+results/raw/
+results/tmp/
+
+# Optional local environment files
+.env
+.env.*
+
+# WSL / local scratch
+scratch/
+local/

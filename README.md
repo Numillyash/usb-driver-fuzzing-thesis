@@ -1,126 +1,124 @@
-# RP2040 portable environment for WSL + Docker Desktop
+# usb-driver-fuzzing-thesis
 
-Переносимый шаблон окружения для **Waveshare RP2040 Zero** и других RP2040-плат на базе **Pico SDK**.
+Основной приватный репозиторий ВКР по теме аппаратного фаззинга и исследований USB-драйверов.
 
-## Что внутри
+## Что это
 
-- `docker/Dockerfile` — воспроизводимый build image
-- `compose.yaml` — запуск dev-контейнера
-- `.devcontainer/devcontainer.json` — открытие проекта прямо в VS Code
-- `firmware/` — минимальный проект Pico SDK
-- `tools/build-container.sh` — сборка из WSL в контейнере
-- `tools/shell.sh` — интерактивная shell-сессия в контейнере
-- `tools/flash-windows.ps1` — прошивка `.uf2` с Windows-хоста
-- `tools/flash-from-wsl.sh` — вызов Windows-прошивки прямо из WSL
-- `tools/flash-linux.sh` — прошивка на обычном Linux-хосте
+Репозиторий объединяет:
 
-## Архитектура
+- переносимое окружение сборки для RP2040 на базе **WSL Ubuntu + Docker Desktop + Pico SDK**;
+- firmware для микроконтроллерных плат, используемых в экспериментах;
+- вспомогательные скрипты сборки, прошивки и запуска;
+- материалы ВКР, заметки, постановки экспериментов и результаты.
 
-- **Сборка** выполняется в контейнере.
-- **Прошивка** выполняется с хоста через UF2 (`RPI-RP2`).
-- Код лучше хранить **внутри Linux FS WSL**, например в `~/work/...`, а не в `C:\...`.
+Текущий базовый контур уже проверен end-to-end:
 
-## 0. Что поставить на ноуте
+- сборка firmware в Docker-контейнере;
+- выпуск `.uf2`-артефакта;
+- прошивка платы с хоста;
+- загрузка прошивки на **Waveshare RP2040 Zero**;
+- подъем USB CDC serial и успешный runtime smoke-test.
 
-### Windows
+## Текущее состояние
 
-1. Обновить WSL:
-   ```powershell
-   wsl --update
-   ```
-2. Поставить Docker Desktop.
-3. В Docker Desktop включить:
-   - `Use WSL 2 based engine`
-   - `Settings -> Resources -> WSL Integration -> Ubuntu = ON`
+На текущем этапе репозиторий используется как **основная исследовательская и инженерная база** для ВКР. В нем будет развиваться несколько направлений одновременно:
 
-### В Ubuntu (WSL)
+1. **Firmware layer** — прошивки для RP2040 и, при необходимости, других плат.
+2. **Tooling layer** — reproducible build environment, devcontainer, Docker, host-side tooling.
+3. **Experiment layer** — сценарии фаззинга, тестовые кейсы, артефакты экспериментов.
+4. **Documentation layer** — материалы ВКР, заметки, методика, промежуточные выводы.
 
-```bash
-sudo apt update
-sudo apt install -y git ca-certificates curl unzip zip make
+## Архитектура окружения
+
+Принятая схема:
+
+- **сборка** выполняется в Docker;
+- **исходники** хранятся в Linux filesystem внутри WSL;
+- **прошивка** выполняется с хоста через UF2/BOOTSEL;
+- **USB passthrough в контейнер не требуется**.
+
+Это даёт:
+
+- воспроизводимую сборку;
+- переносимость между машинами;
+- минимизацию зависимости от локально установленного toolchain;
+- простой и устойчивый процесс прошивки RP2040.
+
+## Проверенный baseline
+
+На стенде уже подтверждено:
+
+- `docker version` из WSL работает;
+- `docker compose version` работает;
+- контейнерная сборка проходит;
+- `pico-sdk` корректно настраивается под `waveshare_rp2040_zero`;
+- генерируется `portable_demo.uf2`;
+- прошивка через host-side script проходит успешно;
+- плата определяется в Windows как `COM`-устройство;
+- runtime smoke-test выдаёт строку:
+
+```text
+portable_demo: RP2040 Zero is alive
 ```
 
-Проверь Docker из WSL:
+## Структура репозитория
 
-```bash
-docker version
-docker compose version
+```text
+usb-driver-fuzzing-thesis/
+├─ docker/
+│  └─ Dockerfile
+├─ .devcontainer/
+│  └─ devcontainer.json
+├─ firmware/
+│  ├─ CMakeLists.txt
+│  └─ src/
+├─ tools/
+│  ├─ build-container.sh
+│  ├─ shell.sh
+│  ├─ flash-from-wsl.sh
+│  ├─ flash-windows.ps1
+│  └─ flash-linux.sh
+├─ docs/
+│  ├─ thesis/
+│  ├─ notes/
+│  └─ references/
+├─ experiments/
+├─ results/
+├─ scripts/
+├─ compose.yaml
+├─ .gitignore
+└─ README.md
 ```
 
-## 1. Клонирование/размещение проекта
+## Быстрый старт
 
-Храни проект в Linux FS:
-
-```bash
-mkdir -p ~/work
-cd ~/work
-# сюда либо git clone, либо cp -r
-```
-
-## 2. Первая сборка
+### 1. Сборка
 
 ```bash
-cd ~/work/rp2040-portable-env
-chmod +x tools/*.sh
 ./tools/build-container.sh
 ```
 
-Артефакты появятся в `build/`, включая `portable_demo.uf2`.
+### 2. Прошивка RP2040 через BOOTSEL
 
-## 3. Прошивка платы из WSL
-
-1. Зажми **BOOT** на плате.
-2. Подключи USB.
-3. Отпусти кнопку, когда появится накопитель `RPI-RP2`.
-4. Выполни:
+Подключить плату в режиме `BOOTSEL`, затем:
 
 ```bash
 ./tools/flash-from-wsl.sh
 ```
 
-## 4. Прошивка платы напрямую из Windows PowerShell
+### 3. Проверка runtime
 
-```powershell
-powershell -ExecutionPolicy Bypass -File .\tools\flash-windows.ps1 -Uf2Path .\build\portable_demo.uf2
-```
+После прошивки устройство должно подняться как USB CDC serial, а тестовая прошивка — выводить heartbeat-сообщения.
 
-## 5. Вход в контейнер руками
+## Ближайшие шаги
 
-```bash
-./tools/shell.sh
-```
+- превратить `portable_demo` в полноценный smoke-test firmware;
+- добавить команды `help`, `ping`, `info`, `reboot` по serial;
+- добавить LED/self-test для платы;
+- перенести в репозиторий реальный код экспериментов ВКР;
+- оформить разделы `docs/`, `experiments/`, `results/`;
+- при необходимости подключить CI для headless build.
 
-После входа:
+## Статус
 
-```bash
-cmake -S firmware -B build -G Ninja -DPICO_BOARD=waveshare_rp2040_zero -DCMAKE_BUILD_TYPE=Debug
-cmake --build build -j
-```
-
-## 6. VS Code / Dev Containers
-
-Открой папку проекта через VS Code из WSL:
-
-```bash
-code .
-```
-
-Потом выбери **Reopen in Container**.
-
-## 7. Если понадобится USB/serial/debug из WSL
-
-Базовый шаблон не зависит от USB passthrough. Но если потом захочешь:
-- serial из WSL
-- Picoprobe/OpenOCD из WSL
-- доступ к USB-устройству напрямую
-
-то это делается через `usbipd-win` на Windows и attach в WSL.
-
-## 8. Как менять плату
-
-Для другой поддерживаемой платы просто замени `PICO_BOARD` в скрипте сборки, например:
-
-- `pico`
-- `pico_w`
-- `waveshare_rp2040_zero`
-
+Репозиторий находится в активной инженерной и исследовательской разработке.
