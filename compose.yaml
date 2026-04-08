@@ -1,0 +1,15 @@
+services:
+  rp2040-dev:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      args:
+        PICO_SDK_TAG: 2.2.0
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace
+    environment:
+      - PICO_SDK_PATH=/opt/pico-sdk
+      - CCACHE_DIR=/tmp/.ccache
+    tty: true
+    stdin_open: true
