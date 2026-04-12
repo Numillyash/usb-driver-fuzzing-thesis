@@ -1,0 +1,7 @@
+ARG ESP_IDF_TAG=release-v5.2
+
+FROM espressif/idf:${ESP_IDF_TAG}
+
+WORKDIR /workspace
+
+CMD ["bash"]

@@ -13,3 +13,17 @@ services:
       - CCACHE_DIR=/tmp/.ccache
     tty: true
     stdin_open: true
+
+  esp32c3-dev:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.esp32c3
+      args:
+        ESP_IDF_TAG: release-v5.2
+    working_dir: /workspace/firmware/esp32c3_bridge
+    volumes:
+      - ./:/workspace
+    environment:
+      - HOME=/tmp
+    tty: true
+    stdin_open: true

@@ -18,6 +18,11 @@ pico_sdk_init()
 
 add_executable(portable_demo
     src/main.c
+    src/scheduler.c
+    src/watchdog_guard.c
+    src/mode_manager.c
+    src/status.c
+    src/command_dispatch.c
 )
 
 target_include_directories(portable_demo PRIVATE
