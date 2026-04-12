@@ -20,6 +20,10 @@ add_executable(portable_demo
     src/main.c
 )
 
+target_include_directories(portable_demo PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}/include
+)
+
 target_link_libraries(portable_demo
     pico_stdlib
 )

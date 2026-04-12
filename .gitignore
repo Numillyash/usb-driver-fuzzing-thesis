@@ -57,3 +57,6 @@ results/tmp/
 # WSL / local scratch
 scratch/
 local/
+
+# Codex local marker
+.codex

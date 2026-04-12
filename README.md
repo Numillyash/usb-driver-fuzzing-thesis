@@ -8,7 +8,7 @@
 
 - переносимое окружение сборки для RP2040 на базе **WSL Ubuntu + Docker Desktop + Pico SDK**;
 - firmware для микроконтроллерных плат, используемых в экспериментах;
-- вспомогательные скрипты сборки, прошивки и запуска;
+- host-side tooling для сборки, прошивки и запуска окружения;
 - материалы ВКР, заметки, постановки экспериментов и результаты.
 
 Текущий базовый контур уже проверен end-to-end:
@@ -25,7 +25,7 @@
 
 1. **Firmware layer** — прошивки для RP2040 и, при необходимости, других плат.
 2. **Tooling layer** — reproducible build environment, devcontainer, Docker, host-side tooling.
-3. **Experiment layer** — сценарии фаззинга, тестовые кейсы, артефакты экспериментов.
+3. **Experiment layer** — сценарии фаззинга, тестовые кейсы и артефакты экспериментов.
 4. **Documentation layer** — материалы ВКР, заметки, методика, промежуточные выводы.
 
 ## Архитектура окружения
@@ -67,10 +67,9 @@ portable_demo: RP2040 Zero is alive
 usb-driver-fuzzing-thesis/
 ├─ docker/
 │  └─ Dockerfile
-├─ .devcontainer/
-│  └─ devcontainer.json
 ├─ firmware/
 │  ├─ CMakeLists.txt
+│  ├─ include/
 │  └─ src/
 ├─ tools/
 │  ├─ build-container.sh
@@ -79,14 +78,11 @@ usb-driver-fuzzing-thesis/
 │  ├─ flash-windows.ps1
 │  └─ flash-linux.sh
 ├─ docs/
-│  ├─ thesis/
-│  ├─ notes/
-│  └─ references/
-├─ experiments/
-├─ results/
-├─ scripts/
+│  ├─ ARCHITECTURE.md
+│  ├─ protocol.md
+│  ├─ flash_layout.md
+│  └─ usb_logging_radio_context_full.md
 ├─ compose.yaml
-├─ .gitignore
 └─ README.md
 ```
 
@@ -96,6 +92,12 @@ usb-driver-fuzzing-thesis/
 
 ```bash
 ./tools/build-container.sh
+```
+
+Артефакт после успешной сборки:
+
+```text
+build/portable_demo.uf2
 ```
 
 ### 2. Прошивка RP2040 через BOOTSEL
@@ -110,13 +112,36 @@ usb-driver-fuzzing-thesis/
 
 После прошивки устройство должно подняться как USB CDC serial, а тестовая прошивка — выводить heartbeat-сообщения.
 
+### 4. Вход в контейнер окружения
+
+```bash
+./tools/shell.sh
+```
+
+## Текущее наполнение firmware
+
+Сейчас в репозитории сохранён минимальный проверенный target `portable_demo`:
+
+- `firmware/src/main.c` — базовый USB CDC smoke-test;
+- `firmware/include/` — типы и черновые интерфейсы control plane, сценариев и логирования;
+- `firmware/CMakeLists.txt` — сборка `portable_demo` под `waveshare_rp2040_zero`.
+
+Новая документация и заголовки описывают следующую стадию развития, но не внедряют runtime-логику и не меняют текущий smoke-test.
+
+## Документация
+
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — общая архитектура стенда;
+- [docs/protocol.md](docs/protocol.md) — первый черновик control-plane протокола;
+- [docs/flash_layout.md](docs/flash_layout.md) — первый черновик разметки flash RP2040;
+- [docs/usb_logging_radio_context_full.md](docs/usb_logging_radio_context_full.md) — расширенный контекст по логированию и радиомосту.
+
 ## Ближайшие шаги
 
 - превратить `portable_demo` в полноценный smoke-test firmware;
+- зафиксировать wire format control plane и storage layout;
 - добавить команды `help`, `ping`, `info`, `reboot` по serial;
 - добавить LED/self-test для платы;
 - перенести в репозиторий реальный код экспериментов ВКР;
-- оформить разделы `docs/`, `experiments/`, `results/`;
 - при необходимости подключить CI для headless build.
 
 ## Статус
