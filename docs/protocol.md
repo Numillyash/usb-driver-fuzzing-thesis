@@ -2,7 +2,12 @@
 
 ## Назначение
 
-Control plane нужен для безопасного управления стендом в режимах `SAFE`, `CONTROLLED` и ограниченно в `AUTORUN`. На этом этапе фиксируется только первый черновик wire format и идентификаторы сообщений. Runtime-логика, ретраи и state machine будут реализованы позже.
+Control plane нужен для безопасного управления стендом в режимах `SAFE`, `CONTROLLED` и ограниченно в `AUTORUN`. На этом этапе важно разделять две вещи:
+
+- что уже реально реализовано и проверено на hardware;
+- что пока остаётся проектным черновиком будущего control-plane.
+
+Сейчас в железе уже подтверждён только минимальный RF bring-up baseline на `nRF24`. Полный control-plane wire format и command set ниже остаются draft-описанием следующего этапа.
 
 ## Транспорт
 
@@ -22,9 +27,9 @@ Control plane нужен для безопасного управления ст
 - структуры, которые не укладываются в один radio frame, обязаны передаваться chunked или уходить в serial-only path;
 - serial transport не имеет этого ограничения и остаётся основным fallback для service/debug операций.
 
-## RF Bring-Up Packet
+## Implemented RF Bring-Up Baseline
 
-До интеграции полного control plane используется отдельный bring-up packet фиксированного размера `16` байт для проверки физического канала RP2040 `->` ESP32-C3 по `nRF24`.
+До интеграции полного control plane используется отдельный bring-up packet фиксированного размера `16` байт для проверки физического канала RP2040 `<->` ESP32-C3 по `nRF24`.
 
 Структура:
 
@@ -44,11 +49,43 @@ typedef struct __attribute__((packed)) {
 
 - `magic`: сигнатура bring-up пакета, текущий draft `0x5246` (`RF`);
 - `version`: версия тестового формата, стартовое значение `1`;
-- `msg_type`: тип сообщения, пока используется только heartbeat/test frame;
+- `msg_type`: тип RF bring-up сообщения;
 - `seq`: монотонный счётчик передатчика;
 - `uptime_ms`: аптайм отправителя в миллисекундах;
 - `arg0`: дополнительный test argument, пока `0`;
 - `flags`: служебные флаги, пока `0`.
+
+### Implemented Message Types
+
+На текущем baseline реализованы только два типа:
+
+| Value | Name | Реально используется |
+| --- | --- | --- |
+| `1` | `RFTEST_DATA` | RP2040 -> ESP32-C3 раз в секунду |
+| `2` | `RFTEST_ACK` | ESP32-C3 -> RP2040 в ответ на валидный `RFTEST_DATA` |
+
+### Implemented Matching Rules
+
+Текущее фактическое поведение:
+
+- RP2040 отправляет `RFTEST_DATA`;
+- ESP32-C3 считает пакет валидным, если проходят текущие проверки `magic` и `version`;
+- ESP32-C3 отправляет `RFTEST_ACK` с тем же `seq`;
+- RP2040 считает ACK валидным, если одновременно совпадают:
+  - `magic`
+  - `version`
+  - `msg_type == RFTEST_ACK`
+  - `seq == seq` последнего отправленного `RFTEST_DATA`
+
+### Implemented Timing Behavior
+
+На текущем baseline в железе используется такой обмен:
+
+1. RP2040 отправляет один `RFTEST_DATA` пакет примерно раз в `1000 ms`.
+2. После успешного TX RP2040 на короткое окно переключается в RX mode и ждёт ACK.
+3. ACK window сейчас короткий, порядка `50-100 ms` и в текущем коде составляет `75 ms`.
+4. ESP32-C3, получив валидный `RFTEST_DATA`, сразу формирует и отправляет `RFTEST_ACK`.
+5. При отсутствии валидного ACK RP2040 логирует timeout и продолжает следующий 1 Hz цикл.
 
 ### Bring-Up Radio Settings
 
@@ -65,17 +102,44 @@ typedef struct __attribute__((packed)) {
 ### Intended Bring-Up Sequence
 
 1. ESP32-C3 поднимается в RX mode и ждёт fixed payload frames.
-2. RP2040 поднимается в TX mode и раз в `1000 ms` отправляет `rf_test_packet_t`.
-3. ESP32-C3 печатает одну короткую serial line на каждый валидный принятый пакет.
-4. Только после стабильного RF bring-up стоит переходить к control-plane framing и command handling.
+2. RP2040 поднимается в TX mode и раз в `1000 ms` отправляет `RFTEST_DATA`.
+3. ESP32-C3 валидирует пакет, логирует его и отправляет `RFTEST_ACK`.
+4. RP2040 принимает ACK и валидирует совпадение `seq`.
+5. Только после стабильного RF round-trip baseline стоит переходить к control-plane framing и command handling.
 
-## Пакет верхнего уровня
+### What Is Implemented Now
+
+На текущий момент в железе подтверждено:
+
+- `packet size = 16 bytes`;
+- fixed payload radio link;
+- `RFTEST_DATA` и `RFTEST_ACK`;
+- sequence-based ACK matching;
+- RP2040 USB CDC logs;
+- ESP-IDF logs на ESP32-C3;
+- стабильный RF round-trip baseline как отдельный bring-up режим.
+
+### What Is Not Implemented Here
+
+Следующее здесь специально не фиксируется как уже реализованное:
+
+- fragmentation;
+- retries на уровне протокола;
+- session management;
+- control-plane command dispatch по radio;
+- scenario upload/storage;
+- flash persistence;
+- любой полный host-device control protocol поверх этих RF test packets.
+
+## Future Control-Plane Packet
 
 Каждый бинарный пакет состоит из:
 
 1. `cp_header_t`
 2. payload фиксированного или переменного размера
 3. `payload_crc32` в хвосте пакета или в payload-структуре команды
+
+Ниже начинается черновой формат будущего control-plane. Это не описание уже зафиксированного RF baseline above.
 
 Черновой заголовок:
 
