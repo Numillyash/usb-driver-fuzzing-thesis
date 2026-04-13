@@ -10,12 +10,18 @@
 #include "nrf24_drv.h"
 #include "rf_test_packet.h"
 
+#define BRIDGE_HEARTBEAT_INTERVAL_MS 5000
+
 void app_main(void)
 {
+    TickType_t last_heartbeat_tick;
+    uint32_t rx_count = 0;
+    uint16_t last_seq = 0;
     uint8_t rx_buf[RF_TEST_PAYLOAD_SIZE];
 
     bridge_uart_init();
     nrf24_drv_init();
+    last_heartbeat_tick = xTaskGetTickCount();
 
     bridge_uart_write_str("esp32c3_bridge: boot\r\n");
     bridge_uart_write_str("esp32c3_bridge: nrf24 rx bring-up mode\r\n");
@@ -29,6 +35,9 @@ void app_main(void)
                 memcpy(&packet, rx_buf, sizeof(packet));
 
                 if (packet.magic == RF_TEST_PACKET_MAGIC && packet.version == RF_TEST_PACKET_VERSION) {
+                    rx_count++;
+                    last_seq = packet.seq;
+
                     char line[128];
                     const int line_len = snprintf(
                         line,
@@ -45,6 +54,23 @@ void app_main(void)
                 }
             }
         }
+
+        if ((xTaskGetTickCount() - last_heartbeat_tick) >= pdMS_TO_TICKS(BRIDGE_HEARTBEAT_INTERVAL_MS)) {
+            char line[128];
+            const int line_len = snprintf(
+                line,
+                sizeof(line),
+                "HB bridge=esp32c3 rf=rx_ready rx_count=%lu last_seq=%u status=0x%02x\r\n",
+                (unsigned long)rx_count,
+                (unsigned)last_seq,
+                (unsigned)nrf24_drv_last_status());
+
+            last_heartbeat_tick = xTaskGetTickCount();
+            if (line_len > 0) {
+                bridge_uart_write(line, (size_t)line_len);
+            }
+        }
+
         vTaskDelay(pdMS_TO_TICKS(20));
     }
 }
