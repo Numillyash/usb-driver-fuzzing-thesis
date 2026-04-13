@@ -27,9 +27,11 @@ Control plane нужен для безопасного управления ст
 - структуры, которые не укладываются в один radio frame, обязаны передаваться chunked или уходить в serial-only path;
 - serial transport не имеет этого ограничения и остаётся основным fallback для service/debug операций.
 
-## Implemented RF Bring-Up Baseline
+## Current Implemented Baseline
 
-До интеграции полного control plane используется отдельный bring-up packet фиксированного размера `16` байт для проверки физического канала RP2040 `<->` ESP32-C3 по `nRF24`.
+Сейчас в проекте реально реализован и подтверждён только RFTEST baseline.
+
+Это отдельный bring-up packet фиксированного размера `16` байт для проверки физического канала RP2040 `<->` ESP32-C3 по `nRF24`.
 
 Структура:
 
@@ -55,7 +57,7 @@ typedef struct __attribute__((packed)) {
 - `arg0`: дополнительный test argument, пока `0`;
 - `flags`: служебные флаги, пока `0`.
 
-### Implemented Message Types
+### RFTEST Baseline Message Types
 
 На текущем baseline реализованы только два типа:
 
@@ -64,7 +66,7 @@ typedef struct __attribute__((packed)) {
 | `1` | `RFTEST_DATA` | RP2040 -> ESP32-C3 раз в секунду |
 | `2` | `RFTEST_ACK` | ESP32-C3 -> RP2040 в ответ на валидный `RFTEST_DATA` |
 
-### Implemented Matching Rules
+### RFTEST Baseline Matching Rules
 
 Текущее фактическое поведение:
 
@@ -77,7 +79,7 @@ typedef struct __attribute__((packed)) {
   - `msg_type == RFTEST_ACK`
   - `seq == seq` последнего отправленного `RFTEST_DATA`
 
-### Implemented Timing Behavior
+### RFTEST Baseline Timing Behavior
 
 На текущем baseline в железе используется такой обмен:
 
@@ -87,7 +89,7 @@ typedef struct __attribute__((packed)) {
 4. ESP32-C3, получив валидный `RFTEST_DATA`, сразу формирует и отправляет `RFTEST_ACK`.
 5. При отсутствии валидного ACK RP2040 логирует timeout и продолжает следующий 1 Hz цикл.
 
-### Bring-Up Radio Settings
+### RFTEST Baseline Radio Settings
 
 Для первого физического запуска канала используются консервативные настройки:
 
@@ -99,7 +101,7 @@ typedef struct __attribute__((packed)) {
 - low TX power;
 - IRQ line не используется, только polling.
 
-### Intended Bring-Up Sequence
+### RFTEST Baseline Bring-Up Sequence
 
 1. ESP32-C3 поднимается в RX mode и ждёт fixed payload frames.
 2. RP2040 поднимается в TX mode и раз в `1000 ms` отправляет `RFTEST_DATA`.
@@ -131,7 +133,37 @@ typedef struct __attribute__((packed)) {
 - flash persistence;
 - любой полный host-device control protocol поверх этих RF test packets.
 
-## Future Control-Plane Packet
+## Next Protocol Step
+
+Следующий шаг не должен заменять RFTEST baseline сразу. Он должен добавить самый маленький useful control primitive поверх уже подтверждённого transport baseline.
+
+Ключевая архитектурная идея:
+
+- logical protocol будет единым;
+- wire format для radio и serial/debug может отличаться.
+
+### Future Compact Radio Frame v2
+
+Для radio следующая итерация должна идти не от текущего `cp_header_t`, а от отдельного compact frame v2:
+
+- очень короткий bounded header;
+- минимальный packet type set;
+- расчёт на `nRF24` MTU и polling-driven exchange;
+- без fragmentation на следующем шаге.
+
+Это будет отдельный radio-oriented wire format для small command/response traffic.
+
+### Future Serial/Debug Framing
+
+Текущий draft `cp_header_t` должен считаться serial/debug-oriented framing:
+
+- он удобен для host tools и debug transport;
+- он не обязан совпадать побайтно с compact radio frame v2;
+- он может оставаться более явным и extensible по полям.
+
+Именно этот draft сейчас уместно рассматривать как базу для serial/debug path, а не как обязательный radio frame.
+
+## Future Serial/Debug Packet Draft
 
 Каждый бинарный пакет состоит из:
 
@@ -139,7 +171,7 @@ typedef struct __attribute__((packed)) {
 2. payload фиксированного или переменного размера
 3. `payload_crc32` в хвосте пакета или в payload-структуре команды
 
-Ниже начинается черновой формат будущего control-plane. Это не описание уже зафиксированного RF baseline above.
+Ниже начинается черновой формат будущего serial/debug-oriented framing. Это не описание уже реализованного RFTEST baseline и не финальное описание будущего compact radio frame v2.
 
 Черновой заголовок:
 
