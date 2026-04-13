@@ -1,4 +1,5 @@
 #include "status.h"
+#include <stddef.h>
 
 void status_init(runtime_status_t *status)
 {

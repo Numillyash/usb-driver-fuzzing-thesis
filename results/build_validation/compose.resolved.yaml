@@ -1,0 +1,44 @@
+name: usb-driver-fuzzing-thesis
+services:
+  esp32c3-dev:
+    build:
+      context: /root/usb-driver-fuzzing-thesis
+      dockerfile: docker/Dockerfile.esp32c3
+      args:
+        ESP_IDF_TAG: release-v5.2
+    environment:
+      HOME: /tmp
+    networks:
+      default: null
+    stdin_open: true
+    tty: true
+    volumes:
+      - type: bind
+        source: /root/usb-driver-fuzzing-thesis
+        target: /workspace
+        bind:
+          create_host_path: true
+    working_dir: /workspace/firmware/esp32c3_bridge
+  rp2040-dev:
+    build:
+      context: /root/usb-driver-fuzzing-thesis
+      dockerfile: docker/Dockerfile
+      args:
+        PICO_SDK_TAG: 2.2.0
+    environment:
+      CCACHE_DIR: /tmp/.ccache
+      PICO_SDK_PATH: /opt/pico-sdk
+    networks:
+      default: null
+    stdin_open: true
+    tty: true
+    volumes:
+      - type: bind
+        source: /root/usb-driver-fuzzing-thesis
+        target: /workspace
+        bind:
+          create_host_path: true
+    working_dir: /workspace
+networks:
+  default:
+    name: usb-driver-fuzzing-thesis_default

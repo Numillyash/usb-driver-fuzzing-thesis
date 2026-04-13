@@ -1,4 +1,5 @@
 #include "command_dispatch.h"
+#include <stddef.h>
 
 #include <string.h>
 

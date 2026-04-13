@@ -1,4 +1,5 @@
 #include "scheduler.h"
+#include <stddef.h>
 
 void scheduler_init(scheduler_state_t *state, scheduler_task_t *tasks, size_t task_count)
 {
