@@ -153,6 +153,60 @@ typedef struct __attribute__((packed)) {
 
 Это будет отдельный radio-oriented wire format для small command/response traffic.
 
+#### rf_frame_v2 Layout
+
+В кодовой базе уже зафиксирован следующий draft `rf_frame_v2.h` как **future radio control-plane format**, но текущий runtime на него ещё не переведён.
+
+```c
+typedef struct __attribute__((packed)) {
+    uint16_t magic;
+    uint8_t  version;
+    uint8_t  pkt_type;
+    uint8_t  src_id;
+    uint8_t  flags;
+    uint16_t seq;
+    uint8_t  payload_len;
+    uint8_t  header_crc8;
+} rfv2_header_t;
+```
+
+И полный fixed-size frame:
+
+```c
+typedef struct __attribute__((packed)) {
+    rfv2_header_t header;
+    uint8_t payload[22];
+} rfv2_frame_t;
+```
+
+Текущий budget:
+
+- `frame size = 32 bytes`
+- `header size = 10 bytes`
+- `payload budget = 22 bytes`
+
+#### rf_frame_v2 Packet Types
+
+Минимальный набор packet types для этого radio format:
+
+- `RFV2_PKT_HEARTBEAT`
+- `RFV2_PKT_PING`
+- `RFV2_PKT_PONG`
+- `RFV2_PKT_GET_STATUS`
+- `RFV2_PKT_STATUS`
+- `RFV2_PKT_SET_MODE`
+- `RFV2_PKT_ACK`
+- `RFV2_PKT_NACK`
+
+#### Header Integrity
+
+Для `rf_frame_v2` зафиксирован отдельный маленький `CRC8` helper для расчёта header checksum:
+
+- `firmware/include/crc8.h`
+- `firmware/src/crc8.c`
+
+Этот helper уже добавлен в кодовую базу, но не включён в текущий RFTEST runtime path.
+
 ### Future Serial/Debug Framing
 
 Текущий draft `cp_header_t` должен считаться serial/debug-oriented framing:

@@ -19,6 +19,7 @@ endif()
 pico_sdk_init()
 
 add_executable(portable_demo
+    src/crc8.c
     src/main.c
     src/nrf24_radio.c
     src/scheduler.c
