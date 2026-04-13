@@ -3,6 +3,7 @@ idf_component_register(
         "main.c"
         "bridge_uart.c"
         "nrf24_drv.c"
+        "../../src/crc8.c"
     INCLUDE_DIRS
         "."
         "../../include"

@@ -1,14 +1,17 @@
 #include <stdio.h>
 #include <stddef.h>
+#include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
 
+#include "crc8.h"
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
 #include "bridge_uart.h"
 #include "nrf24_drv.h"
+#include "rf_frame_v2.h"
 #include "rf_test_packet.h"
 
 #define BRIDGE_HEARTBEAT_INTERVAL_MS 5000
@@ -17,6 +20,37 @@
 #endif
 
 static const char *TAG = "bridge_main";
+
+static bool rfv2_header_crc_is_valid(const rfv2_frame_t *frame)
+{
+    return frame->header.header_crc8 ==
+           crc8_compute(&frame->header, offsetof(rfv2_header_t, header_crc8));
+}
+
+static void log_hfv2(const rfv2_frame_t *frame)
+{
+    rfv2_heartbeat_payload_t heartbeat;
+    unsigned long fault_flags = 0;
+    unsigned usb_state = 0;
+    unsigned scenario_state = 0;
+
+    memset(&heartbeat, 0, sizeof(heartbeat));
+    memcpy(&heartbeat, frame->payload, sizeof(heartbeat));
+    usb_state = (unsigned)heartbeat.link_state;
+    scenario_state = (unsigned)heartbeat.reserved0;
+
+    ESP_LOGI(
+        TAG,
+        "HFV2 src=%u seq=%u mode=%u sys=%u usb=%u scn=%u uptime_ms=%lu fault=%lu",
+        (unsigned)frame->header.src_id,
+        (unsigned)frame->header.seq,
+        (unsigned)heartbeat.mode,
+        (unsigned)heartbeat.system_state,
+        usb_state,
+        scenario_state,
+        (unsigned long)heartbeat.uptime_ms,
+        fault_flags);
+}
 
 #if RF_DEBUG >= 1
 static void log_rxraw(const rf_test_packet_t *packet, uint8_t status)
@@ -61,7 +95,7 @@ void app_main(void)
     uint32_t ack_tx_ok = 0;
     uint32_t ack_tx_fail = 0;
     uint16_t last_seq = 0;
-    uint8_t rx_buf[RF_TEST_PAYLOAD_SIZE];
+    uint8_t rx_buf[RFV2_FRAME_SIZE];
 
     bridge_uart_init();
     nrf24_drv_init();
@@ -87,14 +121,15 @@ void app_main(void)
         }
 
         if (nrf24_drv_poll()) {
-            const int rx_len = nrf24_drv_recv(rx_buf, sizeof(rx_buf));
+            uint8_t rx_pipe = 0xffu;
+            const int rx_len = nrf24_drv_recv(rx_buf, sizeof(rx_buf), &rx_pipe);
 
             if (rx_len == -2) {
                 garbage_rx++;
                 continue;
             }
 
-            if (rx_len == (int)sizeof(rf_test_packet_t)) {
+            if (rx_pipe == 0u && rx_len == (int)sizeof(rf_test_packet_t)) {
                 rf_test_packet_t packet;
                 memcpy(&packet, rx_buf, sizeof(packet));
 
@@ -140,6 +175,17 @@ void app_main(void)
                             ack_ok == (int)sizeof(ack_packet),
                             (unsigned)nrf24_drv_last_status());
                     }
+                }
+            } else if (rx_pipe == 1u && rx_len == (int)sizeof(rfv2_frame_t)) {
+                rfv2_frame_t frame;
+
+                memcpy(&frame, rx_buf, sizeof(frame));
+                if (frame.header.magic == RFV2_FRAME_MAGIC &&
+                    frame.header.version == RFV2_FRAME_VERSION &&
+                    frame.header.pkt_type == RFV2_PKT_HEARTBEAT &&
+                    frame.header.payload_len == sizeof(rfv2_heartbeat_payload_t) &&
+                    rfv2_header_crc_is_valid(&frame)) {
+                    log_hfv2(&frame);
                 }
             }
         }

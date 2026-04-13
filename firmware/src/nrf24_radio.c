@@ -8,6 +8,7 @@
 #include "hardware/gpio.h"
 #include "hardware/spi.h"
 #include "pico/time.h"
+#include "rf_frame_v2.h"
 #include "rf_test_packet.h"
 
 #define NRF24_SPI_PORT                  spi0
@@ -43,8 +44,10 @@
 #define NRF24_REG_RF_SETUP              0x06u
 #define NRF24_REG_STATUS                0x07u
 #define NRF24_REG_RX_ADDR_P0            0x0Au
+#define NRF24_REG_RX_ADDR_P1            0x0Bu
 #define NRF24_REG_TX_ADDR               0x10u
 #define NRF24_REG_RX_PW_P0              0x11u
+#define NRF24_REG_RX_PW_P1              0x12u
 #define NRF24_REG_FIFO_STATUS           0x17u
 #define NRF24_REG_DYNPD                 0x1Cu
 #define NRF24_REG_FEATURE               0x1Du
@@ -54,7 +57,8 @@
 #define NRF24_STATUS_MAX_RT             0x10u
 #define NRF24_FIFO_RX_EMPTY             0x01u
 
-static const uint8_t k_radio_addr[5] = { 'R', 'F', 'T', '0', '1' };
+static const uint8_t k_rf_test_addr[5] = { 'R', 'F', 'T', '0', '1' };
+static const uint8_t k_rfv2_addr[5] = { 'R', 'F', 'V', '2', '1' };
 
 static uint8_t g_last_status;
 static bool g_radio_ready;
@@ -147,6 +151,12 @@ static void nrf24_write_payload(const uint8_t *data, size_t len)
     nrf24_csn_high();
 }
 
+static void nrf24_select_tx_addr(const uint8_t *addr)
+{
+    nrf24_write_register_buf(NRF24_REG_TX_ADDR, addr, 5u);
+    nrf24_write_register_buf(NRF24_REG_RX_ADDR_P0, addr, 5u);
+}
+
 static void nrf24_read_payload(uint8_t *data, size_t len)
 {
     size_t i;
@@ -202,14 +212,16 @@ bool nrf24_radio_init_tx(void)
 
     nrf24_write_register(NRF24_REG_CONFIG, 0x08u);
     nrf24_write_register(NRF24_REG_EN_AA, 0x00u);
-    nrf24_write_register(NRF24_REG_EN_RXADDR, 0x01u);
+    nrf24_write_register(NRF24_REG_EN_RXADDR, 0x03u);
     nrf24_write_register(NRF24_REG_SETUP_AW, NRF24_SETUP_AW_5BYTES);
     nrf24_write_register(NRF24_REG_SETUP_RETR, 0x00u);
     nrf24_write_register(NRF24_REG_RF_CH, NRF24_RF_CHANNEL);
     nrf24_write_register(NRF24_REG_RF_SETUP, NRF24_RF_SETUP_250KBPS_LOW_PWR);
-    nrf24_write_register_buf(NRF24_REG_RX_ADDR_P0, k_radio_addr, sizeof(k_radio_addr));
-    nrf24_write_register_buf(NRF24_REG_TX_ADDR, k_radio_addr, sizeof(k_radio_addr));
+    nrf24_write_register_buf(NRF24_REG_RX_ADDR_P0, k_rf_test_addr, sizeof(k_rf_test_addr));
+    nrf24_write_register_buf(NRF24_REG_RX_ADDR_P1, k_rfv2_addr, sizeof(k_rfv2_addr));
+    nrf24_write_register_buf(NRF24_REG_TX_ADDR, k_rf_test_addr, sizeof(k_rf_test_addr));
     nrf24_write_register(NRF24_REG_RX_PW_P0, RF_TEST_PAYLOAD_SIZE);
+    nrf24_write_register(NRF24_REG_RX_PW_P1, RFV2_FRAME_SIZE);
     nrf24_write_register(NRF24_REG_DYNPD, 0x00u);
     nrf24_write_register(NRF24_REG_FEATURE, 0x00u);
     nrf24_write_register(NRF24_REG_STATUS, NRF24_STATUS_CLEAR_IRQS);
@@ -233,6 +245,7 @@ bool nrf24_radio_send_fixed(const void *data, size_t len)
     }
 
     memcpy(payload, data, sizeof(payload));
+    nrf24_select_tx_addr(k_rf_test_addr);
     nrf24_set_tx_mode();
     (void)nrf24_command(NRF24_CMD_FLUSH_TX);
     nrf24_write_payload(payload, sizeof(payload));
@@ -249,6 +262,41 @@ bool nrf24_radio_send_fixed(const void *data, size_t len)
             return (status & NRF24_STATUS_TX_DS) != 0u;
         }
     } while (!time_reached(deadline));
+
+    (void)nrf24_command(NRF24_CMD_FLUSH_TX);
+    return false;
+}
+
+bool nrf24_radio_send_frame_v2(const void *data, size_t len)
+{
+    uint8_t payload[RFV2_FRAME_SIZE];
+
+    if (!g_radio_ready || data == NULL || len != RFV2_FRAME_SIZE) {
+        return false;
+    }
+
+    memcpy(payload, data, sizeof(payload));
+    nrf24_select_tx_addr(k_rfv2_addr);
+    nrf24_set_tx_mode();
+    (void)nrf24_command(NRF24_CMD_FLUSH_TX);
+    nrf24_write_payload(payload, sizeof(payload));
+
+    nrf24_ce_high();
+    sleep_us(20);
+    nrf24_ce_low();
+
+    {
+        absolute_time_t deadline = make_timeout_time_ms(NRF24_TX_TIMEOUT_MS);
+        uint8_t status;
+
+        do {
+            status = nrf24_read_register(NRF24_REG_STATUS);
+            if ((status & (NRF24_STATUS_TX_DS | NRF24_STATUS_MAX_RT)) != 0u) {
+                nrf24_write_register(NRF24_REG_STATUS, NRF24_STATUS_CLEAR_IRQS);
+                return (status & NRF24_STATUS_TX_DS) != 0u;
+            }
+        } while (!time_reached(deadline));
+    }
 
     (void)nrf24_command(NRF24_CMD_FLUSH_TX);
     return false;

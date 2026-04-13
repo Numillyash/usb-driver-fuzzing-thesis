@@ -1,6 +1,8 @@
 #include "nrf24_drv.h"
 
+#include <stdbool.h>
 #include <stddef.h>
+#include <stdint.h>
 #include <string.h>
 
 #include "driver/gpio.h"
@@ -10,6 +12,7 @@
 #include "esp_rom_sys.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "rf_frame_v2.h"
 #include "rf_test_packet.h"
 
 static const char *TAG = "nrf24_drv";
@@ -46,8 +49,10 @@ static const char *TAG = "nrf24_drv";
 #define NRF24_REG_RF_SETUP              0x06u
 #define NRF24_REG_STATUS                0x07u
 #define NRF24_REG_RX_ADDR_P0            0x0Au
+#define NRF24_REG_RX_ADDR_P1            0x0Bu
 #define NRF24_REG_TX_ADDR               0x10u
 #define NRF24_REG_RX_PW_P0              0x11u
+#define NRF24_REG_RX_PW_P1              0x12u
 #define NRF24_REG_FIFO_STATUS           0x17u
 #define NRF24_REG_DYNPD                 0x1Cu
 #define NRF24_REG_FEATURE               0x1Du
@@ -60,7 +65,8 @@ static const char *TAG = "nrf24_drv";
 #define NRF24_STATUS_RX_P_NO_EMPTY      0x07u
 #define NRF24_FIFO_RX_EMPTY             0x01u
 
-static const uint8_t k_radio_addr[5] = { 'R', 'F', 'T', '0', '1' };
+static const uint8_t k_rf_test_addr[5] = { 'R', 'F', 'T', '0', '1' };
+static const uint8_t k_rfv2_addr[5] = { 'R', 'F', 'V', '2', '1' };
 
 static spi_device_handle_t g_spi;
 static bool g_ready;
@@ -152,6 +158,25 @@ static esp_err_t nrf24_write_register_buf(uint8_t reg, const uint8_t *data, size
     return ESP_FAIL;
 }
 
+static size_t nrf24_payload_size_for_pipe(uint8_t rx_p_no)
+{
+    if (rx_p_no == 0u) {
+        return RF_TEST_PAYLOAD_SIZE;
+    }
+    if (rx_p_no == 1u) {
+        return RFV2_FRAME_SIZE;
+    }
+
+    return 0u;
+}
+
+static esp_err_t nrf24_select_tx_addr(const uint8_t *addr)
+{
+    ESP_ERROR_CHECK(nrf24_write_register_buf(NRF24_REG_TX_ADDR, addr, 5u));
+    ESP_ERROR_CHECK(nrf24_write_register_buf(NRF24_REG_RX_ADDR_P0, addr, 5u));
+    return ESP_OK;
+}
+
 static esp_err_t nrf24_set_rx_mode(void)
 {
     nrf24_ce_low();
@@ -199,7 +224,7 @@ void nrf24_drv_init(void)
         .sclk_io_num = NRF24_PIN_SCK,
         .quadwp_io_num = -1,
         .quadhd_io_num = -1,
-        .max_transfer_sz = RF_TEST_PAYLOAD_SIZE + 1,
+        .max_transfer_sz = RFV2_FRAME_SIZE + 1,
     };
     spi_device_interface_config_t devcfg = {
         .clock_speed_hz = NRF24_SPI_CLOCK_HZ,
@@ -216,14 +241,16 @@ void nrf24_drv_init(void)
 
     ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_CONFIG, 0x08u));
     ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_EN_AA, 0x00u));
-    ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_EN_RXADDR, 0x01u));
+    ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_EN_RXADDR, 0x03u));
     ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_SETUP_AW, NRF24_SETUP_AW_5BYTES));
     ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_SETUP_RETR, 0x00u));
     ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_RF_CH, NRF24_RF_CHANNEL));
     ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_RF_SETUP, NRF24_RF_SETUP_250KBPS_LOW_PWR));
-    ESP_ERROR_CHECK(nrf24_write_register_buf(NRF24_REG_RX_ADDR_P0, k_radio_addr, sizeof(k_radio_addr)));
-    ESP_ERROR_CHECK(nrf24_write_register_buf(NRF24_REG_TX_ADDR, k_radio_addr, sizeof(k_radio_addr)));
+    ESP_ERROR_CHECK(nrf24_write_register_buf(NRF24_REG_RX_ADDR_P0, k_rf_test_addr, sizeof(k_rf_test_addr)));
+    ESP_ERROR_CHECK(nrf24_write_register_buf(NRF24_REG_RX_ADDR_P1, k_rfv2_addr, sizeof(k_rfv2_addr)));
+    ESP_ERROR_CHECK(nrf24_write_register_buf(NRF24_REG_TX_ADDR, k_rf_test_addr, sizeof(k_rf_test_addr)));
     ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_RX_PW_P0, RF_TEST_PAYLOAD_SIZE));
+    ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_RX_PW_P1, RFV2_FRAME_SIZE));
     ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_DYNPD, 0x00u));
     ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_FEATURE, 0x00u));
     ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_STATUS, NRF24_STATUS_CLEAR_IRQS));
@@ -246,6 +273,7 @@ int nrf24_drv_send(const uint8_t *data, size_t len)
         return -1;
     }
 
+    ESP_ERROR_CHECK(nrf24_select_tx_addr(k_rf_test_addr));
     nrf24_ce_low();
     ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_CONFIG, NRF24_CONFIG_TX));
     ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_STATUS, NRF24_STATUS_CLEAR_IRQS));
@@ -278,16 +306,16 @@ int nrf24_drv_send(const uint8_t *data, size_t len)
     return -1;
 }
 
-int nrf24_drv_recv(uint8_t *data, size_t max_len)
+int nrf24_drv_recv(uint8_t *data, size_t max_len, uint8_t *pipe_out)
 {
-    uint8_t tx[1 + RF_TEST_PAYLOAD_SIZE] = { 0 };
-    uint8_t rx[1 + RF_TEST_PAYLOAD_SIZE] = { 0 };
+    uint8_t tx[1 + RFV2_FRAME_SIZE] = { 0 };
+    uint8_t rx[1 + RFV2_FRAME_SIZE] = { 0 };
     size_t copy_len;
     uint8_t status = 0;
     uint8_t fifo_status = NRF24_FIFO_RX_EMPTY;
     uint8_t rx_p_no = NRF24_STATUS_RX_P_NO_EMPTY;
 
-    if (!g_ready || data == NULL || max_len < RF_TEST_PAYLOAD_SIZE) {
+    if (!g_ready || data == NULL || max_len < RFV2_FRAME_SIZE) {
         return 0;
     }
 
@@ -305,13 +333,18 @@ int nrf24_drv_recv(uint8_t *data, size_t max_len)
     }
 
     tx[0] = NRF24_CMD_R_RX_PAYLOAD;
-    if (nrf24_transfer(tx, rx, sizeof(tx)) != ESP_OK) {
+    copy_len = nrf24_payload_size_for_pipe(rx_p_no);
+    if (copy_len == 0u) {
+        nrf24_drv_recover_rx();
+        return -1;
+    }
+
+    if (nrf24_transfer(tx, rx, copy_len + 1u) != ESP_OK) {
         nrf24_drv_recover_rx();
         return -1;
     }
 
     g_last_status = rx[0];
-    copy_len = RF_TEST_PAYLOAD_SIZE;
     memcpy(data, &rx[1], copy_len);
     if (nrf24_payload_is_garbage(data, copy_len)) {
         nrf24_drv_recover_rx();
@@ -319,6 +352,9 @@ int nrf24_drv_recv(uint8_t *data, size_t max_len)
     }
 
     ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_STATUS, NRF24_STATUS_CLEAR_IRQS));
+    if (pipe_out != NULL) {
+        *pipe_out = rx_p_no;
+    }
     return (int)copy_len;
 }
 
