@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <string.h>
 
+#include "esp_log.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
@@ -11,6 +12,8 @@
 #include "rf_test_packet.h"
 
 #define BRIDGE_HEARTBEAT_INTERVAL_MS 5000
+
+static const char *TAG = "bridge_main";
 
 void app_main(void)
 {
@@ -27,6 +30,18 @@ void app_main(void)
     bridge_uart_write_str("esp32c3_bridge: nrf24 rx bring-up mode\r\n");
 
     while (1) {
+        const TickType_t now = xTaskGetTickCount();
+
+        if ((now - last_heartbeat_tick) >= pdMS_TO_TICKS(BRIDGE_HEARTBEAT_INTERVAL_MS)) {
+            ESP_LOGI(
+                TAG,
+                "HB bridge=esp32c3 rf=rx_ready rx_count=%u last_seq=%u status=0x%02x",
+                (unsigned)rx_count,
+                (unsigned)last_seq,
+                (unsigned)nrf24_drv_last_status());
+            last_heartbeat_tick = now;
+        }
+
         if (nrf24_drv_poll()) {
             const int rx_len = nrf24_drv_recv(rx_buf, sizeof(rx_buf));
 
@@ -55,22 +70,6 @@ void app_main(void)
             }
         }
 
-        if ((xTaskGetTickCount() - last_heartbeat_tick) >= pdMS_TO_TICKS(BRIDGE_HEARTBEAT_INTERVAL_MS)) {
-            char line[128];
-            const int line_len = snprintf(
-                line,
-                sizeof(line),
-                "HB bridge=esp32c3 rf=rx_ready rx_count=%lu last_seq=%u status=0x%02x\r\n",
-                (unsigned long)rx_count,
-                (unsigned)last_seq,
-                (unsigned)nrf24_drv_last_status());
-
-            last_heartbeat_tick = xTaskGetTickCount();
-            if (line_len > 0) {
-                bridge_uart_write(line, (size_t)line_len);
-            }
-        }
-
-        vTaskDelay(pdMS_TO_TICKS(20));
+        vTaskDelay(pdMS_TO_TICKS(10));
     }
 }
