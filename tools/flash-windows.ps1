@@ -1,15 +1,14 @@
-param(
-    [string]$Uf2Path = ".\build\portable_demo.uf2"
-)
+$ErrorActionPreference = "Stop"
 
+$RepoRoot = Split-Path $PSScriptRoot -Parent
+$Uf2Path = Join-Path $RepoRoot "build\portable_demo.uf2"
 $resolvedUf2 = (Resolve-Path $Uf2Path).Path
-$volume = Get-Volume | Where-Object { $_.FileSystemLabel -eq 'RPI-RP2' } | Select-Object -First 1
 
-if (-not $volume) {
-    throw "Не найден накопитель RPI-RP2. Переведи плату в BOOTSEL/UF2 режим и попробуй снова."
+$target = Get-Volume | Where-Object FileSystemLabel -eq "RPI-RP2" | Select-Object -First 1
+if (-not $target) {
+    throw "RPI-RP2 drive not found. Put the board into BOOTSEL mode first."
 }
 
-$drive = "$($volume.DriveLetter):\"
-$target = Join-Path $drive ([System.IO.Path]::GetFileName($resolvedUf2))
-Copy-Item -Path $resolvedUf2 -Destination $target -Force
-Write-Host "UF2 copied to $target"
+$dest = ($target.DriveLetter + ":\")
+Copy-Item -Path $resolvedUf2 -Destination $dest -Force
+Write-Host "UF2 copied to $dest"

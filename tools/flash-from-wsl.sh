@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-UF2="$ROOT_DIR/build/portable_demo.uf2"
-PS1="$ROOT_DIR/tools/flash-windows.ps1"
 
-if [[ ! -f "$UF2" ]]; then
-  echo "UF2 file not found: $UF2" >&2
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PS_SCRIPT_UNC="\\\\wsl.localhost\\ubuntu${SCRIPT_DIR//\//\\}\\flash-windows.ps1"
+
+POWERSHELL_EXE="/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe"
+
+if [[ ! -x "$POWERSHELL_EXE" ]]; then
+  echo "PowerShell not found at: $POWERSHELL_EXE" >&2
   exit 1
 fi
 
-powershell.exe -ExecutionPolicy Bypass -File "$(wslpath -w "$PS1")" -Uf2Path "$(wslpath -w "$UF2")"
+"$POWERSHELL_EXE" -ExecutionPolicy Bypass -File "$PS_SCRIPT_UNC"
