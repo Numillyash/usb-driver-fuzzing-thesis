@@ -12,7 +12,8 @@ extern "C" {
 #define RF_TEST_PAYLOAD_SIZE        UINT8_C(16)
 
 typedef enum {
-    RF_TEST_MSG_HEARTBEAT = 1
+    RF_TEST_MSG_DATA = 1,
+    RF_TEST_MSG_ACK = 2
 } rf_test_msg_type_t;
 
 typedef enum {

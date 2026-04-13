@@ -95,16 +95,35 @@ void app_main(void)
 #endif
 
                 if (packet.magic == RF_TEST_PACKET_MAGIC && packet.version == RF_TEST_PACKET_VERSION) {
-                    rx_count++;
-                    last_seq = packet.seq;
+                    if (packet.msg_type == RF_TEST_MSG_DATA) {
+                        rf_test_packet_t ack_packet = {
+                            .magic = RF_TEST_PACKET_MAGIC,
+                            .version = RF_TEST_PACKET_VERSION,
+                            .msg_type = RF_TEST_MSG_ACK,
+                            .seq = packet.seq,
+                            .uptime_ms = packet.uptime_ms,
+                            .arg0 = packet.arg0,
+                            .flags = RF_TEST_FLAG_NONE,
+                        };
+                        const int ack_ok = nrf24_drv_send((const uint8_t *)&ack_packet, sizeof(ack_packet));
 
-                    ESP_LOGI(
-                        TAG,
-                        "RFTEST seq=%u uptime_ms=%lu arg0=%lu flags=0x%04x",
-                        (unsigned)packet.seq,
-                        (unsigned long)packet.uptime_ms,
-                        (unsigned long)packet.arg0,
-                        (unsigned)packet.flags);
+                        rx_count++;
+                        last_seq = packet.seq;
+
+                        ESP_LOGI(
+                            TAG,
+                            "RFTEST seq=%u uptime_ms=%lu arg0=%lu flags=0x%04x",
+                            (unsigned)packet.seq,
+                            (unsigned long)packet.uptime_ms,
+                            (unsigned long)packet.arg0,
+                            (unsigned)packet.flags);
+                        ESP_LOGI(
+                            TAG,
+                            "ACKTX seq=%u ok=%d status=0x%02x",
+                            (unsigned)packet.seq,
+                            ack_ok == (int)sizeof(ack_packet),
+                            (unsigned)nrf24_drv_last_status());
+                    }
                 }
             }
         }

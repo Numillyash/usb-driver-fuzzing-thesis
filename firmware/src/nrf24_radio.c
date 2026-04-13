@@ -19,14 +19,17 @@
 
 #define NRF24_SPI_BAUDRATE              2000000u
 #define NRF24_RF_CHANNEL                40u
+#define NRF24_CONFIG_RX                 0x0Fu
 #define NRF24_CONFIG_TX                 0x0Eu
 #define NRF24_STATUS_CLEAR_IRQS         0x70u
 #define NRF24_RF_SETUP_250KBPS_LOW_PWR  0x20u
 #define NRF24_SETUP_AW_5BYTES           0x03u
 #define NRF24_TX_TIMEOUT_MS             20u
+#define NRF24_RX_TIMEOUT_MS             100u
 
 #define NRF24_CMD_R_REGISTER            0x00u
 #define NRF24_CMD_W_REGISTER            0x20u
+#define NRF24_CMD_R_RX_PAYLOAD          0x61u
 #define NRF24_CMD_W_TX_PAYLOAD          0xA0u
 #define NRF24_CMD_FLUSH_TX              0xE1u
 #define NRF24_CMD_FLUSH_RX              0xE2u
@@ -42,11 +45,14 @@
 #define NRF24_REG_RX_ADDR_P0            0x0Au
 #define NRF24_REG_TX_ADDR               0x10u
 #define NRF24_REG_RX_PW_P0              0x11u
+#define NRF24_REG_FIFO_STATUS           0x17u
 #define NRF24_REG_DYNPD                 0x1Cu
 #define NRF24_REG_FEATURE               0x1Du
 
+#define NRF24_STATUS_RX_DR              0x40u
 #define NRF24_STATUS_TX_DS              0x20u
 #define NRF24_STATUS_MAX_RT             0x10u
+#define NRF24_FIFO_RX_EMPTY             0x01u
 
 static const uint8_t k_radio_addr[5] = { 'R', 'F', 'T', '0', '1' };
 
@@ -141,6 +147,43 @@ static void nrf24_write_payload(const uint8_t *data, size_t len)
     nrf24_csn_high();
 }
 
+static void nrf24_read_payload(uint8_t *data, size_t len)
+{
+    size_t i;
+
+    nrf24_csn_low();
+    g_last_status = nrf24_transfer_byte(NRF24_CMD_R_RX_PAYLOAD);
+    for (i = 0; i < len; ++i) {
+        data[i] = nrf24_transfer_byte(0xffu);
+    }
+    nrf24_csn_high();
+}
+
+static void nrf24_set_tx_mode(void)
+{
+    nrf24_ce_low();
+    nrf24_write_register(NRF24_REG_STATUS, NRF24_STATUS_CLEAR_IRQS);
+    nrf24_write_register(NRF24_REG_CONFIG, NRF24_CONFIG_TX);
+    sleep_us(150);
+}
+
+static void nrf24_set_rx_mode(void)
+{
+    nrf24_ce_low();
+    nrf24_write_register(NRF24_REG_STATUS, NRF24_STATUS_CLEAR_IRQS);
+    nrf24_write_register(NRF24_REG_CONFIG, NRF24_CONFIG_RX);
+    sleep_us(150);
+    nrf24_ce_high();
+}
+
+static bool nrf24_rx_available(void)
+{
+    const uint8_t status = nrf24_read_register(NRF24_REG_STATUS);
+    const uint8_t fifo_status = nrf24_read_register(NRF24_REG_FIFO_STATUS);
+
+    return ((status & NRF24_STATUS_RX_DR) != 0u) || ((fifo_status & NRF24_FIFO_RX_EMPTY) == 0u);
+}
+
 bool nrf24_radio_init_tx(void)
 {
     spi_init(NRF24_SPI_PORT, NRF24_SPI_BAUDRATE);
@@ -172,7 +215,7 @@ bool nrf24_radio_init_tx(void)
     nrf24_write_register(NRF24_REG_STATUS, NRF24_STATUS_CLEAR_IRQS);
     (void)nrf24_command(NRF24_CMD_FLUSH_TX);
     (void)nrf24_command(NRF24_CMD_FLUSH_RX);
-    nrf24_write_register(NRF24_REG_CONFIG, NRF24_CONFIG_TX);
+    nrf24_set_tx_mode();
     sleep_ms(5);
 
     g_radio_ready = true;
@@ -190,8 +233,7 @@ bool nrf24_radio_send_fixed(const void *data, size_t len)
     }
 
     memcpy(payload, data, sizeof(payload));
-    nrf24_ce_low();
-    nrf24_write_register(NRF24_REG_STATUS, NRF24_STATUS_CLEAR_IRQS);
+    nrf24_set_tx_mode();
     (void)nrf24_command(NRF24_CMD_FLUSH_TX);
     nrf24_write_payload(payload, sizeof(payload));
 
@@ -210,6 +252,33 @@ bool nrf24_radio_send_fixed(const void *data, size_t len)
 
     (void)nrf24_command(NRF24_CMD_FLUSH_TX);
     return false;
+}
+
+int nrf24_radio_recv_fixed(void *data, size_t len, uint32_t timeout_ms)
+{
+    absolute_time_t deadline;
+    uint8_t payload[RF_TEST_PAYLOAD_SIZE];
+
+    if (!g_radio_ready || data == NULL || len != RF_TEST_PAYLOAD_SIZE) {
+        return -1;
+    }
+
+    nrf24_set_rx_mode();
+    deadline = make_timeout_time_ms(timeout_ms == 0 ? NRF24_RX_TIMEOUT_MS : timeout_ms);
+
+    while (!time_reached(deadline)) {
+        if (nrf24_rx_available()) {
+            nrf24_read_payload(payload, sizeof(payload));
+            memcpy(data, payload, sizeof(payload));
+            nrf24_write_register(NRF24_REG_STATUS, NRF24_STATUS_CLEAR_IRQS);
+            nrf24_ce_low();
+            return (int)sizeof(payload);
+        }
+        sleep_ms(1);
+    }
+
+    nrf24_ce_low();
+    return 0;
 }
 
 uint8_t nrf24_radio_last_status(void)
