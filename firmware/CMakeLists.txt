@@ -32,6 +32,8 @@ target_include_directories(portable_demo PRIVATE
 
 target_link_libraries(portable_demo
     pico_stdlib
+    hardware_gpio
+    hardware_spi
 )
 
 pico_enable_stdio_usb(portable_demo 1)
