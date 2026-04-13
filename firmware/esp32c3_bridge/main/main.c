@@ -13,7 +13,7 @@
 
 #define BRIDGE_HEARTBEAT_INTERVAL_MS 5000
 #ifndef RF_DEBUG
-#define RF_DEBUG 0
+#define RF_DEBUG 2
 #endif
 
 static const char *TAG = "bridge_main";
@@ -98,19 +98,13 @@ void app_main(void)
                     rx_count++;
                     last_seq = packet.seq;
 
-                    char line[128];
-                    const int line_len = snprintf(
-                        line,
-                        sizeof(line),
-                        "RFTEST seq=%u uptime_ms=%lu arg0=%lu flags=0x%04x\r\n",
+                    ESP_LOGI(
+                        TAG,
+                        "RFTEST seq=%u uptime_ms=%lu arg0=%lu flags=0x%04x",
                         (unsigned)packet.seq,
                         (unsigned long)packet.uptime_ms,
                         (unsigned long)packet.arg0,
                         (unsigned)packet.flags);
-
-                    if (line_len > 0) {
-                        bridge_uart_write(line, (size_t)line_len);
-                    }
                 }
             }
         }
