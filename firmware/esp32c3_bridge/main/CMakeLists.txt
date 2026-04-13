@@ -3,5 +3,7 @@ idf_component_register(
         "main.c"
         "bridge_uart.c"
         "nrf24_drv.c"
-    INCLUDE_DIRS "."
+    INCLUDE_DIRS
+        "."
+        "../../include"
 )

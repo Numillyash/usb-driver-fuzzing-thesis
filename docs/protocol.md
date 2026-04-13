@@ -22,6 +22,53 @@ Control plane нужен для безопасного управления ст
 - структуры, которые не укладываются в один radio frame, обязаны передаваться chunked или уходить в serial-only path;
 - serial transport не имеет этого ограничения и остаётся основным fallback для service/debug операций.
 
+## RF Bring-Up Packet
+
+До интеграции полного control plane используется отдельный bring-up packet фиксированного размера `16` байт для проверки физического канала RP2040 `->` ESP32-C3 по `nRF24`.
+
+Структура:
+
+```c
+typedef struct __attribute__((packed)) {
+    uint16_t magic;
+    uint8_t  version;
+    uint8_t  msg_type;
+    uint16_t seq;
+    uint32_t uptime_ms;
+    uint32_t arg0;
+    uint16_t flags;
+} rf_test_packet_t;
+```
+
+Поля:
+
+- `magic`: сигнатура bring-up пакета, текущий draft `0x5246` (`RF`);
+- `version`: версия тестового формата, стартовое значение `1`;
+- `msg_type`: тип сообщения, пока используется только heartbeat/test frame;
+- `seq`: монотонный счётчик передатчика;
+- `uptime_ms`: аптайм отправителя в миллисекундах;
+- `arg0`: дополнительный test argument, пока `0`;
+- `flags`: служебные флаги, пока `0`.
+
+### Bring-Up Radio Settings
+
+Для первого физического запуска канала используются консервативные настройки:
+
+- fixed payload `16` bytes;
+- air rate `250 kbps`;
+- CRC enabled;
+- auto-ack disabled;
+- retransmit disabled;
+- low TX power;
+- IRQ line не используется, только polling.
+
+### Intended Bring-Up Sequence
+
+1. ESP32-C3 поднимается в RX mode и ждёт fixed payload frames.
+2. RP2040 поднимается в TX mode и раз в `1000 ms` отправляет `rf_test_packet_t`.
+3. ESP32-C3 печатает одну короткую serial line на каждый валидный принятый пакет.
+4. Только после стабильного RF bring-up стоит переходить к control-plane framing и command handling.
+
 ## Пакет верхнего уровня
 
 Каждый бинарный пакет состоит из:

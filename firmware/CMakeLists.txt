@@ -18,6 +18,7 @@ pico_sdk_init()
 
 add_executable(portable_demo
     src/main.c
+    src/nrf24_radio.c
     src/scheduler.c
     src/watchdog_guard.c
     src/mode_manager.c
