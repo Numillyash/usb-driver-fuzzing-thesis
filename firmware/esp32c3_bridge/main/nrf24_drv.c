@@ -55,6 +55,9 @@ static const char *TAG = "nrf24_drv";
 #define NRF24_STATUS_RX_DR              0x40u
 #define NRF24_STATUS_TX_DS              0x20u
 #define NRF24_STATUS_MAX_RT             0x10u
+#define NRF24_STATUS_RX_P_NO_MASK       0x0Eu
+#define NRF24_STATUS_RX_P_NO_SHIFT      1u
+#define NRF24_STATUS_RX_P_NO_EMPTY      0x07u
 #define NRF24_FIFO_RX_EMPTY             0x01u
 
 static const uint8_t k_radio_addr[5] = { 'R', 'F', 'T', '0', '1' };
@@ -159,6 +162,35 @@ static esp_err_t nrf24_set_rx_mode(void)
     return ESP_OK;
 }
 
+static bool nrf24_payload_is_garbage(const uint8_t *data, size_t len)
+{
+    size_t i;
+    bool all_zero = true;
+    bool all_ff = true;
+
+    for (i = 0; i < len; ++i) {
+        if (data[i] != 0x00u) {
+            all_zero = false;
+        }
+        if (data[i] != 0xffu) {
+            all_ff = false;
+        }
+    }
+
+    return all_zero || all_ff;
+}
+
+void nrf24_drv_recover_rx(void)
+{
+    if (!g_ready) {
+        return;
+    }
+
+    ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_STATUS, NRF24_STATUS_CLEAR_IRQS));
+    ESP_ERROR_CHECK(nrf24_command(NRF24_CMD_FLUSH_RX, NULL));
+    ESP_ERROR_CHECK(nrf24_set_rx_mode());
+}
+
 void nrf24_drv_init(void)
 {
     spi_bus_config_t buscfg = {
@@ -251,19 +283,41 @@ int nrf24_drv_recv(uint8_t *data, size_t max_len)
     uint8_t tx[1 + RF_TEST_PAYLOAD_SIZE] = { 0 };
     uint8_t rx[1 + RF_TEST_PAYLOAD_SIZE] = { 0 };
     size_t copy_len;
+    uint8_t status = 0;
+    uint8_t fifo_status = NRF24_FIFO_RX_EMPTY;
+    uint8_t rx_p_no = NRF24_STATUS_RX_P_NO_EMPTY;
 
     if (!g_ready || data == NULL || max_len < RF_TEST_PAYLOAD_SIZE) {
         return 0;
     }
 
+    if (nrf24_read_register(NRF24_REG_STATUS, &status) != ESP_OK) {
+        return -1;
+    }
+    if (nrf24_read_register(NRF24_REG_FIFO_STATUS, &fifo_status) != ESP_OK) {
+        return -1;
+    }
+
+    rx_p_no = (uint8_t)((status & NRF24_STATUS_RX_P_NO_MASK) >> NRF24_STATUS_RX_P_NO_SHIFT);
+    if ((status & NRF24_STATUS_RX_DR) == 0u || rx_p_no == NRF24_STATUS_RX_P_NO_EMPTY || (fifo_status & NRF24_FIFO_RX_EMPTY) != 0u) {
+        nrf24_drv_recover_rx();
+        return 0;
+    }
+
     tx[0] = NRF24_CMD_R_RX_PAYLOAD;
     if (nrf24_transfer(tx, rx, sizeof(tx)) != ESP_OK) {
+        nrf24_drv_recover_rx();
         return -1;
     }
 
     g_last_status = rx[0];
     copy_len = RF_TEST_PAYLOAD_SIZE;
     memcpy(data, &rx[1], copy_len);
+    if (nrf24_payload_is_garbage(data, copy_len)) {
+        nrf24_drv_recover_rx();
+        return -2;
+    }
+
     ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_STATUS, NRF24_STATUS_CLEAR_IRQS));
     return (int)copy_len;
 }
@@ -272,6 +326,7 @@ bool nrf24_drv_poll(void)
 {
     uint8_t status = 0;
     uint8_t fifo_status = NRF24_FIFO_RX_EMPTY;
+    uint8_t rx_p_no = NRF24_STATUS_RX_P_NO_EMPTY;
 
     if (!g_ready) {
         return false;
@@ -284,7 +339,18 @@ bool nrf24_drv_poll(void)
         return false;
     }
 
-    return ((status & NRF24_STATUS_RX_DR) != 0u) || ((fifo_status & NRF24_FIFO_RX_EMPTY) == 0u);
+    rx_p_no = (uint8_t)((status & NRF24_STATUS_RX_P_NO_MASK) >> NRF24_STATUS_RX_P_NO_SHIFT);
+
+    if (((status & NRF24_STATUS_RX_DR) == 0u) ||
+        (rx_p_no == NRF24_STATUS_RX_P_NO_EMPTY) ||
+        ((fifo_status & NRF24_FIFO_RX_EMPTY) != 0u)) {
+        if ((status & NRF24_STATUS_RX_DR) != 0u || (fifo_status & NRF24_FIFO_RX_EMPTY) == 0u) {
+            nrf24_drv_recover_rx();
+        }
+        return false;
+    }
+
+    return true;
 }
 
 uint8_t nrf24_drv_last_status(void)

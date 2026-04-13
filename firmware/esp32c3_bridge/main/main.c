@@ -56,7 +56,10 @@ static void log_rxhex(const uint8_t *buf, size_t len)
 void app_main(void)
 {
     TickType_t last_heartbeat_tick;
-    uint32_t rx_count = 0;
+    uint32_t valid_rx = 0;
+    uint32_t garbage_rx = 0;
+    uint32_t ack_tx_ok = 0;
+    uint32_t ack_tx_fail = 0;
     uint16_t last_seq = 0;
     uint8_t rx_buf[RF_TEST_PAYLOAD_SIZE];
 
@@ -73,8 +76,11 @@ void app_main(void)
         if ((now - last_heartbeat_tick) >= pdMS_TO_TICKS(BRIDGE_HEARTBEAT_INTERVAL_MS)) {
             ESP_LOGI(
                 TAG,
-                "HB bridge=esp32c3 rf=rx_ready rx_count=%u last_seq=%u status=0x%02x",
-                (unsigned)rx_count,
+                "HB bridge=esp32c3 rf=rx_ready valid_rx=%u garbage_rx=%u ack_tx_ok=%u ack_tx_fail=%u last_seq=%u status=0x%02x",
+                (unsigned)valid_rx,
+                (unsigned)garbage_rx,
+                (unsigned)ack_tx_ok,
+                (unsigned)ack_tx_fail,
                 (unsigned)last_seq,
                 (unsigned)nrf24_drv_last_status());
             last_heartbeat_tick = now;
@@ -82,6 +88,11 @@ void app_main(void)
 
         if (nrf24_drv_poll()) {
             const int rx_len = nrf24_drv_recv(rx_buf, sizeof(rx_buf));
+
+            if (rx_len == -2) {
+                garbage_rx++;
+                continue;
+            }
 
             if (rx_len == (int)sizeof(rf_test_packet_t)) {
                 rf_test_packet_t packet;
@@ -107,8 +118,13 @@ void app_main(void)
                         };
                         const int ack_ok = nrf24_drv_send((const uint8_t *)&ack_packet, sizeof(ack_packet));
 
-                        rx_count++;
+                        valid_rx++;
                         last_seq = packet.seq;
+                        if (ack_ok == (int)sizeof(ack_packet)) {
+                            ack_tx_ok++;
+                        } else {
+                            ack_tx_fail++;
+                        }
 
                         ESP_LOGI(
                             TAG,
