@@ -56,6 +56,7 @@ typedef struct __attribute__((packed)) {
 
 /* Common prefix for all binary log records. Payload bytes may follow. */
 typedef struct __attribute__((packed)) {
+    uint32_t seq;
     uint16_t record_size;
     uint8_t severity;
     uint8_t source;

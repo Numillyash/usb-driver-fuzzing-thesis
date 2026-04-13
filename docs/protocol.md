@@ -14,6 +14,14 @@ Control plane нужен для безопасного управления ст
 
 Общий пакетный формат должен быть одинаковым для radio и для возможного бинарного serial-канала. REPL fallback остаётся текстовым фасадом над теми же командами.
 
+### Ограничения nRF24 transport
+
+- practical radio MTU для одного nRF24 payload: до `32` байт;
+- из этих `32` байт часть должна уйти под transport header, sequence и flags;
+- поэтому control-plane payload для radio должен проектироваться как `small, bounded, fragmentable`;
+- структуры, которые не укладываются в один radio frame, обязаны передаваться chunked или уходить в serial-only path;
+- serial transport не имеет этого ограничения и остаётся основным fallback для service/debug операций.
+
 ## Пакет верхнего уровня
 
 Каждый бинарный пакет состоит из:
@@ -82,6 +90,44 @@ typedef struct __attribute__((packed)) {
 | `0x11` | `CP_CMD_LOG_READ` | Чтение диапазона логов |
 | `0x12` | `CP_CMD_LOG_ERASE` | Очистка log ring |
 | `0x13` | `CP_CMD_CLEAR_FAULTS` | Сброс fault/panic markers |
+
+## Command Class Split
+
+Для следующего этапа полезно считать команды двумя классами транспорта.
+
+### Radio-safe commands
+
+Это команды с короткими payload и предсказуемым ответом, которые можно безопасно укладывать в nRF24 MTU:
+
+- `CP_CMD_PING`
+- `CP_CMD_GET_INFO`
+- `CP_CMD_GET_STATUS`
+- `CP_CMD_SET_MODE`
+- `CP_CMD_REBOOT`
+- `CP_CMD_ABORT_SCENARIO`
+- `CP_CMD_LOG_INFO`
+- `CP_CMD_CLEAR_FAULTS`
+
+### Serial-only or Serial-preferred commands
+
+Это команды, которые либо уже предполагают крупные payload, либо почти наверняка потребуют fragmentation/reassembly:
+
+- `CP_CMD_LIST_SCENARIOS`
+- `CP_CMD_GET_SCENARIO_META`
+- `CP_CMD_UPLOAD_SCENARIO_BEGIN`
+- `CP_CMD_UPLOAD_SCENARIO_CHUNK`
+- `CP_CMD_UPLOAD_SCENARIO_COMMIT`
+- `CP_CMD_DELETE_SCENARIO`
+- `CP_CMD_RUN_SCENARIO`
+- `CP_CMD_GET_CONFIG`
+- `CP_CMD_SET_CONFIG`
+- `CP_CMD_LOG_READ`
+- `CP_CMD_LOG_ERASE`
+
+Интерпретация на текущем этапе:
+
+- `radio-safe` не значит “только radio”, эти команды также должны работать по serial;
+- `serial-only` не запрещает будущую поддержку по radio, но требует явной fragment policy и более строгих timeout/retry правил.
 
 ## Response IDs
 

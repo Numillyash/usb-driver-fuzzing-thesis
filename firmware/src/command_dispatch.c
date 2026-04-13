@@ -1,6 +1,6 @@
 #include "command_dispatch.h"
-#include <stddef.h>
 
+#include <stddef.h>
 #include <string.h>
 
 static void command_dispatch_fill_header(command_packet_t *packet,

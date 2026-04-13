@@ -58,5 +58,8 @@ results/tmp/
 scratch/
 local/
 
+# ESP-IDF generated local config
+firmware/esp32c3_bridge/sdkconfig
+
 # Codex local marker
 .codex

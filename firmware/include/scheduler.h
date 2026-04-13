@@ -17,6 +17,14 @@ typedef enum {
     SCHEDULER_TASK_RUNNING = 2
 } scheduler_task_state_t;
 
+typedef enum {
+    SCHEDULER_TASK_ID_NONE = 0,
+    SCHEDULER_TASK_ID_COMMAND = 1,
+    SCHEDULER_TASK_ID_STATUS_HEARTBEAT = 2,
+    SCHEDULER_TASK_ID_WATCHDOG = 3,
+    SCHEDULER_TASK_ID_LOG_FLUSH = 4
+} scheduler_task_id_t;
+
 typedef struct {
     scheduler_task_fn_t fn;
     void *context;

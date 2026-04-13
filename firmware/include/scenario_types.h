@@ -47,6 +47,15 @@ typedef enum {
     SCENARIO_WATCHDOG_STRICT = 2
 } scenario_watchdog_policy_t;
 
+typedef enum {
+    SCENARIO_STEP_NOP = 0,
+    SCENARIO_STEP_DELAY_MS = 1,
+    SCENARIO_STEP_USB_ATTACH = 2,
+    SCENARIO_STEP_USB_DETACH = 3,
+    SCENARIO_STEP_SEND_REPORT = 4,
+    SCENARIO_STEP_WAIT_FOR_HOST = 5
+} scenario_step_opcode_t;
+
 /* Persistent metadata header for a stored scenario object. */
 typedef struct __attribute__((packed)) {
     uint32_t magic;

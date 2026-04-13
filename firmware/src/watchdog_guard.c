@@ -1,4 +1,5 @@
 #include "watchdog_guard.h"
+
 #include <stddef.h>
 
 void watchdog_guard_init(watchdog_guard_t *guard, uint32_t timeout_ms)

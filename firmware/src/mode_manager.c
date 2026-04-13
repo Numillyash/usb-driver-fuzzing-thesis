@@ -1,4 +1,5 @@
 #include "mode_manager.h"
+
 #include <stddef.h>
 
 void mode_manager_init(mode_manager_state_t *state, cp_device_mode_t initial_mode)

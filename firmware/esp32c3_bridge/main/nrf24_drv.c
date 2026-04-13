@@ -1,5 +1,7 @@
 #include "nrf24_drv.h"
 
+#include <stddef.h>
+
 #include "esp_log.h"
 
 static const char *TAG = "nrf24_drv";

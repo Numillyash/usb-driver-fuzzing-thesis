@@ -1,9 +1,10 @@
 #include "bridge_uart.h"
-#include <stddef.h>
 
+#include <stddef.h>
 #include <string.h>
 
 #include "freertos/FreeRTOS.h"
+#include "freertos/projdefs.h"
 #include "driver/uart.h"
 #include "esp_err.h"
 
