@@ -1,5 +1,6 @@
 #include "nrf24_radio.h"
 
+#include <stdio.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -10,6 +11,10 @@
 #include "pico/time.h"
 #include "rf_frame_v2.h"
 #include "rf_test_packet.h"
+
+#ifndef NRF24_DIAG
+#define NRF24_DIAG 1
+#endif
 
 #define NRF24_SPI_PORT                  spi0
 #define NRF24_PIN_SCK                   2
@@ -142,6 +147,54 @@ static void nrf24_write_register_buf(uint8_t reg, const uint8_t *data, size_t le
     nrf24_csn_high();
 }
 
+static void nrf24_read_register_buf(uint8_t reg, uint8_t *data, size_t len)
+{
+    size_t i;
+
+    nrf24_csn_low();
+    g_last_status = nrf24_transfer_byte(NRF24_CMD_R_REGISTER | reg);
+    for (i = 0; i < len; ++i) {
+        data[i] = nrf24_transfer_byte(0xffu);
+    }
+    nrf24_csn_high();
+}
+
+#if NRF24_DIAG
+static void nrf24_diag_print_addr5(const char *label, const uint8_t *addr)
+{
+    printf("%s=%02x:%02x:%02x:%02x:%02x\r\n",
+           label,
+           (unsigned)addr[0],
+           (unsigned)addr[1],
+           (unsigned)addr[2],
+           (unsigned)addr[3],
+           (unsigned)addr[4]);
+}
+
+static void nrf24_diag_dump_state(const char *label)
+{
+    uint8_t rx_addr_p0[5] = { 0 };
+    uint8_t rx_addr_p1[5] = { 0 };
+    uint8_t tx_addr[5] = { 0 };
+
+    nrf24_read_register_buf(NRF24_REG_RX_ADDR_P0, rx_addr_p0, sizeof(rx_addr_p0));
+    nrf24_read_register_buf(NRF24_REG_RX_ADDR_P1, rx_addr_p1, sizeof(rx_addr_p1));
+    nrf24_read_register_buf(NRF24_REG_TX_ADDR, tx_addr, sizeof(tx_addr));
+
+    printf("nrf24[%s] CFG=0x%02x EN_RXADDR=0x%02x STATUS=0x%02x FIFO=0x%02x RX_PW_P0=%u RX_PW_P1=%u\r\n",
+           label,
+           (unsigned)nrf24_read_register(NRF24_REG_CONFIG),
+           (unsigned)nrf24_read_register(NRF24_REG_EN_RXADDR),
+           (unsigned)nrf24_read_register(NRF24_REG_STATUS),
+           (unsigned)nrf24_read_register(NRF24_REG_FIFO_STATUS),
+           (unsigned)nrf24_read_register(NRF24_REG_RX_PW_P0),
+           (unsigned)nrf24_read_register(NRF24_REG_RX_PW_P1));
+    nrf24_diag_print_addr5("RX_ADDR_P0", rx_addr_p0);
+    nrf24_diag_print_addr5("RX_ADDR_P1", rx_addr_p1);
+    nrf24_diag_print_addr5("TX_ADDR", tx_addr);
+}
+#endif
+
 static void nrf24_write_payload(const uint8_t *data, size_t len)
 {
     size_t i;
@@ -203,6 +256,9 @@ static void nrf24_prepare_tx(const uint8_t *tx_addr)
     nrf24_write_register_buf(NRF24_REG_TX_ADDR, tx_addr, 5u);
     nrf24_set_tx_mode();
     (void)nrf24_command(NRF24_CMD_FLUSH_TX);
+#if NRF24_DIAG
+    nrf24_diag_dump_state("prepare_tx");
+#endif
 }
 
 static void nrf24_restore_prx(void)
@@ -212,6 +268,9 @@ static void nrf24_restore_prx(void)
     (void)nrf24_command(NRF24_CMD_FLUSH_TX);
     nrf24_configure_prx_pipes();
     nrf24_set_rx_mode();
+#if NRF24_DIAG
+    nrf24_diag_dump_state("restore_prx");
+#endif
 }
 
 static bool nrf24_rx_available(void)
@@ -283,6 +342,10 @@ bool nrf24_radio_send_fixed(const void *data, size_t len)
     }
 
     memcpy(payload, data, sizeof(payload));
+#if NRF24_DIAG
+    printf("nrf24 rf_test target=RFTEST len=%u\r\n", (unsigned)len);
+    nrf24_diag_dump_state("before_rf_test_send");
+#endif
     nrf24_prepare_tx(k_rf_test_addr);
     nrf24_write_payload(payload, sizeof(payload));
 
@@ -296,11 +359,19 @@ bool nrf24_radio_send_fixed(const void *data, size_t len)
         if ((status & (NRF24_STATUS_TX_DS | NRF24_STATUS_MAX_RT)) != 0u) {
             nrf24_write_register(NRF24_REG_STATUS, NRF24_STATUS_CLEAR_IRQS);
             nrf24_restore_prx();
+#if NRF24_DIAG
+            printf("nrf24 rf_test tx_result=%u status=0x%02x\r\n",
+                   (unsigned)((status & NRF24_STATUS_TX_DS) != 0u),
+                   (unsigned)status);
+#endif
             return (status & NRF24_STATUS_TX_DS) != 0u;
         }
     } while (!time_reached(deadline));
 
     nrf24_restore_prx();
+#if NRF24_DIAG
+    printf("nrf24 rf_test tx_result=0 status=0x%02x\r\n", (unsigned)g_last_status);
+#endif
     return false;
 }
 
@@ -348,6 +419,10 @@ int nrf24_radio_recv_fixed(void *data, size_t len, uint32_t timeout_ms)
     }
 
     nrf24_restore_prx();
+#if NRF24_DIAG
+    printf("nrf24 rf_test entering_ack_wait timeout_ms=%u\r\n",
+           (unsigned)(timeout_ms == 0 ? NRF24_RX_TIMEOUT_MS : timeout_ms));
+#endif
     deadline = make_timeout_time_ms(timeout_ms == 0 ? NRF24_RX_TIMEOUT_MS : timeout_ms);
 
     while (!time_reached(deadline)) {
@@ -355,11 +430,19 @@ int nrf24_radio_recv_fixed(void *data, size_t len, uint32_t timeout_ms)
             nrf24_read_payload(payload, sizeof(payload));
             memcpy(data, payload, sizeof(payload));
             nrf24_write_register(NRF24_REG_STATUS, NRF24_STATUS_CLEAR_IRQS);
+#if NRF24_DIAG
+            printf("nrf24 rf_test recv_raw len=%u status=0x%02x\r\n",
+                   (unsigned)sizeof(payload),
+                   (unsigned)g_last_status);
+#endif
             return (int)sizeof(payload);
         }
         sleep_ms(1);
     }
 
+#if NRF24_DIAG
+    printf("nrf24 rf_test recv_raw len=0 status=0x%02x\r\n", (unsigned)g_last_status);
+#endif
     return 0;
 }
 

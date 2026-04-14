@@ -17,6 +17,10 @@
 
 static const char *TAG = "nrf24_drv";
 
+#ifndef NRF24_DIAG
+#define NRF24_DIAG 1
+#endif
+
 #define NRF24_PIN_SCK                   GPIO_NUM_4
 #define NRF24_PIN_MOSI                  GPIO_NUM_6
 #define NRF24_PIN_MISO                  GPIO_NUM_5
@@ -158,6 +162,109 @@ static esp_err_t nrf24_write_register_buf(uint8_t reg, const uint8_t *data, size
     return ESP_FAIL;
 }
 
+static esp_err_t nrf24_read_register_buf(uint8_t reg, uint8_t *data, size_t len)
+{
+    uint8_t tx[1 + 5] = { 0 };
+    uint8_t rx[1 + 5] = { 0 };
+
+    if (len > 5u) {
+        return ESP_ERR_INVALID_ARG;
+    }
+
+    tx[0] = (uint8_t)(NRF24_CMD_R_REGISTER | reg);
+    memset(&tx[1], 0xff, len);
+
+    if (nrf24_transfer(tx, rx, len + 1u) == ESP_OK) {
+        g_last_status = rx[0];
+        memcpy(data, &rx[1], len);
+        return ESP_OK;
+    }
+
+    return ESP_FAIL;
+}
+
+#if NRF24_DIAG
+static void nrf24_log_addr5(const char *label, const uint8_t *addr)
+{
+    ESP_LOGI(
+        TAG,
+        "%s=%02x:%02x:%02x:%02x:%02x",
+        label,
+        (unsigned)addr[0],
+        (unsigned)addr[1],
+        (unsigned)addr[2],
+        (unsigned)addr[3],
+        (unsigned)addr[4]);
+}
+
+static void nrf24_dump_state(const char *label)
+{
+    uint8_t config = 0;
+    uint8_t en_rxaddr = 0;
+    uint8_t status = 0;
+    uint8_t fifo_status = 0;
+    uint8_t rx_pw_p0 = 0;
+    uint8_t rx_pw_p1 = 0;
+    uint8_t feature = 0;
+    uint8_t dynpd = 0;
+    uint8_t rx_addr_p0[5] = { 0 };
+    uint8_t rx_addr_p1[5] = { 0 };
+    uint8_t tx_addr[5] = { 0 };
+
+    (void)nrf24_read_register(NRF24_REG_CONFIG, &config);
+    (void)nrf24_read_register(NRF24_REG_EN_RXADDR, &en_rxaddr);
+    (void)nrf24_read_register(NRF24_REG_STATUS, &status);
+    (void)nrf24_read_register(NRF24_REG_FIFO_STATUS, &fifo_status);
+    (void)nrf24_read_register(NRF24_REG_RX_PW_P0, &rx_pw_p0);
+    (void)nrf24_read_register(NRF24_REG_RX_PW_P1, &rx_pw_p1);
+    (void)nrf24_read_register(NRF24_REG_FEATURE, &feature);
+    (void)nrf24_read_register(NRF24_REG_DYNPD, &dynpd);
+    (void)nrf24_read_register_buf(NRF24_REG_RX_ADDR_P0, rx_addr_p0, sizeof(rx_addr_p0));
+    (void)nrf24_read_register_buf(NRF24_REG_RX_ADDR_P1, rx_addr_p1, sizeof(rx_addr_p1));
+    (void)nrf24_read_register_buf(NRF24_REG_TX_ADDR, tx_addr, sizeof(tx_addr));
+
+    ESP_LOGI(
+        TAG,
+        "%s CFG=0x%02x EN_RXADDR=0x%02x STATUS=0x%02x FIFO=0x%02x RX_PW_P0=%u RX_PW_P1=%u FEATURE=0x%02x DYNPD=0x%02x",
+        label,
+        (unsigned)config,
+        (unsigned)en_rxaddr,
+        (unsigned)status,
+        (unsigned)fifo_status,
+        (unsigned)rx_pw_p0,
+        (unsigned)rx_pw_p1,
+        (unsigned)feature,
+        (unsigned)dynpd);
+    nrf24_log_addr5("RX_ADDR_P0", rx_addr_p0);
+    nrf24_log_addr5("RX_ADDR_P1", rx_addr_p1);
+    nrf24_log_addr5("TX_ADDR", tx_addr);
+}
+
+static void nrf24_log_pipe_seen(uint8_t pipe_no, uint8_t status, uint8_t fifo_status)
+{
+    ESP_LOGI(
+        TAG,
+        "PIPE%u_SEEN STATUS=0x%02x FIFO=0x%02x rx_p_no=%u",
+        (unsigned)pipe_no,
+        (unsigned)status,
+        (unsigned)fifo_status,
+        (unsigned)pipe_no);
+}
+
+static void nrf24_log_pipe0_raw(const uint8_t *data, size_t len, uint8_t pipe_no)
+{
+    char line[3 * 16 + 32];
+    size_t dump_len = len < 16u ? len : 16u;
+    int offset = snprintf(line, sizeof(line), "PIPE0_RAW len=%u pipe=%u", (unsigned)len, (unsigned)pipe_no);
+    size_t i;
+
+    for (i = 0; i < dump_len && offset > 0 && offset < (int)sizeof(line); ++i) {
+        offset += snprintf(line + offset, sizeof(line) - (size_t)offset, " %02x", (unsigned)data[i]);
+    }
+    ESP_LOGI(TAG, "%s", line);
+}
+#endif
+
 static size_t nrf24_payload_size_for_pipe(uint8_t rx_p_no)
 {
     if (rx_p_no == 0u) {
@@ -202,6 +309,9 @@ static esp_err_t nrf24_prepare_tx(const uint8_t *tx_addr)
     ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_CONFIG, NRF24_CONFIG_TX));
     esp_rom_delay_us(150);
     ESP_ERROR_CHECK(nrf24_command(NRF24_CMD_FLUSH_TX, NULL));
+#if NRF24_DIAG
+    nrf24_dump_state("prepare_tx");
+#endif
     return ESP_OK;
 }
 
@@ -212,6 +322,9 @@ static esp_err_t nrf24_restore_prx(void)
     ESP_ERROR_CHECK(nrf24_command(NRF24_CMD_FLUSH_TX, NULL));
     ESP_ERROR_CHECK(nrf24_configure_prx_pipes());
     ESP_ERROR_CHECK(nrf24_set_rx_mode());
+#if NRF24_DIAG
+    nrf24_dump_state("restore_prx");
+#endif
     return ESP_OK;
 }
 
@@ -282,6 +395,9 @@ void nrf24_drv_init(void)
 
     g_ready = true;
     ESP_LOGI(TAG, "NRF24 RX bring-up ready");
+#if NRF24_DIAG
+    nrf24_dump_state("post_init");
+#endif
 }
 
 int nrf24_drv_send(const uint8_t *data, size_t len)
@@ -312,12 +428,18 @@ int nrf24_drv_send(const uint8_t *data, size_t len)
         ESP_ERROR_CHECK(nrf24_read_register(NRF24_REG_STATUS, &status));
         if ((status & (NRF24_STATUS_TX_DS | NRF24_STATUS_MAX_RT)) != 0u) {
             ESP_ERROR_CHECK(nrf24_restore_prx());
+#if NRF24_DIAG
+            nrf24_dump_state("post_tx_rf_test");
+#endif
             return (status & NRF24_STATUS_TX_DS) != 0u ? (int)len : -1;
         }
         vTaskDelay(pdMS_TO_TICKS(1));
     }
 
     ESP_ERROR_CHECK(nrf24_restore_prx());
+#if NRF24_DIAG
+    nrf24_dump_state("post_tx_rf_test_timeout");
+#endif
     return -1;
 }
 
@@ -349,12 +471,18 @@ int nrf24_drv_send_frame_v2(const uint8_t *data, size_t len)
         ESP_ERROR_CHECK(nrf24_read_register(NRF24_REG_STATUS, &status));
         if ((status & (NRF24_STATUS_TX_DS | NRF24_STATUS_MAX_RT)) != 0u) {
             ESP_ERROR_CHECK(nrf24_restore_prx());
+#if NRF24_DIAG
+            nrf24_dump_state("post_tx_rfv2");
+#endif
             return (status & NRF24_STATUS_TX_DS) != 0u ? (int)len : -1;
         }
         vTaskDelay(pdMS_TO_TICKS(1));
     }
 
     ESP_ERROR_CHECK(nrf24_restore_prx());
+#if NRF24_DIAG
+    nrf24_dump_state("post_tx_rfv2_timeout");
+#endif
     return -1;
 }
 
@@ -379,6 +507,11 @@ int nrf24_drv_recv(uint8_t *data, size_t max_len, uint8_t *pipe_out)
     }
 
     rx_p_no = (uint8_t)((status & NRF24_STATUS_RX_P_NO_MASK) >> NRF24_STATUS_RX_P_NO_SHIFT);
+#if NRF24_DIAG
+    if ((status & NRF24_STATUS_RX_DR) != 0u || (fifo_status & NRF24_FIFO_RX_EMPTY) == 0u) {
+        nrf24_log_pipe_seen(rx_p_no, status, fifo_status);
+    }
+#endif
     if ((status & NRF24_STATUS_RX_DR) == 0u || rx_p_no == NRF24_STATUS_RX_P_NO_EMPTY || (fifo_status & NRF24_FIFO_RX_EMPTY) != 0u) {
         nrf24_drv_recover_rx();
         return 0;
@@ -398,6 +531,11 @@ int nrf24_drv_recv(uint8_t *data, size_t max_len, uint8_t *pipe_out)
 
     g_last_status = rx[0];
     memcpy(data, &rx[1], copy_len);
+#if NRF24_DIAG
+    if (rx_p_no == 0u) {
+        nrf24_log_pipe0_raw(data, copy_len, rx_p_no);
+    }
+#endif
     if (nrf24_payload_is_garbage(data, copy_len)) {
         nrf24_drv_recover_rx();
         return -2;
@@ -428,6 +566,11 @@ bool nrf24_drv_poll(void)
     }
 
     rx_p_no = (uint8_t)((status & NRF24_STATUS_RX_P_NO_MASK) >> NRF24_STATUS_RX_P_NO_SHIFT);
+#if NRF24_DIAG
+    if ((status & NRF24_STATUS_RX_DR) != 0u || (fifo_status & NRF24_FIFO_RX_EMPTY) == 0u) {
+        nrf24_log_pipe_seen(rx_p_no, status, fifo_status);
+    }
+#endif
 
     if (((status & NRF24_STATUS_RX_DR) == 0u) ||
         (rx_p_no == NRF24_STATUS_RX_P_NO_EMPTY) ||
