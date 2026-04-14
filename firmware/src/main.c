@@ -10,6 +10,7 @@
 #include "pico/time.h"
 #include "rf_frame_v2.h"
 #include "rf_test_packet.h"
+#include "status.h"
 
 #define RF_TEST_INTERVAL_MS 1000u
 #define RF_TEST_ACK_TIMEOUT_MS 75u
@@ -70,6 +71,22 @@ static void build_rfv2_pong(rfv2_frame_t *frame, uint16_t seq, uint32_t nonce)
     };
 
     build_rfv2_header(frame, RFV2_PKT_PONG, seq, (uint8_t)sizeof(payload));
+    memcpy(frame->payload, &payload, sizeof(payload));
+}
+
+static void build_rfv2_status(rfv2_frame_t *frame, uint16_t seq, uint16_t active_seq)
+{
+    rfv2_status_payload_t payload = {
+        .uptime_ms = to_ms_since_boot(get_absolute_time()),
+        .active_seq = active_seq,
+        .mode = CP_DEVICE_MODE_SAFE,
+        .system_state = STATUS_SYSTEM_SAFE_IDLE,
+        .usb_state = STATUS_USB_ACTIVE,
+        .scenario_state = SCENARIO_STATE_IDLE,
+        .fault_flags = 0u,
+    };
+
+    build_rfv2_header(frame, RFV2_PKT_STATUS, seq, (uint8_t)sizeof(payload));
     memcpy(frame->payload, &payload, sizeof(payload));
 }
 
@@ -167,6 +184,26 @@ int main(void) {
                 printf("portable_demo: rfv2 pong seq=%u nonce=%lu\r\n",
                        (unsigned)pong_frame.header.seq,
                        (unsigned long)pong_payload.nonce);
+            } else if (rx_len == (int)sizeof(rx_frame) &&
+                       rfv2_header_is_valid(&rx_frame) &&
+                       rx_frame.header.pkt_type == RFV2_PKT_GET_STATUS &&
+                       rx_frame.header.payload_len == 0u) {
+                rfv2_frame_t status_frame;
+                rfv2_status_payload_t status_payload;
+
+                printf("portable_demo: rfv2 get_status seq=%u\r\n",
+                       (unsigned)rx_frame.header.seq);
+
+                build_rfv2_status(&status_frame, rx_frame.header.seq, (uint16_t)(seq == 0 ? 0u : (seq - 1u)));
+                (void)nrf24_radio_send_frame_v2(&status_frame, sizeof(status_frame));
+                memcpy(&status_payload, status_frame.payload, sizeof(status_payload));
+
+                printf("portable_demo: rfv2 status seq=%u mode=%u sys=%u usb=%u scn=%u\r\n",
+                       (unsigned)status_frame.header.seq,
+                       (unsigned)status_payload.mode,
+                       (unsigned)status_payload.system_state,
+                       (unsigned)status_payload.usb_state,
+                       (unsigned)status_payload.scenario_state);
             }
         }
 

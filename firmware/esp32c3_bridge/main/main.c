@@ -17,6 +17,8 @@
 #define BRIDGE_HEARTBEAT_INTERVAL_MS 5000
 #define RFV2_PING_INTERVAL_MS 7000
 #define RFV2_PING_TIMEOUT_MS 1500
+#define RFV2_STATUS_INTERVAL_MS 10000
+#define RFV2_STATUS_TIMEOUT_MS 1500
 #ifndef RF_DEBUG
 #define RF_DEBUG 2
 #endif
@@ -68,6 +70,11 @@ static void build_rfv2_ping(rfv2_frame_t *frame, uint16_t seq, uint32_t nonce)
 
     build_rfv2_header(frame, RFV2_PKT_PING, RFV2_SRC_ESP32C3, seq, (uint8_t)sizeof(payload));
     memcpy(frame->payload, &payload, sizeof(payload));
+}
+
+static void build_rfv2_get_status(rfv2_frame_t *frame, uint16_t seq)
+{
+    build_rfv2_header(frame, RFV2_PKT_GET_STATUS, RFV2_SRC_ESP32C3, seq, 0u);
 }
 
 static void log_hfv2(const rfv2_frame_t *frame)
@@ -134,23 +141,28 @@ void app_main(void)
 {
     TickType_t last_heartbeat_tick;
     TickType_t last_ping_tick;
+    TickType_t last_status_tick;
     uint32_t valid_rx = 0;
     uint32_t garbage_rx = 0;
     uint32_t ack_tx_ok = 0;
     uint32_t ack_tx_fail = 0;
     uint32_t ping_nonce = 1;
     uint16_t last_seq = 0;
-    uint16_t ping_seq = RFV2_SEQ_FIRST_VALID;
+    uint16_t request_seq = RFV2_SEQ_FIRST_VALID;
     uint16_t ping_wait_seq = RFV2_SEQ_RESERVED;
+    uint16_t status_wait_seq = RFV2_SEQ_RESERVED;
     uint32_t ping_wait_nonce = 0;
     bool ping_in_flight = false;
+    bool status_in_flight = false;
     TickType_t ping_deadline_tick = 0;
+    TickType_t status_deadline_tick = 0;
     uint8_t rx_buf[RFV2_FRAME_SIZE];
 
     bridge_uart_init();
     nrf24_drv_init();
     last_heartbeat_tick = xTaskGetTickCount();
     last_ping_tick = last_heartbeat_tick;
+    last_status_tick = last_heartbeat_tick;
 
     bridge_uart_write_str("esp32c3_bridge: boot\r\n");
     bridge_uart_write_str("esp32c3_bridge: nrf24 rx bring-up mode\r\n");
@@ -173,7 +185,7 @@ void app_main(void)
 
         if (!ping_in_flight && (now - last_ping_tick) >= pdMS_TO_TICKS(RFV2_PING_INTERVAL_MS)) {
             rfv2_frame_t ping_frame;
-            const uint16_t current_ping_seq = ping_seq;
+            const uint16_t current_ping_seq = request_seq;
             const uint32_t current_ping_nonce = ping_nonce;
             const int ping_ok;
 
@@ -189,10 +201,27 @@ void app_main(void)
                 ping_wait_seq = current_ping_seq;
                 ping_wait_nonce = current_ping_nonce;
                 ping_deadline_tick = now + pdMS_TO_TICKS(RFV2_PING_TIMEOUT_MS);
-                ping_seq = rfv2_next_seq(ping_seq);
+                request_seq = rfv2_next_seq(request_seq);
                 ping_nonce++;
             }
             last_ping_tick = now;
+        }
+
+        if (!status_in_flight && (now - last_status_tick) >= pdMS_TO_TICKS(RFV2_STATUS_INTERVAL_MS)) {
+            rfv2_frame_t status_req_frame;
+            const uint16_t current_status_seq = request_seq;
+            const int status_ok;
+
+            build_rfv2_get_status(&status_req_frame, current_status_seq);
+            status_ok = nrf24_drv_send_frame_v2((const uint8_t *)&status_req_frame, sizeof(status_req_frame));
+            if (status_ok == (int)sizeof(status_req_frame)) {
+                ESP_LOGI(TAG, "STATUSTX seq=%u", (unsigned)current_status_seq);
+                status_in_flight = true;
+                status_wait_seq = current_status_seq;
+                status_deadline_tick = now + pdMS_TO_TICKS(RFV2_STATUS_TIMEOUT_MS);
+                request_seq = rfv2_next_seq(request_seq);
+            }
+            last_status_tick = now;
         }
 
         if (nrf24_drv_poll()) {
@@ -277,6 +306,26 @@ void app_main(void)
                         ping_wait_seq = RFV2_SEQ_RESERVED;
                         ping_wait_nonce = 0;
                     }
+                } else if (rfv2_frame_is_valid(&frame) &&
+                           frame.header.pkt_type == RFV2_PKT_STATUS &&
+                           frame.header.payload_len == sizeof(rfv2_status_payload_t)) {
+                    rfv2_status_payload_t status_payload;
+
+                    memcpy(&status_payload, frame.payload, sizeof(status_payload));
+                    if (status_in_flight && frame.header.seq == status_wait_seq) {
+                        ESP_LOGI(
+                            TAG,
+                            "STATUSRX seq=%u mode=%u sys=%u usb=%u scn=%u uptime_ms=%lu fault=%lu",
+                            (unsigned)frame.header.seq,
+                            (unsigned)status_payload.mode,
+                            (unsigned)status_payload.system_state,
+                            (unsigned)status_payload.usb_state,
+                            (unsigned)status_payload.scenario_state,
+                            (unsigned long)status_payload.uptime_ms,
+                            (unsigned long)status_payload.fault_flags);
+                        status_in_flight = false;
+                        status_wait_seq = RFV2_SEQ_RESERVED;
+                    }
                 }
             }
         }
@@ -290,6 +339,11 @@ void app_main(void)
             ping_in_flight = false;
             ping_wait_seq = RFV2_SEQ_RESERVED;
             ping_wait_nonce = 0;
+        }
+
+        if (status_in_flight && now >= status_deadline_tick) {
+            status_in_flight = false;
+            status_wait_seq = RFV2_SEQ_RESERVED;
         }
 
         vTaskDelay(pdMS_TO_TICKS(10));
