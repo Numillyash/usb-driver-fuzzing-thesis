@@ -12,6 +12,9 @@ extern "C" {
 #define RFV2_FRAME_SIZE         UINT8_C(32)
 #define RFV2_HEADER_SIZE        UINT8_C(10)
 #define RFV2_PAYLOAD_SIZE       UINT8_C(RFV2_FRAME_SIZE - RFV2_HEADER_SIZE)
+#define RFV2_SEQ_RESERVED       UINT16_C(0x0000)
+#define RFV2_SEQ_FIRST_VALID    UINT16_C(0x0001)
+#define RFV2_SEQ_MAX            UINT16_C(0xFFFF)
 
 typedef enum {
     RFV2_SRC_RP2040 = 1,
@@ -22,8 +25,16 @@ typedef enum {
 typedef enum {
     RFV2_FLAG_NONE = 0x00,
     RFV2_FLAG_ACK_REQUIRED = 0x01,
+    /* Reserved in the current revision. This bit must be zero for valid frames. */
     RFV2_FLAG_ERROR = 0x02
 } rfv2_flags_t;
+
+typedef enum {
+    RFV2_LINK_UNKNOWN = 0,
+    RFV2_LINK_OK = 1,
+    RFV2_LINK_DEGRADED = 2,
+    RFV2_LINK_LOST = 3
+} rfv2_link_state_t;
 
 typedef enum {
     RFV2_PKT_HEARTBEAT = 1,
@@ -42,6 +53,7 @@ typedef struct __attribute__((packed)) {
     uint8_t pkt_type;
     uint8_t src_id;
     uint8_t flags;
+    /* seq=0 is reserved. Valid command/event frames use 0x0001..0xffff and wrap 0xffff -> 0x0001. */
     uint16_t seq;
     uint8_t payload_len;
     uint8_t header_crc8;
@@ -63,10 +75,6 @@ typedef struct __attribute__((packed)) {
     uint32_t nonce;
     uint32_t responder_uptime_ms;
 } rfv2_pong_payload_t;
-
-typedef struct __attribute__((packed)) {
-    uint8_t request_flags;
-} rfv2_get_status_payload_t;
 
 typedef struct __attribute__((packed)) {
     uint32_t uptime_ms;
@@ -107,7 +115,6 @@ static_assert(sizeof(rfv2_frame_t) == RFV2_FRAME_SIZE, "rfv2_frame_t size must b
 static_assert(sizeof(rfv2_heartbeat_payload_t) <= RFV2_PAYLOAD_SIZE, "heartbeat payload too large");
 static_assert(sizeof(rfv2_ping_payload_t) <= RFV2_PAYLOAD_SIZE, "ping payload too large");
 static_assert(sizeof(rfv2_pong_payload_t) <= RFV2_PAYLOAD_SIZE, "pong payload too large");
-static_assert(sizeof(rfv2_get_status_payload_t) <= RFV2_PAYLOAD_SIZE, "get_status payload too large");
 static_assert(sizeof(rfv2_status_payload_t) <= RFV2_PAYLOAD_SIZE, "status payload too large");
 static_assert(sizeof(rfv2_set_mode_payload_t) <= RFV2_PAYLOAD_SIZE, "set_mode payload too large");
 static_assert(sizeof(rfv2_ack_payload_t) <= RFV2_PAYLOAD_SIZE, "ack payload too large");
@@ -118,7 +125,6 @@ _Static_assert(sizeof(rfv2_frame_t) == RFV2_FRAME_SIZE, "rfv2_frame_t size must 
 _Static_assert(sizeof(rfv2_heartbeat_payload_t) <= RFV2_PAYLOAD_SIZE, "heartbeat payload too large");
 _Static_assert(sizeof(rfv2_ping_payload_t) <= RFV2_PAYLOAD_SIZE, "ping payload too large");
 _Static_assert(sizeof(rfv2_pong_payload_t) <= RFV2_PAYLOAD_SIZE, "pong payload too large");
-_Static_assert(sizeof(rfv2_get_status_payload_t) <= RFV2_PAYLOAD_SIZE, "get_status payload too large");
 _Static_assert(sizeof(rfv2_status_payload_t) <= RFV2_PAYLOAD_SIZE, "status payload too large");
 _Static_assert(sizeof(rfv2_set_mode_payload_t) <= RFV2_PAYLOAD_SIZE, "set_mode payload too large");
 _Static_assert(sizeof(rfv2_ack_payload_t) <= RFV2_PAYLOAD_SIZE, "ack payload too large");

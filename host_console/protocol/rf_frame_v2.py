@@ -9,6 +9,9 @@ RFV2_FRAME_VERSION = 2
 RFV2_FRAME_SIZE = 32
 RFV2_HEADER_SIZE = 10
 RFV2_PAYLOAD_SIZE = RFV2_FRAME_SIZE - RFV2_HEADER_SIZE
+RFV2_SEQ_RESERVED = 0x0000
+RFV2_SEQ_FIRST_VALID = 0x0001
+RFV2_SEQ_MAX = 0xFFFF
 
 RFV2_PKT_HEARTBEAT = 1
 RFV2_PKT_PING = 2
@@ -27,11 +30,15 @@ RFV2_FLAG_NONE = 0x00
 RFV2_FLAG_ACK_REQUIRED = 0x01
 RFV2_FLAG_ERROR = 0x02
 
+RFV2_LINK_UNKNOWN = 0
+RFV2_LINK_OK = 1
+RFV2_LINK_DEGRADED = 2
+RFV2_LINK_LOST = 3
+
 HEADER_STRUCT = struct.Struct("<HBBBBHBB")
 HEARTBEAT_STRUCT = struct.Struct("<IBBBB")
 PING_STRUCT = struct.Struct("<I")
 PONG_STRUCT = struct.Struct("<II")
-GET_STATUS_STRUCT = struct.Struct("<B")
 STATUS_STRUCT = struct.Struct("<IHBBBBH")
 SET_MODE_STRUCT = struct.Struct("<BB")
 ACK_STRUCT = struct.Struct("<BBH")
@@ -46,6 +53,13 @@ PACKET_TYPE_NAMES: Dict[int, str] = {
     RFV2_PKT_SET_MODE: "SET_MODE",
     RFV2_PKT_ACK: "ACK",
     RFV2_PKT_NACK: "NACK",
+}
+
+LINK_STATE_NAMES: Dict[int, str] = {
+    RFV2_LINK_UNKNOWN: "UNKNOWN",
+    RFV2_LINK_OK: "OK",
+    RFV2_LINK_DEGRADED: "DEGRADED",
+    RFV2_LINK_LOST: "LOST",
 }
 
 
@@ -82,6 +96,14 @@ class RFFrameV2:
             raise ValueError(f"payload too large: {self.payload_len} > {RFV2_PAYLOAD_SIZE}")
         if len(self.payload) < self.payload_len:
             raise ValueError("payload shorter than payload_len")
+
+
+def next_seq(seq: int) -> int:
+    if seq < RFV2_SEQ_FIRST_VALID or seq > RFV2_SEQ_MAX:
+        return RFV2_SEQ_FIRST_VALID
+    if seq == RFV2_SEQ_MAX:
+        return RFV2_SEQ_FIRST_VALID
+    return seq + 1
 
 
 def _build_header_bytes(
@@ -141,6 +163,8 @@ def decode_frame(raw: bytes) -> RFFrameV2:
     magic, version, pkt_type, src_id, flags, seq, payload_len, header_crc8 = HEADER_STRUCT.unpack(
         raw[:RFV2_HEADER_SIZE]
     )
+    if payload_len > RFV2_PAYLOAD_SIZE:
+        raise ValueError(f"payload_len too large: {payload_len} > {RFV2_PAYLOAD_SIZE}")
     payload = raw[RFV2_HEADER_SIZE:]
 
     return RFFrameV2(
@@ -192,6 +216,7 @@ def decode_payload(frame: RFFrameV2) -> dict:
             "mode": mode,
             "system_state": system_state,
             "link_state": link_state,
+            "link_state_name": LINK_STATE_NAMES.get(link_state, f"UNKNOWN({link_state})"),
             "reserved0": reserved0,
         }
     if frame.pkt_type == RFV2_PKT_PING and len(payload) >= PING_STRUCT.size:
@@ -200,9 +225,8 @@ def decode_payload(frame: RFFrameV2) -> dict:
     if frame.pkt_type == RFV2_PKT_PONG and len(payload) >= PONG_STRUCT.size:
         nonce, responder_uptime_ms = PONG_STRUCT.unpack(payload[: PONG_STRUCT.size])
         return {"nonce": nonce, "responder_uptime_ms": responder_uptime_ms}
-    if frame.pkt_type == RFV2_PKT_GET_STATUS and len(payload) >= GET_STATUS_STRUCT.size:
-        (request_flags,) = GET_STATUS_STRUCT.unpack(payload[: GET_STATUS_STRUCT.size])
-        return {"request_flags": request_flags}
+    if frame.pkt_type == RFV2_PKT_GET_STATUS and len(payload) == 0:
+        return {}
     if frame.pkt_type == RFV2_PKT_STATUS and len(payload) >= STATUS_STRUCT.size:
         uptime_ms, active_seq, mode, system_state, usb_state, scenario_state, fault_flags = STATUS_STRUCT.unpack(
             payload[: STATUS_STRUCT.size]

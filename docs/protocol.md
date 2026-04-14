@@ -164,6 +164,7 @@ typedef struct __attribute__((packed)) {
     uint8_t  pkt_type;
     uint8_t  src_id;
     uint8_t  flags;
+    /* seq=0 is reserved. Valid command/event frames use 0x0001..0xffff and wrap 0xffff -> 0x0001. */
     uint16_t seq;
     uint8_t  payload_len;
     uint8_t  header_crc8;
@@ -185,6 +186,12 @@ typedef struct __attribute__((packed)) {
 - `header size = 10 bytes`
 - `payload budget = 22 bytes`
 
+#### rf_frame_v2 Sequence Policy
+
+- `seq=0` зарезервирован и не используется для валидных command/event frames;
+- валидный диапазон: `0x0001..0xffff`;
+- wrap policy: `0xffff -> 0x0001`.
+
 #### rf_frame_v2 Packet Types
 
 Минимальный набор packet types для этого radio format:
@@ -197,6 +204,27 @@ typedef struct __attribute__((packed)) {
 - `RFV2_PKT_SET_MODE`
 - `RFV2_PKT_ACK`
 - `RFV2_PKT_NACK`
+
+#### rf_frame_v2 Packet Notes
+
+- `RFV2_PKT_GET_STATUS` в текущем draft фиксируется как zero-payload packet;
+- `RFV2_PKT_HEARTBEAT` использует компактный payload с `uptime_ms`, `mode`, `system_state`, `link_state` и одним reserved byte;
+- `link_state` пока имеет минимальный набор значений:
+  - `UNKNOWN = 0`
+  - `OK = 1`
+  - `DEGRADED = 2`
+  - `LOST = 3`
+
+#### rf_frame_v2 Flags
+
+В текущей ревизии реально используются только следующие биты:
+
+- bit `0` = `RFV2_FLAG_ACK_REQUIRED`
+
+Зарезервированные биты:
+
+- bit `1` = `RFV2_FLAG_ERROR` пока не используется и должен быть `0`
+- bits `2..7` зарезервированы и тоже должны быть `0`
 
 #### Header Integrity
 
