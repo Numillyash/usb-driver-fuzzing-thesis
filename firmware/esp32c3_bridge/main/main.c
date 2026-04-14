@@ -187,7 +187,7 @@ void app_main(void)
             rfv2_frame_t ping_frame;
             const uint16_t current_ping_seq = request_seq;
             const uint32_t current_ping_nonce = ping_nonce;
-            const int ping_ok;
+            int ping_ok;
 
             build_rfv2_ping(&ping_frame, current_ping_seq, current_ping_nonce);
             ping_ok = nrf24_drv_send_frame_v2((const uint8_t *)&ping_frame, sizeof(ping_frame));
@@ -210,7 +210,7 @@ void app_main(void)
         if (!status_in_flight && (now - last_status_tick) >= pdMS_TO_TICKS(RFV2_STATUS_INTERVAL_MS)) {
             rfv2_frame_t status_req_frame;
             const uint16_t current_status_seq = request_seq;
-            const int status_ok;
+            int status_ok;
 
             build_rfv2_get_status(&status_req_frame, current_status_seq);
             status_ok = nrf24_drv_send_frame_v2((const uint8_t *)&status_req_frame, sizeof(status_req_frame));

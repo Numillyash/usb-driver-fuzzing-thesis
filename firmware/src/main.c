@@ -147,7 +147,7 @@ int main(void) {
 
         if ((now_ms - last_heartbeat_ms) >= RFV2_HEARTBEAT_INTERVAL_MS) {
                 rfv2_frame_t heartbeat_frame;
-                const bool heartbeat_sent;
+                bool heartbeat_sent;
 
                 build_rfv2_heartbeat(&heartbeat_frame, heartbeat_seq);
                 heartbeat_sent = nrf24_radio_send_frame_v2(&heartbeat_frame, sizeof(heartbeat_frame));
