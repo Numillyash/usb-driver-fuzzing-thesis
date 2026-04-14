@@ -306,6 +306,49 @@ int nrf24_drv_send(const uint8_t *data, size_t len)
     return -1;
 }
 
+int nrf24_drv_send_frame_v2(const uint8_t *data, size_t len)
+{
+    uint8_t tx[1 + RFV2_FRAME_SIZE] = { 0 };
+    uint8_t rx[1 + RFV2_FRAME_SIZE] = { 0 };
+    TickType_t deadline;
+
+    if (!g_ready || data == NULL || len != RFV2_FRAME_SIZE) {
+        return -1;
+    }
+
+    ESP_ERROR_CHECK(nrf24_select_tx_addr(k_rfv2_addr));
+    nrf24_ce_low();
+    ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_CONFIG, NRF24_CONFIG_TX));
+    ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_STATUS, NRF24_STATUS_CLEAR_IRQS));
+    ESP_ERROR_CHECK(nrf24_command(NRF24_CMD_FLUSH_TX, NULL));
+
+    tx[0] = NRF24_CMD_W_TX_PAYLOAD;
+    memcpy(&tx[1], data, len);
+    ESP_ERROR_CHECK(nrf24_transfer(tx, rx, len + 1u));
+    g_last_status = rx[0];
+
+    nrf24_ce_high();
+    esp_rom_delay_us(20);
+    nrf24_ce_low();
+
+    deadline = xTaskGetTickCount() + pdMS_TO_TICKS(NRF24_TX_TIMEOUT_MS);
+    while (xTaskGetTickCount() <= deadline) {
+        uint8_t status = 0;
+
+        ESP_ERROR_CHECK(nrf24_read_register(NRF24_REG_STATUS, &status));
+        if ((status & (NRF24_STATUS_TX_DS | NRF24_STATUS_MAX_RT)) != 0u) {
+            ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_STATUS, NRF24_STATUS_CLEAR_IRQS));
+            ESP_ERROR_CHECK(nrf24_set_rx_mode());
+            return (status & NRF24_STATUS_TX_DS) != 0u ? (int)len : -1;
+        }
+        vTaskDelay(pdMS_TO_TICKS(1));
+    }
+
+    ESP_ERROR_CHECK(nrf24_command(NRF24_CMD_FLUSH_TX, NULL));
+    ESP_ERROR_CHECK(nrf24_set_rx_mode());
+    return -1;
+}
+
 int nrf24_drv_recv(uint8_t *data, size_t max_len, uint8_t *pipe_out)
 {
     uint8_t tx[1 + RFV2_FRAME_SIZE] = { 0 };

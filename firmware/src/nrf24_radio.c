@@ -55,6 +55,9 @@
 #define NRF24_STATUS_RX_DR              0x40u
 #define NRF24_STATUS_TX_DS              0x20u
 #define NRF24_STATUS_MAX_RT             0x10u
+#define NRF24_STATUS_RX_P_NO_MASK       0x0Eu
+#define NRF24_STATUS_RX_P_NO_SHIFT      1u
+#define NRF24_STATUS_RX_P_NO_EMPTY      0x07u
 #define NRF24_FIFO_RX_EMPTY             0x01u
 
 static const uint8_t k_rf_test_addr[5] = { 'R', 'F', 'T', '0', '1' };
@@ -194,6 +197,22 @@ static bool nrf24_rx_available(void)
     return ((status & NRF24_STATUS_RX_DR) != 0u) || ((fifo_status & NRF24_FIFO_RX_EMPTY) == 0u);
 }
 
+static int nrf24_rx_pipe_number(void)
+{
+    const uint8_t status = nrf24_read_register(NRF24_REG_STATUS);
+    const uint8_t fifo_status = nrf24_read_register(NRF24_REG_FIFO_STATUS);
+    const uint8_t rx_p_no = (uint8_t)((status & NRF24_STATUS_RX_P_NO_MASK) >> NRF24_STATUS_RX_P_NO_SHIFT);
+
+    if ((fifo_status & NRF24_FIFO_RX_EMPTY) != 0u) {
+        return -1;
+    }
+    if (rx_p_no == NRF24_STATUS_RX_P_NO_EMPTY) {
+        return -1;
+    }
+
+    return (int)rx_p_no;
+}
+
 bool nrf24_radio_init_tx(void)
 {
     spi_init(NRF24_SPI_PORT, NRF24_SPI_BAUDRATE);
@@ -315,7 +334,34 @@ int nrf24_radio_recv_fixed(void *data, size_t len, uint32_t timeout_ms)
     deadline = make_timeout_time_ms(timeout_ms == 0 ? NRF24_RX_TIMEOUT_MS : timeout_ms);
 
     while (!time_reached(deadline)) {
-        if (nrf24_rx_available()) {
+        if (nrf24_rx_available() && nrf24_rx_pipe_number() == 0) {
+            nrf24_read_payload(payload, sizeof(payload));
+            memcpy(data, payload, sizeof(payload));
+            nrf24_write_register(NRF24_REG_STATUS, NRF24_STATUS_CLEAR_IRQS);
+            nrf24_ce_low();
+            return (int)sizeof(payload);
+        }
+        sleep_ms(1);
+    }
+
+    nrf24_ce_low();
+    return 0;
+}
+
+int nrf24_radio_recv_frame_v2(void *data, size_t len, uint32_t timeout_ms)
+{
+    absolute_time_t deadline;
+    uint8_t payload[RFV2_FRAME_SIZE];
+
+    if (!g_radio_ready || data == NULL || len != RFV2_FRAME_SIZE) {
+        return -1;
+    }
+
+    nrf24_set_rx_mode();
+    deadline = make_timeout_time_ms(timeout_ms == 0 ? NRF24_RX_TIMEOUT_MS : timeout_ms);
+
+    while (!time_reached(deadline)) {
+        if (nrf24_rx_available() && nrf24_rx_pipe_number() == 1) {
             nrf24_read_payload(payload, sizeof(payload));
             memcpy(data, payload, sizeof(payload));
             nrf24_write_register(NRF24_REG_STATUS, NRF24_STATUS_CLEAR_IRQS);

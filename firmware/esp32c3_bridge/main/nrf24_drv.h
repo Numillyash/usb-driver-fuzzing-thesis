@@ -11,6 +11,7 @@ extern "C" {
 
 void nrf24_drv_init(void);
 int nrf24_drv_send(const uint8_t *data, size_t len);
+int nrf24_drv_send_frame_v2(const uint8_t *data, size_t len);
 int nrf24_drv_recv(uint8_t *data, size_t max_len, uint8_t *pipe_out);
 bool nrf24_drv_poll(void);
 void nrf24_drv_recover_rx(void);

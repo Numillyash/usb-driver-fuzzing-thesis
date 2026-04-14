@@ -15,16 +15,59 @@
 #include "rf_test_packet.h"
 
 #define BRIDGE_HEARTBEAT_INTERVAL_MS 5000
+#define RFV2_PING_INTERVAL_MS 7000
+#define RFV2_PING_TIMEOUT_MS 1500
 #ifndef RF_DEBUG
 #define RF_DEBUG 2
 #endif
 
 static const char *TAG = "bridge_main";
 
+static uint16_t rfv2_next_seq(uint16_t seq)
+{
+    if (seq == RFV2_SEQ_RESERVED || seq == RFV2_SEQ_MAX) {
+        return RFV2_SEQ_FIRST_VALID;
+    }
+
+    return (uint16_t)(seq + 1u);
+}
+
+static void build_rfv2_header(rfv2_frame_t *frame, uint8_t pkt_type, uint8_t src_id, uint16_t seq, uint8_t payload_len)
+{
+    memset(frame, 0, sizeof(*frame));
+    frame->header.magic = RFV2_FRAME_MAGIC;
+    frame->header.version = RFV2_FRAME_VERSION;
+    frame->header.pkt_type = pkt_type;
+    frame->header.src_id = src_id;
+    frame->header.flags = RFV2_FLAG_NONE;
+    frame->header.seq = seq;
+    frame->header.payload_len = payload_len;
+    frame->header.header_crc8 = crc8_compute(&frame->header, offsetof(rfv2_header_t, header_crc8));
+}
+
 static bool rfv2_header_crc_is_valid(const rfv2_frame_t *frame)
 {
     return frame->header.header_crc8 ==
            crc8_compute(&frame->header, offsetof(rfv2_header_t, header_crc8));
+}
+
+static bool rfv2_frame_is_valid(const rfv2_frame_t *frame)
+{
+    return frame->header.magic == RFV2_FRAME_MAGIC &&
+           frame->header.version == RFV2_FRAME_VERSION &&
+           frame->header.seq != RFV2_SEQ_RESERVED &&
+           frame->header.payload_len <= RFV2_PAYLOAD_SIZE &&
+           rfv2_header_crc_is_valid(frame);
+}
+
+static void build_rfv2_ping(rfv2_frame_t *frame, uint16_t seq, uint32_t nonce)
+{
+    rfv2_ping_payload_t payload = {
+        .nonce = nonce,
+    };
+
+    build_rfv2_header(frame, RFV2_PKT_PING, RFV2_SRC_ESP32C3, seq, (uint8_t)sizeof(payload));
+    memcpy(frame->payload, &payload, sizeof(payload));
 }
 
 static void log_hfv2(const rfv2_frame_t *frame)
@@ -90,16 +133,24 @@ static void log_rxhex(const uint8_t *buf, size_t len)
 void app_main(void)
 {
     TickType_t last_heartbeat_tick;
+    TickType_t last_ping_tick;
     uint32_t valid_rx = 0;
     uint32_t garbage_rx = 0;
     uint32_t ack_tx_ok = 0;
     uint32_t ack_tx_fail = 0;
+    uint32_t ping_nonce = 1;
     uint16_t last_seq = 0;
+    uint16_t ping_seq = RFV2_SEQ_FIRST_VALID;
+    uint16_t ping_wait_seq = RFV2_SEQ_RESERVED;
+    uint32_t ping_wait_nonce = 0;
+    bool ping_in_flight = false;
+    TickType_t ping_deadline_tick = 0;
     uint8_t rx_buf[RFV2_FRAME_SIZE];
 
     bridge_uart_init();
     nrf24_drv_init();
     last_heartbeat_tick = xTaskGetTickCount();
+    last_ping_tick = last_heartbeat_tick;
 
     bridge_uart_write_str("esp32c3_bridge: boot\r\n");
     bridge_uart_write_str("esp32c3_bridge: nrf24 rx bring-up mode\r\n");
@@ -118,6 +169,30 @@ void app_main(void)
                 (unsigned)last_seq,
                 (unsigned)nrf24_drv_last_status());
             last_heartbeat_tick = now;
+        }
+
+        if (!ping_in_flight && (now - last_ping_tick) >= pdMS_TO_TICKS(RFV2_PING_INTERVAL_MS)) {
+            rfv2_frame_t ping_frame;
+            const uint16_t current_ping_seq = ping_seq;
+            const uint32_t current_ping_nonce = ping_nonce;
+            const int ping_ok;
+
+            build_rfv2_ping(&ping_frame, current_ping_seq, current_ping_nonce);
+            ping_ok = nrf24_drv_send_frame_v2((const uint8_t *)&ping_frame, sizeof(ping_frame));
+            if (ping_ok == (int)sizeof(ping_frame)) {
+                ESP_LOGI(
+                    TAG,
+                    "PINGTX seq=%u nonce=%lu",
+                    (unsigned)current_ping_seq,
+                    (unsigned long)current_ping_nonce);
+                ping_in_flight = true;
+                ping_wait_seq = current_ping_seq;
+                ping_wait_nonce = current_ping_nonce;
+                ping_deadline_tick = now + pdMS_TO_TICKS(RFV2_PING_TIMEOUT_MS);
+                ping_seq = rfv2_next_seq(ping_seq);
+                ping_nonce++;
+            }
+            last_ping_tick = now;
         }
 
         if (nrf24_drv_poll()) {
@@ -180,14 +255,41 @@ void app_main(void)
                 rfv2_frame_t frame;
 
                 memcpy(&frame, rx_buf, sizeof(frame));
-                if (frame.header.magic == RFV2_FRAME_MAGIC &&
-                    frame.header.version == RFV2_FRAME_VERSION &&
+                if (rfv2_frame_is_valid(&frame) &&
                     frame.header.pkt_type == RFV2_PKT_HEARTBEAT &&
-                    frame.header.payload_len == sizeof(rfv2_heartbeat_payload_t) &&
-                    rfv2_header_crc_is_valid(&frame)) {
+                    frame.header.payload_len == sizeof(rfv2_heartbeat_payload_t)) {
                     log_hfv2(&frame);
+                } else if (rfv2_frame_is_valid(&frame) &&
+                           frame.header.pkt_type == RFV2_PKT_PONG &&
+                           frame.header.payload_len == sizeof(rfv2_pong_payload_t)) {
+                    rfv2_pong_payload_t pong_payload;
+
+                    memcpy(&pong_payload, frame.payload, sizeof(pong_payload));
+                    if (ping_in_flight &&
+                        frame.header.seq == ping_wait_seq &&
+                        pong_payload.nonce == ping_wait_nonce) {
+                        ESP_LOGI(
+                            TAG,
+                            "PONGRX seq=%u nonce=%lu ok=1",
+                            (unsigned)frame.header.seq,
+                            (unsigned long)pong_payload.nonce);
+                        ping_in_flight = false;
+                        ping_wait_seq = RFV2_SEQ_RESERVED;
+                        ping_wait_nonce = 0;
+                    }
                 }
             }
+        }
+
+        if (ping_in_flight && now >= ping_deadline_tick) {
+            ESP_LOGI(
+                TAG,
+                "PING timeout seq=%u nonce=%lu",
+                (unsigned)ping_wait_seq,
+                (unsigned long)ping_wait_nonce);
+            ping_in_flight = false;
+            ping_wait_seq = RFV2_SEQ_RESERVED;
+            ping_wait_nonce = 0;
         }
 
         vTaskDelay(pdMS_TO_TICKS(10));

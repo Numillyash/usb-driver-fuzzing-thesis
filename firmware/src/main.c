@@ -11,8 +11,42 @@
 #include "rf_frame_v2.h"
 #include "rf_test_packet.h"
 
+#define RF_TEST_INTERVAL_MS 1000u
 #define RF_TEST_ACK_TIMEOUT_MS 75u
 #define RFV2_HEARTBEAT_INTERVAL_MS 5000u
+#define RFV2_PING_POLL_MS 10u
+
+static uint16_t rfv2_next_seq(uint16_t seq)
+{
+    if (seq == RFV2_SEQ_RESERVED || seq == RFV2_SEQ_MAX) {
+        return RFV2_SEQ_FIRST_VALID;
+    }
+
+    return (uint16_t)(seq + 1u);
+}
+
+static void build_rfv2_header(rfv2_frame_t *frame, uint8_t pkt_type, uint16_t seq, uint8_t payload_len)
+{
+    memset(frame, 0, sizeof(*frame));
+    frame->header.magic = RFV2_FRAME_MAGIC;
+    frame->header.version = RFV2_FRAME_VERSION;
+    frame->header.pkt_type = pkt_type;
+    frame->header.src_id = RFV2_SRC_RP2040;
+    frame->header.flags = RFV2_FLAG_NONE;
+    frame->header.seq = seq;
+    frame->header.payload_len = payload_len;
+    frame->header.header_crc8 = crc8_compute(&frame->header, offsetof(rfv2_header_t, header_crc8));
+}
+
+static bool rfv2_header_is_valid(const rfv2_frame_t *frame)
+{
+    return frame->header.magic == RFV2_FRAME_MAGIC &&
+           frame->header.version == RFV2_FRAME_VERSION &&
+           frame->header.seq != RFV2_SEQ_RESERVED &&
+           frame->header.payload_len <= RFV2_PAYLOAD_SIZE &&
+           frame->header.header_crc8 ==
+               crc8_compute(&frame->header, offsetof(rfv2_header_t, header_crc8));
+}
 
 static void build_rfv2_heartbeat(rfv2_frame_t *frame, uint16_t seq)
 {
@@ -20,85 +54,122 @@ static void build_rfv2_heartbeat(rfv2_frame_t *frame, uint16_t seq)
         .uptime_ms = to_ms_since_boot(get_absolute_time()),
         .mode = 0u,
         .system_state = 0u,
-        .link_state = 0u,
+        .link_state = RFV2_LINK_OK,
         .reserved0 = 0u,
     };
 
-    memset(frame, 0, sizeof(*frame));
-    frame->header.magic = RFV2_FRAME_MAGIC;
-    frame->header.version = RFV2_FRAME_VERSION;
-    frame->header.pkt_type = RFV2_PKT_HEARTBEAT;
-    frame->header.src_id = RFV2_SRC_RP2040;
-    frame->header.flags = RFV2_FLAG_NONE;
-    frame->header.seq = seq;
-    frame->header.payload_len = (uint8_t)sizeof(payload);
+    build_rfv2_header(frame, RFV2_PKT_HEARTBEAT, seq, (uint8_t)sizeof(payload));
     memcpy(frame->payload, &payload, sizeof(payload));
-    frame->header.header_crc8 = crc8_compute(&frame->header, offsetof(rfv2_header_t, header_crc8));
+}
+
+static void build_rfv2_pong(rfv2_frame_t *frame, uint16_t seq, uint32_t nonce)
+{
+    rfv2_pong_payload_t payload = {
+        .nonce = nonce,
+        .responder_uptime_ms = to_ms_since_boot(get_absolute_time()),
+    };
+
+    build_rfv2_header(frame, RFV2_PKT_PONG, seq, (uint8_t)sizeof(payload));
+    memcpy(frame->payload, &payload, sizeof(payload));
 }
 
 int main(void) {
     uint16_t seq = 0;
-    uint16_t heartbeat_seq = 0;
+    uint16_t heartbeat_seq = RFV2_SEQ_FIRST_VALID;
+    uint32_t last_rf_test_ms = 0;
     uint32_t last_heartbeat_ms = 0;
 
     stdio_init_all();
     sleep_ms(2000);
     (void)nrf24_radio_init_tx();
+    last_rf_test_ms = to_ms_since_boot(get_absolute_time()) - RF_TEST_INTERVAL_MS;
+    last_heartbeat_ms = to_ms_since_boot(get_absolute_time()) - RFV2_HEARTBEAT_INTERVAL_MS;
 
     while (true) {
-        rf_test_packet_t packet = {
-            .magic = RF_TEST_PACKET_MAGIC,
-            .version = RF_TEST_PACKET_VERSION,
-            .msg_type = RF_TEST_MSG_DATA,
-            .seq = seq++,
-            .uptime_ms = to_ms_since_boot(get_absolute_time()),
-            .arg0 = 0,
-            .flags = RF_TEST_FLAG_NONE,
-        };
-        const bool sent = nrf24_radio_send_fixed(&packet, sizeof(packet));
-        rf_test_packet_t ack_packet;
-        int ack_len = 0;
+        const uint32_t now_ms = to_ms_since_boot(get_absolute_time());
 
-        printf("portable_demo: rf_test seq=%u sent=%u status=0x%02x\r\n",
-               (unsigned)packet.seq,
-               sent ? 1u : 0u,
-               (unsigned)nrf24_radio_last_status());
+        if ((now_ms - last_rf_test_ms) >= RF_TEST_INTERVAL_MS) {
+            rf_test_packet_t packet = {
+                .magic = RF_TEST_PACKET_MAGIC,
+                .version = RF_TEST_PACKET_VERSION,
+                .msg_type = RF_TEST_MSG_DATA,
+                .seq = seq++,
+                .uptime_ms = now_ms,
+                .arg0 = 0,
+                .flags = RF_TEST_FLAG_NONE,
+            };
+            const bool sent = nrf24_radio_send_fixed(&packet, sizeof(packet));
+            rf_test_packet_t ack_packet;
+            int ack_len = 0;
 
-        if (sent) {
-            ack_len = nrf24_radio_recv_fixed(&ack_packet, sizeof(ack_packet), RF_TEST_ACK_TIMEOUT_MS);
-        }
-
-        if (ack_len == (int)sizeof(ack_packet) &&
-            ack_packet.magic == RF_TEST_PACKET_MAGIC &&
-            ack_packet.version == RF_TEST_PACKET_VERSION &&
-            ack_packet.msg_type == RF_TEST_MSG_ACK &&
-            ack_packet.seq == packet.seq) {
-            printf("portable_demo: ack seq=%u status=0x%02x\r\n",
-                   (unsigned)ack_packet.seq,
-                   (unsigned)nrf24_radio_last_status());
-        } else if (sent) {
-            printf("portable_demo: ack timeout seq=%u status=0x%02x\r\n",
+            printf("portable_demo: rf_test seq=%u sent=%u status=0x%02x\r\n",
                    (unsigned)packet.seq,
+                   sent ? 1u : 0u,
                    (unsigned)nrf24_radio_last_status());
+
+            if (sent) {
+                ack_len = nrf24_radio_recv_fixed(&ack_packet, sizeof(ack_packet), RF_TEST_ACK_TIMEOUT_MS);
+            }
+
+            if (ack_len == (int)sizeof(ack_packet) &&
+                ack_packet.magic == RF_TEST_PACKET_MAGIC &&
+                ack_packet.version == RF_TEST_PACKET_VERSION &&
+                ack_packet.msg_type == RF_TEST_MSG_ACK &&
+                ack_packet.seq == packet.seq) {
+                printf("portable_demo: ack seq=%u status=0x%02x\r\n",
+                       (unsigned)ack_packet.seq,
+                       (unsigned)nrf24_radio_last_status());
+            } else if (sent) {
+                printf("portable_demo: ack timeout seq=%u status=0x%02x\r\n",
+                       (unsigned)packet.seq,
+                       (unsigned)nrf24_radio_last_status());
+            }
+
+            last_rf_test_ms = now_ms;
         }
 
-        {
-            const uint32_t now_ms = to_ms_since_boot(get_absolute_time());
-
-            if ((now_ms - last_heartbeat_ms) >= RFV2_HEARTBEAT_INTERVAL_MS) {
+        if ((now_ms - last_heartbeat_ms) >= RFV2_HEARTBEAT_INTERVAL_MS) {
                 rfv2_frame_t heartbeat_frame;
                 const bool heartbeat_sent;
 
-                build_rfv2_heartbeat(&heartbeat_frame, heartbeat_seq++);
+                build_rfv2_heartbeat(&heartbeat_frame, heartbeat_seq);
                 heartbeat_sent = nrf24_radio_send_frame_v2(&heartbeat_frame, sizeof(heartbeat_frame));
 
                 printf("portable_demo: hfv2 seq=%u sent=%u status=0x%02x\r\n",
                        (unsigned)heartbeat_frame.header.seq,
                        heartbeat_sent ? 1u : 0u,
                        (unsigned)nrf24_radio_last_status());
+                heartbeat_seq = rfv2_next_seq(heartbeat_seq);
                 last_heartbeat_ms = now_ms;
+        }
+
+        {
+            rfv2_frame_t rx_frame;
+            const int rx_len = nrf24_radio_recv_frame_v2(&rx_frame, sizeof(rx_frame), RFV2_PING_POLL_MS);
+
+            if (rx_len == (int)sizeof(rx_frame) &&
+                rfv2_header_is_valid(&rx_frame) &&
+                rx_frame.header.pkt_type == RFV2_PKT_PING &&
+                rx_frame.header.payload_len == sizeof(rfv2_ping_payload_t)) {
+                rfv2_ping_payload_t ping_payload;
+                rfv2_frame_t pong_frame;
+                rfv2_pong_payload_t pong_payload;
+
+                memcpy(&ping_payload, rx_frame.payload, sizeof(ping_payload));
+                printf("portable_demo: rfv2 ping seq=%u nonce=%lu\r\n",
+                       (unsigned)rx_frame.header.seq,
+                       (unsigned long)ping_payload.nonce);
+
+                build_rfv2_pong(&pong_frame, rx_frame.header.seq, ping_payload.nonce);
+                (void)nrf24_radio_send_frame_v2(&pong_frame, sizeof(pong_frame));
+                memcpy(&pong_payload, pong_frame.payload, sizeof(pong_payload));
+
+                printf("portable_demo: rfv2 pong seq=%u nonce=%lu\r\n",
+                       (unsigned)pong_frame.header.seq,
+                       (unsigned long)pong_payload.nonce);
             }
         }
-        sleep_ms(1000);
+
+        sleep_ms(5);
     }
 }
