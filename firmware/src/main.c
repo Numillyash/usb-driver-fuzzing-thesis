@@ -12,10 +12,15 @@
 #include "rf_test_packet.h"
 #include "status.h"
 
+#ifndef PIPE0_PROBE_DIAG
+#define PIPE0_PROBE_DIAG 1
+#endif
+
 #define RF_TEST_INTERVAL_MS 1000u
 #define RF_TEST_ACK_TIMEOUT_MS 75u
 #define RFV2_HEARTBEAT_INTERVAL_MS 5000u
 #define RFV2_PING_POLL_MS 10u
+#define PIPE0_PROBE_ARG0 UINT32_C(0x50424F30)
 
 static uint16_t rfv2_next_seq(uint16_t seq)
 {
@@ -206,6 +211,22 @@ int main(void) {
                        (unsigned)status_payload.scenario_state);
             }
         }
+
+#if PIPE0_PROBE_DIAG
+        {
+            rf_test_packet_t probe_packet;
+            const int probe_len = nrf24_radio_recv_fixed(&probe_packet, sizeof(probe_packet), 1u);
+
+            if (probe_len == (int)sizeof(probe_packet) &&
+                probe_packet.magic == RF_TEST_PACKET_MAGIC &&
+                probe_packet.version == RF_TEST_PACKET_VERSION &&
+                probe_packet.msg_type == RF_TEST_MSG_DATA &&
+                probe_packet.arg0 == PIPE0_PROBE_ARG0) {
+                printf("portable_demo: PIPE0_PROBERX seq=%u\r\n",
+                       (unsigned)probe_packet.seq);
+            }
+        }
+#endif
 
         sleep_ms(5);
     }

@@ -14,11 +14,17 @@
 #include "rf_frame_v2.h"
 #include "rf_test_packet.h"
 
+#ifndef PIPE0_PROBE_DIAG
+#define PIPE0_PROBE_DIAG 1
+#endif
+
 #define BRIDGE_HEARTBEAT_INTERVAL_MS 5000
 #define RFV2_PING_INTERVAL_MS 7000
 #define RFV2_PING_TIMEOUT_MS 1500
 #define RFV2_STATUS_INTERVAL_MS 10000
 #define RFV2_STATUS_TIMEOUT_MS 1500
+#define PIPE0_PROBE_INTERVAL_MS 3000
+#define PIPE0_PROBE_ARG0 UINT32_C(0x50424F30)
 #ifndef RF_DEBUG
 #define RF_DEBUG 2
 #endif
@@ -142,6 +148,10 @@ void app_main(void)
     TickType_t last_heartbeat_tick;
     TickType_t last_ping_tick;
     TickType_t last_status_tick;
+#if PIPE0_PROBE_DIAG
+    TickType_t last_pipe0_probe_tick;
+    uint16_t pipe0_probe_seq = 1;
+#endif
     uint32_t valid_rx = 0;
     uint32_t garbage_rx = 0;
     uint32_t ack_tx_ok = 0;
@@ -163,6 +173,9 @@ void app_main(void)
     last_heartbeat_tick = xTaskGetTickCount();
     last_ping_tick = last_heartbeat_tick;
     last_status_tick = last_heartbeat_tick;
+#if PIPE0_PROBE_DIAG
+    last_pipe0_probe_tick = last_heartbeat_tick;
+#endif
 
     bridge_uart_write_str("esp32c3_bridge: boot\r\n");
     bridge_uart_write_str("esp32c3_bridge: nrf24 rx bring-up mode\r\n");
@@ -223,6 +236,29 @@ void app_main(void)
             }
             last_status_tick = now;
         }
+
+#if PIPE0_PROBE_DIAG
+        if ((now - last_pipe0_probe_tick) >= pdMS_TO_TICKS(PIPE0_PROBE_INTERVAL_MS)) {
+            rf_test_packet_t probe_packet = {
+                .magic = RF_TEST_PACKET_MAGIC,
+                .version = RF_TEST_PACKET_VERSION,
+                .msg_type = RF_TEST_MSG_DATA,
+                .seq = pipe0_probe_seq++,
+                .uptime_ms = (uint32_t)pdTICKS_TO_MS(now),
+                .arg0 = PIPE0_PROBE_ARG0,
+                .flags = RF_TEST_FLAG_NONE,
+            };
+            const int probe_ok = nrf24_drv_send((const uint8_t *)&probe_packet, sizeof(probe_packet));
+
+            ESP_LOGI(
+                TAG,
+                "PIPE0_PROBETX seq=%u ok=%d status=0x%02x",
+                (unsigned)probe_packet.seq,
+                probe_ok == (int)sizeof(probe_packet),
+                (unsigned)nrf24_drv_last_status());
+            last_pipe0_probe_tick = now;
+        }
+#endif
 
         if (nrf24_drv_poll()) {
             uint8_t rx_pipe = 0xffu;
