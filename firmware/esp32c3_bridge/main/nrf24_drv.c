@@ -170,9 +170,15 @@ static size_t nrf24_payload_size_for_pipe(uint8_t rx_p_no)
     return 0u;
 }
 
-static esp_err_t nrf24_select_tx_addr(const uint8_t *addr)
+static esp_err_t nrf24_configure_prx_pipes(void)
 {
-    ESP_ERROR_CHECK(nrf24_write_register_buf(NRF24_REG_TX_ADDR, addr, 5u));
+    ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_EN_RXADDR, 0x03u));
+    ESP_ERROR_CHECK(nrf24_write_register_buf(NRF24_REG_RX_ADDR_P0, k_rf_test_addr, sizeof(k_rf_test_addr)));
+    ESP_ERROR_CHECK(nrf24_write_register_buf(NRF24_REG_RX_ADDR_P1, k_rfv2_addr, sizeof(k_rfv2_addr)));
+    ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_RX_PW_P0, RF_TEST_PAYLOAD_SIZE));
+    ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_RX_PW_P1, RFV2_FRAME_SIZE));
+    ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_DYNPD, 0x00u));
+    ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_FEATURE, 0x00u));
     return ESP_OK;
 }
 
@@ -183,6 +189,29 @@ static esp_err_t nrf24_set_rx_mode(void)
     ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_CONFIG, NRF24_CONFIG_RX));
     esp_rom_delay_us(150);
     nrf24_ce_high();
+    return ESP_OK;
+}
+
+static esp_err_t nrf24_prepare_tx(const uint8_t *tx_addr)
+{
+    nrf24_ce_low();
+    ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_STATUS, NRF24_STATUS_CLEAR_IRQS));
+    ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_DYNPD, 0x00u));
+    ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_FEATURE, 0x00u));
+    ESP_ERROR_CHECK(nrf24_write_register_buf(NRF24_REG_TX_ADDR, tx_addr, 5u));
+    ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_CONFIG, NRF24_CONFIG_TX));
+    esp_rom_delay_us(150);
+    ESP_ERROR_CHECK(nrf24_command(NRF24_CMD_FLUSH_TX, NULL));
+    return ESP_OK;
+}
+
+static esp_err_t nrf24_restore_prx(void)
+{
+    nrf24_ce_low();
+    ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_STATUS, NRF24_STATUS_CLEAR_IRQS));
+    ESP_ERROR_CHECK(nrf24_command(NRF24_CMD_FLUSH_TX, NULL));
+    ESP_ERROR_CHECK(nrf24_configure_prx_pipes());
+    ESP_ERROR_CHECK(nrf24_set_rx_mode());
     return ESP_OK;
 }
 
@@ -210,9 +239,8 @@ void nrf24_drv_recover_rx(void)
         return;
     }
 
-    ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_STATUS, NRF24_STATUS_CLEAR_IRQS));
     ESP_ERROR_CHECK(nrf24_command(NRF24_CMD_FLUSH_RX, NULL));
-    ESP_ERROR_CHECK(nrf24_set_rx_mode());
+    ESP_ERROR_CHECK(nrf24_restore_prx());
 }
 
 void nrf24_drv_init(void)
@@ -240,22 +268,16 @@ void nrf24_drv_init(void)
 
     ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_CONFIG, 0x08u));
     ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_EN_AA, 0x00u));
-    ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_EN_RXADDR, 0x03u));
     ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_SETUP_AW, NRF24_SETUP_AW_5BYTES));
     ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_SETUP_RETR, 0x00u));
     ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_RF_CH, NRF24_RF_CHANNEL));
     ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_RF_SETUP, NRF24_RF_SETUP_250KBPS_LOW_PWR));
-    ESP_ERROR_CHECK(nrf24_write_register_buf(NRF24_REG_RX_ADDR_P0, k_rf_test_addr, sizeof(k_rf_test_addr)));
-    ESP_ERROR_CHECK(nrf24_write_register_buf(NRF24_REG_RX_ADDR_P1, k_rfv2_addr, sizeof(k_rfv2_addr)));
     ESP_ERROR_CHECK(nrf24_write_register_buf(NRF24_REG_TX_ADDR, k_rf_test_addr, sizeof(k_rf_test_addr)));
-    ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_RX_PW_P0, RF_TEST_PAYLOAD_SIZE));
-    ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_RX_PW_P1, RFV2_FRAME_SIZE));
-    ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_DYNPD, 0x00u));
-    ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_FEATURE, 0x00u));
+    ESP_ERROR_CHECK(nrf24_configure_prx_pipes());
     ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_STATUS, NRF24_STATUS_CLEAR_IRQS));
     ESP_ERROR_CHECK(nrf24_command(NRF24_CMD_FLUSH_TX, NULL));
     ESP_ERROR_CHECK(nrf24_command(NRF24_CMD_FLUSH_RX, NULL));
-    ESP_ERROR_CHECK(nrf24_set_rx_mode());
+    ESP_ERROR_CHECK(nrf24_restore_prx());
     vTaskDelay(pdMS_TO_TICKS(5));
 
     g_ready = true;
@@ -272,11 +294,7 @@ int nrf24_drv_send(const uint8_t *data, size_t len)
         return -1;
     }
 
-    ESP_ERROR_CHECK(nrf24_select_tx_addr(k_rf_test_addr));
-    nrf24_ce_low();
-    ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_CONFIG, NRF24_CONFIG_TX));
-    ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_STATUS, NRF24_STATUS_CLEAR_IRQS));
-    ESP_ERROR_CHECK(nrf24_command(NRF24_CMD_FLUSH_TX, NULL));
+    ESP_ERROR_CHECK(nrf24_prepare_tx(k_rf_test_addr));
 
     tx[0] = NRF24_CMD_W_TX_PAYLOAD;
     memcpy(&tx[1], data, len);
@@ -293,15 +311,13 @@ int nrf24_drv_send(const uint8_t *data, size_t len)
 
         ESP_ERROR_CHECK(nrf24_read_register(NRF24_REG_STATUS, &status));
         if ((status & (NRF24_STATUS_TX_DS | NRF24_STATUS_MAX_RT)) != 0u) {
-            ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_STATUS, NRF24_STATUS_CLEAR_IRQS));
-            ESP_ERROR_CHECK(nrf24_set_rx_mode());
+            ESP_ERROR_CHECK(nrf24_restore_prx());
             return (status & NRF24_STATUS_TX_DS) != 0u ? (int)len : -1;
         }
         vTaskDelay(pdMS_TO_TICKS(1));
     }
 
-    ESP_ERROR_CHECK(nrf24_command(NRF24_CMD_FLUSH_TX, NULL));
-    ESP_ERROR_CHECK(nrf24_set_rx_mode());
+    ESP_ERROR_CHECK(nrf24_restore_prx());
     return -1;
 }
 
@@ -315,11 +331,7 @@ int nrf24_drv_send_frame_v2(const uint8_t *data, size_t len)
         return -1;
     }
 
-    ESP_ERROR_CHECK(nrf24_select_tx_addr(k_rfv2_addr));
-    nrf24_ce_low();
-    ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_CONFIG, NRF24_CONFIG_TX));
-    ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_STATUS, NRF24_STATUS_CLEAR_IRQS));
-    ESP_ERROR_CHECK(nrf24_command(NRF24_CMD_FLUSH_TX, NULL));
+    ESP_ERROR_CHECK(nrf24_prepare_tx(k_rfv2_addr));
 
     tx[0] = NRF24_CMD_W_TX_PAYLOAD;
     memcpy(&tx[1], data, len);
@@ -336,15 +348,13 @@ int nrf24_drv_send_frame_v2(const uint8_t *data, size_t len)
 
         ESP_ERROR_CHECK(nrf24_read_register(NRF24_REG_STATUS, &status));
         if ((status & (NRF24_STATUS_TX_DS | NRF24_STATUS_MAX_RT)) != 0u) {
-            ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_STATUS, NRF24_STATUS_CLEAR_IRQS));
-            ESP_ERROR_CHECK(nrf24_set_rx_mode());
+            ESP_ERROR_CHECK(nrf24_restore_prx());
             return (status & NRF24_STATUS_TX_DS) != 0u ? (int)len : -1;
         }
         vTaskDelay(pdMS_TO_TICKS(1));
     }
 
-    ESP_ERROR_CHECK(nrf24_command(NRF24_CMD_FLUSH_TX, NULL));
-    ESP_ERROR_CHECK(nrf24_set_rx_mode());
+    ESP_ERROR_CHECK(nrf24_restore_prx());
     return -1;
 }
 

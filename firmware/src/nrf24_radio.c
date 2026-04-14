@@ -154,9 +154,15 @@ static void nrf24_write_payload(const uint8_t *data, size_t len)
     nrf24_csn_high();
 }
 
-static void nrf24_select_tx_addr(const uint8_t *addr)
+static void nrf24_configure_prx_pipes(void)
 {
-    nrf24_write_register_buf(NRF24_REG_TX_ADDR, addr, 5u);
+    nrf24_write_register(NRF24_REG_EN_RXADDR, 0x03u);
+    nrf24_write_register_buf(NRF24_REG_RX_ADDR_P0, k_rf_test_addr, sizeof(k_rf_test_addr));
+    nrf24_write_register_buf(NRF24_REG_RX_ADDR_P1, k_rfv2_addr, sizeof(k_rfv2_addr));
+    nrf24_write_register(NRF24_REG_RX_PW_P0, RF_TEST_PAYLOAD_SIZE);
+    nrf24_write_register(NRF24_REG_RX_PW_P1, RFV2_FRAME_SIZE);
+    nrf24_write_register(NRF24_REG_DYNPD, 0x00u);
+    nrf24_write_register(NRF24_REG_FEATURE, 0x00u);
 }
 
 static void nrf24_read_payload(uint8_t *data, size_t len)
@@ -186,6 +192,26 @@ static void nrf24_set_rx_mode(void)
     nrf24_write_register(NRF24_REG_CONFIG, NRF24_CONFIG_RX);
     sleep_us(150);
     nrf24_ce_high();
+}
+
+static void nrf24_prepare_tx(const uint8_t *tx_addr)
+{
+    nrf24_ce_low();
+    nrf24_write_register(NRF24_REG_STATUS, NRF24_STATUS_CLEAR_IRQS);
+    nrf24_write_register(NRF24_REG_DYNPD, 0x00u);
+    nrf24_write_register(NRF24_REG_FEATURE, 0x00u);
+    nrf24_write_register_buf(NRF24_REG_TX_ADDR, tx_addr, 5u);
+    nrf24_set_tx_mode();
+    (void)nrf24_command(NRF24_CMD_FLUSH_TX);
+}
+
+static void nrf24_restore_prx(void)
+{
+    nrf24_ce_low();
+    nrf24_write_register(NRF24_REG_STATUS, NRF24_STATUS_CLEAR_IRQS);
+    (void)nrf24_command(NRF24_CMD_FLUSH_TX);
+    nrf24_configure_prx_pipes();
+    nrf24_set_rx_mode();
 }
 
 static bool nrf24_rx_available(void)
@@ -230,22 +256,16 @@ bool nrf24_radio_init_tx(void)
 
     nrf24_write_register(NRF24_REG_CONFIG, 0x08u);
     nrf24_write_register(NRF24_REG_EN_AA, 0x00u);
-    nrf24_write_register(NRF24_REG_EN_RXADDR, 0x03u);
     nrf24_write_register(NRF24_REG_SETUP_AW, NRF24_SETUP_AW_5BYTES);
     nrf24_write_register(NRF24_REG_SETUP_RETR, 0x00u);
     nrf24_write_register(NRF24_REG_RF_CH, NRF24_RF_CHANNEL);
     nrf24_write_register(NRF24_REG_RF_SETUP, NRF24_RF_SETUP_250KBPS_LOW_PWR);
-    nrf24_write_register_buf(NRF24_REG_RX_ADDR_P0, k_rf_test_addr, sizeof(k_rf_test_addr));
-    nrf24_write_register_buf(NRF24_REG_RX_ADDR_P1, k_rfv2_addr, sizeof(k_rfv2_addr));
     nrf24_write_register_buf(NRF24_REG_TX_ADDR, k_rf_test_addr, sizeof(k_rf_test_addr));
-    nrf24_write_register(NRF24_REG_RX_PW_P0, RF_TEST_PAYLOAD_SIZE);
-    nrf24_write_register(NRF24_REG_RX_PW_P1, RFV2_FRAME_SIZE);
-    nrf24_write_register(NRF24_REG_DYNPD, 0x00u);
-    nrf24_write_register(NRF24_REG_FEATURE, 0x00u);
+    nrf24_configure_prx_pipes();
     nrf24_write_register(NRF24_REG_STATUS, NRF24_STATUS_CLEAR_IRQS);
     (void)nrf24_command(NRF24_CMD_FLUSH_TX);
     (void)nrf24_command(NRF24_CMD_FLUSH_RX);
-    nrf24_set_tx_mode();
+    nrf24_restore_prx();
     sleep_ms(5);
 
     g_radio_ready = true;
@@ -263,9 +283,7 @@ bool nrf24_radio_send_fixed(const void *data, size_t len)
     }
 
     memcpy(payload, data, sizeof(payload));
-    nrf24_select_tx_addr(k_rf_test_addr);
-    nrf24_set_tx_mode();
-    (void)nrf24_command(NRF24_CMD_FLUSH_TX);
+    nrf24_prepare_tx(k_rf_test_addr);
     nrf24_write_payload(payload, sizeof(payload));
 
     nrf24_ce_high();
@@ -277,11 +295,12 @@ bool nrf24_radio_send_fixed(const void *data, size_t len)
         status = nrf24_read_register(NRF24_REG_STATUS);
         if ((status & (NRF24_STATUS_TX_DS | NRF24_STATUS_MAX_RT)) != 0u) {
             nrf24_write_register(NRF24_REG_STATUS, NRF24_STATUS_CLEAR_IRQS);
+            nrf24_restore_prx();
             return (status & NRF24_STATUS_TX_DS) != 0u;
         }
     } while (!time_reached(deadline));
 
-    (void)nrf24_command(NRF24_CMD_FLUSH_TX);
+    nrf24_restore_prx();
     return false;
 }
 
@@ -294,9 +313,7 @@ bool nrf24_radio_send_frame_v2(const void *data, size_t len)
     }
 
     memcpy(payload, data, sizeof(payload));
-    nrf24_select_tx_addr(k_rfv2_addr);
-    nrf24_set_tx_mode();
-    (void)nrf24_command(NRF24_CMD_FLUSH_TX);
+    nrf24_prepare_tx(k_rfv2_addr);
     nrf24_write_payload(payload, sizeof(payload));
 
     nrf24_ce_high();
@@ -311,12 +328,13 @@ bool nrf24_radio_send_frame_v2(const void *data, size_t len)
             status = nrf24_read_register(NRF24_REG_STATUS);
             if ((status & (NRF24_STATUS_TX_DS | NRF24_STATUS_MAX_RT)) != 0u) {
                 nrf24_write_register(NRF24_REG_STATUS, NRF24_STATUS_CLEAR_IRQS);
+                nrf24_restore_prx();
                 return (status & NRF24_STATUS_TX_DS) != 0u;
             }
         } while (!time_reached(deadline));
     }
 
-    (void)nrf24_command(NRF24_CMD_FLUSH_TX);
+    nrf24_restore_prx();
     return false;
 }
 
@@ -329,7 +347,7 @@ int nrf24_radio_recv_fixed(void *data, size_t len, uint32_t timeout_ms)
         return -1;
     }
 
-    nrf24_set_rx_mode();
+    nrf24_restore_prx();
     deadline = make_timeout_time_ms(timeout_ms == 0 ? NRF24_RX_TIMEOUT_MS : timeout_ms);
 
     while (!time_reached(deadline)) {
@@ -337,13 +355,11 @@ int nrf24_radio_recv_fixed(void *data, size_t len, uint32_t timeout_ms)
             nrf24_read_payload(payload, sizeof(payload));
             memcpy(data, payload, sizeof(payload));
             nrf24_write_register(NRF24_REG_STATUS, NRF24_STATUS_CLEAR_IRQS);
-            nrf24_ce_low();
             return (int)sizeof(payload);
         }
         sleep_ms(1);
     }
 
-    nrf24_ce_low();
     return 0;
 }
 
@@ -356,7 +372,7 @@ int nrf24_radio_recv_frame_v2(void *data, size_t len, uint32_t timeout_ms)
         return -1;
     }
 
-    nrf24_set_rx_mode();
+    nrf24_restore_prx();
     deadline = make_timeout_time_ms(timeout_ms == 0 ? NRF24_RX_TIMEOUT_MS : timeout_ms);
 
     while (!time_reached(deadline)) {
@@ -364,13 +380,11 @@ int nrf24_radio_recv_frame_v2(void *data, size_t len, uint32_t timeout_ms)
             nrf24_read_payload(payload, sizeof(payload));
             memcpy(data, payload, sizeof(payload));
             nrf24_write_register(NRF24_REG_STATUS, NRF24_STATUS_CLEAR_IRQS);
-            nrf24_ce_low();
             return (int)sizeof(payload);
         }
         sleep_ms(1);
     }
 
-    nrf24_ce_low();
     return 0;
 }
 
