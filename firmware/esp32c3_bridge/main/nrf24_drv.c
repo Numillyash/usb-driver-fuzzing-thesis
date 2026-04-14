@@ -173,7 +173,6 @@ static size_t nrf24_payload_size_for_pipe(uint8_t rx_p_no)
 static esp_err_t nrf24_select_tx_addr(const uint8_t *addr)
 {
     ESP_ERROR_CHECK(nrf24_write_register_buf(NRF24_REG_TX_ADDR, addr, 5u));
-    ESP_ERROR_CHECK(nrf24_write_register_buf(NRF24_REG_RX_ADDR_P0, addr, 5u));
     return ESP_OK;
 }
 

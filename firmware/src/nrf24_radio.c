@@ -157,7 +157,6 @@ static void nrf24_write_payload(const uint8_t *data, size_t len)
 static void nrf24_select_tx_addr(const uint8_t *addr)
 {
     nrf24_write_register_buf(NRF24_REG_TX_ADDR, addr, 5u);
-    nrf24_write_register_buf(NRF24_REG_RX_ADDR_P0, addr, 5u);
 }
 
 static void nrf24_read_payload(uint8_t *data, size_t len)
