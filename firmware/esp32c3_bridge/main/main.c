@@ -21,7 +21,7 @@
 #define RFV2_DISABLE_DIAG 1
 #endif
 #ifndef PIPE0_DIRECTION_TEST
-#define PIPE0_DIRECTION_TEST 1
+#define PIPE0_DIRECTION_TEST 0
 #endif
 #ifndef NRF24_SINGLE_PIPE_RFTEST
 #define NRF24_SINGLE_PIPE_RFTEST 0
@@ -333,7 +333,7 @@ void app_main(void)
                     valid_rx++;
                     last_seq = packet.seq;
                     log_pipe0_decoded(&packet);
-#elif !(PIPE0_DIRECTION_TEST && PIPE0_TEST_ESP_TO_RP) && !NRF24_SINGLE_PIPE_RFTEST && !NRF24_DUAL_PIPE_COEX_TEST
+#elif !NRF24_SINGLE_PIPE_RFTEST
                     if (packet.msg_type == RF_TEST_MSG_DATA) {
                         rf_test_packet_t ack_packet = {
                             .magic = RF_TEST_PACKET_MAGIC,
