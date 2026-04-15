@@ -26,12 +26,12 @@
 #ifndef NRF24_SINGLE_PIPE_RFTEST
 #define NRF24_SINGLE_PIPE_RFTEST 0
 #endif
-#ifndef NRF24_DUAL_PIPE_COEX_TEST
-#define NRF24_DUAL_PIPE_COEX_TEST 1
+#ifndef NRF24_DUAL_PIPE_BASELINE
+#define NRF24_DUAL_PIPE_BASELINE 1
 #endif
 
-#if NRF24_SINGLE_PIPE_RFTEST && NRF24_DUAL_PIPE_COEX_TEST
-#error "NRF24_SINGLE_PIPE_RFTEST and NRF24_DUAL_PIPE_COEX_TEST are mutually exclusive"
+#if NRF24_SINGLE_PIPE_RFTEST && NRF24_DUAL_PIPE_BASELINE
+#error "NRF24_SINGLE_PIPE_RFTEST and NRF24_DUAL_PIPE_BASELINE are mutually exclusive"
 #endif
 #ifndef PIPE0_TEST_RP_TO_ESP
 #define PIPE0_TEST_RP_TO_ESP 1
@@ -53,12 +53,9 @@
 #if PIPE0_PROBE_DIAG && PIPE0_DIRECTION_TEST && PIPE0_TEST_ESP_TO_RP
 #define PIPE0_PROBE_ARG0 UINT32_C(0x50424F30)
 #endif
-#ifndef RF_DEBUG
-#define RF_DEBUG 2
-#endif
-
 static const char *TAG = "bridge_main";
 
+#if PIPE0_DIRECTION_TEST && PIPE0_TEST_RP_TO_ESP
 static void log_pipe0_decoded(const rf_test_packet_t *packet)
 {
     ESP_LOGI(
@@ -70,8 +67,9 @@ static void log_pipe0_decoded(const rf_test_packet_t *packet)
         (unsigned long)packet->arg0,
         (unsigned)packet->flags);
 }
+#endif
 
-#if !RFV2_DISABLE_DIAG && !NRF24_SINGLE_PIPE_RFTEST && !NRF24_DUAL_PIPE_COEX_TEST
+#if !RFV2_DISABLE_DIAG && !NRF24_SINGLE_PIPE_RFTEST && !NRF24_DUAL_PIPE_BASELINE
 static uint16_t rfv2_next_seq(uint16_t seq)
 {
     if (seq == RFV2_SEQ_RESERVED || seq == RFV2_SEQ_MAX) {
@@ -150,41 +148,6 @@ static void log_hfv2(const rfv2_frame_t *frame)
 }
 #endif
 
-#if RF_DEBUG >= 1
-static void log_rxraw(const rf_test_packet_t *packet, uint8_t status)
-{
-    const uint8_t *bytes = (const uint8_t *)packet;
-
-    ESP_LOGI(
-        TAG,
-        "RXRAW m0=0x%02x m1=0x%02x ver=%u type=%u seq=%u uptime_ms=%lu arg0=%lu flags=0x%04x status=0x%02x",
-        (unsigned)bytes[0],
-        (unsigned)bytes[1],
-        (unsigned)packet->version,
-        (unsigned)packet->msg_type,
-        (unsigned)packet->seq,
-        (unsigned long)packet->uptime_ms,
-        (unsigned long)packet->arg0,
-        (unsigned)packet->flags,
-        (unsigned)status);
-}
-#endif
-
-#if RF_DEBUG >= 2
-static void log_rxhex(const uint8_t *buf, size_t len)
-{
-    char line[3 * RF_TEST_PAYLOAD_SIZE + 8];
-    int offset = snprintf(line, sizeof(line), "RXHEX");
-    size_t i;
-
-    for (i = 0; i < len && offset > 0 && offset < (int)sizeof(line); ++i) {
-        offset += snprintf(line + offset, sizeof(line) - (size_t)offset, " %02x", (unsigned)buf[i]);
-    }
-
-    ESP_LOGI(TAG, "%s", line);
-}
-#endif
-
 void app_main(void)
 {
     TickType_t last_heartbeat_tick;
@@ -198,7 +161,7 @@ void app_main(void)
     uint32_t ack_tx_fail = 0;
     uint16_t last_seq = 0;
     uint8_t rx_buf[RFV2_FRAME_SIZE];
-#if !RFV2_DISABLE_DIAG && !NRF24_SINGLE_PIPE_RFTEST && !NRF24_DUAL_PIPE_COEX_TEST
+#if !RFV2_DISABLE_DIAG && !NRF24_SINGLE_PIPE_RFTEST && !NRF24_DUAL_PIPE_BASELINE
     TickType_t last_ping_tick;
     TickType_t last_status_tick;
     uint32_t ping_nonce = 1;
@@ -215,7 +178,7 @@ void app_main(void)
     bridge_uart_init();
     nrf24_drv_init();
     last_heartbeat_tick = xTaskGetTickCount();
-#if !RFV2_DISABLE_DIAG && !NRF24_SINGLE_PIPE_RFTEST && !NRF24_DUAL_PIPE_COEX_TEST
+#if !RFV2_DISABLE_DIAG && !NRF24_SINGLE_PIPE_RFTEST && !NRF24_DUAL_PIPE_BASELINE
     last_ping_tick = last_heartbeat_tick;
     last_status_tick = last_heartbeat_tick;
 #endif
@@ -242,7 +205,7 @@ void app_main(void)
             last_heartbeat_tick = now;
         }
 
-#if !RFV2_DISABLE_DIAG && !NRF24_SINGLE_PIPE_RFTEST && !NRF24_DUAL_PIPE_COEX_TEST
+#if !RFV2_DISABLE_DIAG && !NRF24_SINGLE_PIPE_RFTEST && !NRF24_DUAL_PIPE_BASELINE
         if (!ping_in_flight && (now - last_ping_tick) >= pdMS_TO_TICKS(RFV2_PING_INTERVAL_MS)) {
             rfv2_frame_t ping_frame;
             const uint16_t current_ping_seq = request_seq;
@@ -321,13 +284,6 @@ void app_main(void)
                 rf_test_packet_t packet;
                 memcpy(&packet, rx_buf, sizeof(packet));
 
-#if RF_DEBUG >= 1
-                log_rxraw(&packet, nrf24_drv_last_status());
-#endif
-#if RF_DEBUG >= 2
-                log_rxhex(rx_buf, rx_payload_len);
-#endif
-
                 if (packet.magic == RF_TEST_PACKET_MAGIC && packet.version == RF_TEST_PACKET_VERSION) {
 #if PIPE0_DIRECTION_TEST && PIPE0_TEST_RP_TO_ESP
                     valid_rx++;
@@ -371,7 +327,7 @@ void app_main(void)
 #endif
                 }
             }
-#if !RFV2_DISABLE_DIAG && !NRF24_SINGLE_PIPE_RFTEST && !NRF24_DUAL_PIPE_COEX_TEST
+#if !RFV2_DISABLE_DIAG && !NRF24_SINGLE_PIPE_RFTEST && !NRF24_DUAL_PIPE_BASELINE
             else if (rx_pipe == 1u && rx_len == (int)sizeof(rfv2_frame_t)) {
                 rfv2_frame_t frame;
 
@@ -423,7 +379,7 @@ void app_main(void)
 #endif
         }
 
-#if !RFV2_DISABLE_DIAG && !NRF24_SINGLE_PIPE_RFTEST && !NRF24_DUAL_PIPE_COEX_TEST
+#if !RFV2_DISABLE_DIAG && !NRF24_SINGLE_PIPE_RFTEST && !NRF24_DUAL_PIPE_BASELINE
         if (ping_in_flight && now >= ping_deadline_tick) {
             ESP_LOGI(
                 TAG,

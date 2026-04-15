@@ -23,12 +23,12 @@ static const char *TAG = "nrf24_drv";
 #ifndef NRF24_SINGLE_PIPE_RFTEST
 #define NRF24_SINGLE_PIPE_RFTEST 0
 #endif
-#ifndef NRF24_DUAL_PIPE_COEX_TEST
-#define NRF24_DUAL_PIPE_COEX_TEST 1
+#ifndef NRF24_DUAL_PIPE_BASELINE
+#define NRF24_DUAL_PIPE_BASELINE 1
 #endif
 
-#if NRF24_SINGLE_PIPE_RFTEST && NRF24_DUAL_PIPE_COEX_TEST
-#error "NRF24_SINGLE_PIPE_RFTEST and NRF24_DUAL_PIPE_COEX_TEST are mutually exclusive"
+#if NRF24_SINGLE_PIPE_RFTEST && NRF24_DUAL_PIPE_BASELINE
+#error "NRF24_SINGLE_PIPE_RFTEST and NRF24_DUAL_PIPE_BASELINE are mutually exclusive"
 #endif
 
 #define NRF24_PIN_SCK                   GPIO_NUM_4
@@ -224,7 +224,7 @@ static void nrf24_dump_state(const char *label)
     uint8_t rx_pw_p0 = 0;
     uint8_t rx_addr_p0[5] = { 0 };
     uint8_t tx_addr[5] = { 0 };
-#if NRF24_DUAL_PIPE_COEX_TEST
+#if NRF24_DUAL_PIPE_BASELINE
     uint8_t rx_pw_p1 = 0;
     uint8_t rx_addr_p1[5] = { 0 };
 #endif
@@ -241,12 +241,12 @@ static void nrf24_dump_state(const char *label)
     (void)nrf24_read_register(NRF24_REG_RX_PW_P0, &rx_pw_p0);
     (void)nrf24_read_register_buf(NRF24_REG_RX_ADDR_P0, rx_addr_p0, sizeof(rx_addr_p0));
     (void)nrf24_read_register_buf(NRF24_REG_TX_ADDR, tx_addr, sizeof(tx_addr));
-#if NRF24_DUAL_PIPE_COEX_TEST
+#if NRF24_DUAL_PIPE_BASELINE
     (void)nrf24_read_register(NRF24_REG_RX_PW_P1, &rx_pw_p1);
     (void)nrf24_read_register_buf(NRF24_REG_RX_ADDR_P1, rx_addr_p1, sizeof(rx_addr_p1));
 #endif
 
-#if NRF24_DUAL_PIPE_COEX_TEST
+#if NRF24_DUAL_PIPE_BASELINE
     ESP_LOGI(
         TAG,
         "%s RF_CH=0x%02x RF_SETUP=0x%02x SETUP_AW=0x%02x EN_AA=0x%02x SETUP_RETR=0x%02x CFG=0x%02x EN_RXADDR=0x%02x STATUS=0x%02x FIFO=0x%02x RX_PW_P0=%u RX_PW_P1=%u",
@@ -284,30 +284,6 @@ static void nrf24_dump_state(const char *label)
     nrf24_log_addr5("TX_ADDR", tx_addr);
 #endif
 }
-
-static void nrf24_log_pipe_seen(uint8_t pipe_no, uint8_t status, uint8_t fifo_status)
-{
-    ESP_LOGI(
-        TAG,
-        "PIPE%u_SEEN STATUS=0x%02x FIFO=0x%02x rx_p_no=%u",
-        (unsigned)pipe_no,
-        (unsigned)status,
-        (unsigned)fifo_status,
-        (unsigned)pipe_no);
-}
-
-static void nrf24_log_pipe0_raw(const uint8_t *data, size_t len, uint8_t pipe_no)
-{
-    char line[3 * 16 + 32];
-    size_t dump_len = len < 16u ? len : 16u;
-    int offset = snprintf(line, sizeof(line), "PIPE0_RAW len=%u pipe=%u", (unsigned)len, (unsigned)pipe_no);
-    size_t i;
-
-    for (i = 0; i < dump_len && offset > 0 && offset < (int)sizeof(line); ++i) {
-        offset += snprintf(line + offset, sizeof(line) - (size_t)offset, " %02x", (unsigned)data[i]);
-    }
-    ESP_LOGI(TAG, "%s", line);
-}
 #endif
 
 static size_t nrf24_payload_size_for_pipe(uint8_t rx_p_no)
@@ -315,7 +291,7 @@ static size_t nrf24_payload_size_for_pipe(uint8_t rx_p_no)
     if (rx_p_no == 0u) {
         return RF_TEST_PAYLOAD_SIZE;
     }
-#if NRF24_DUAL_PIPE_COEX_TEST
+#if NRF24_DUAL_PIPE_BASELINE
     if (rx_p_no == 1u) {
         return RFV2_FRAME_SIZE;
     }
@@ -325,10 +301,10 @@ static size_t nrf24_payload_size_for_pipe(uint8_t rx_p_no)
 
 static esp_err_t nrf24_configure_prx_pipes(void)
 {
-    ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_EN_RXADDR, NRF24_DUAL_PIPE_COEX_TEST ? 0x03u : 0x01u));
+    ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_EN_RXADDR, NRF24_DUAL_PIPE_BASELINE ? 0x03u : 0x01u));
     ESP_ERROR_CHECK(nrf24_write_register_buf(NRF24_REG_RX_ADDR_P0, k_rf_test_addr, sizeof(k_rf_test_addr)));
     ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_RX_PW_P0, RF_TEST_PAYLOAD_SIZE));
-#if NRF24_DUAL_PIPE_COEX_TEST
+#if NRF24_DUAL_PIPE_BASELINE
     ESP_ERROR_CHECK(nrf24_write_register_buf(NRF24_REG_RX_ADDR_P1, k_rfv2_addr, sizeof(k_rfv2_addr)));
     ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_RX_PW_P1, RFV2_FRAME_SIZE));
 #endif
@@ -358,7 +334,7 @@ static esp_err_t nrf24_prepare_tx(const uint8_t *tx_addr)
     esp_rom_delay_us(150);
     ESP_ERROR_CHECK(nrf24_command(NRF24_CMD_FLUSH_TX, NULL));
 #if NRF24_DIAG
-    nrf24_dump_state("prepare_tx");
+    (void)tx_addr;
 #endif
     return ESP_OK;
 }
@@ -371,7 +347,6 @@ static esp_err_t nrf24_restore_prx(void)
     ESP_ERROR_CHECK(nrf24_configure_prx_pipes());
     ESP_ERROR_CHECK(nrf24_set_rx_mode());
 #if NRF24_DIAG
-    nrf24_dump_state("restore_prx");
 #endif
     return ESP_OK;
 }
@@ -477,7 +452,6 @@ int nrf24_drv_send(const uint8_t *data, size_t len)
         if ((status & (NRF24_STATUS_TX_DS | NRF24_STATUS_MAX_RT)) != 0u) {
             ESP_ERROR_CHECK(nrf24_restore_prx());
 #if NRF24_DIAG
-            nrf24_dump_state("post_tx_rf_test");
 #endif
             return (status & NRF24_STATUS_TX_DS) != 0u ? (int)len : -1;
         }
@@ -486,14 +460,13 @@ int nrf24_drv_send(const uint8_t *data, size_t len)
 
     ESP_ERROR_CHECK(nrf24_restore_prx());
 #if NRF24_DIAG
-    nrf24_dump_state("post_tx_rf_test_timeout");
 #endif
     return -1;
 }
 
 int nrf24_drv_send_frame_v2(const uint8_t *data, size_t len)
 {
-#if NRF24_SINGLE_PIPE_RFTEST || NRF24_DUAL_PIPE_COEX_TEST
+#if NRF24_SINGLE_PIPE_RFTEST || NRF24_DUAL_PIPE_BASELINE
     (void)data;
     (void)len;
     return -1;
@@ -525,7 +498,6 @@ int nrf24_drv_send_frame_v2(const uint8_t *data, size_t len)
         if ((status & (NRF24_STATUS_TX_DS | NRF24_STATUS_MAX_RT)) != 0u) {
             ESP_ERROR_CHECK(nrf24_restore_prx());
 #if NRF24_DIAG
-            nrf24_dump_state("post_tx_rfv2");
 #endif
             return (status & NRF24_STATUS_TX_DS) != 0u ? (int)len : -1;
         }
@@ -534,7 +506,6 @@ int nrf24_drv_send_frame_v2(const uint8_t *data, size_t len)
 
     ESP_ERROR_CHECK(nrf24_restore_prx());
 #if NRF24_DIAG
-    nrf24_dump_state("post_tx_rfv2_timeout");
 #endif
     return -1;
 #endif
@@ -578,12 +549,6 @@ int nrf24_drv_recv_any(uint8_t *data, size_t max_len, uint8_t *pipe_out, size_t 
 #else
         rx_p_no = (uint8_t)((status & NRF24_STATUS_RX_P_NO_MASK) >> NRF24_STATUS_RX_P_NO_SHIFT);
 #endif
-#if NRF24_DIAG
-        if (rx_dr_set || !fifo_empty) {
-            nrf24_log_pipe_seen(rx_p_no, status, fifo_status);
-        }
-#endif
-
         if (!rx_dr_set && fifo_empty) {
             return 0;
         }
@@ -620,11 +585,6 @@ int nrf24_drv_recv_any(uint8_t *data, size_t max_len, uint8_t *pipe_out, size_t 
 
     g_last_status = rx[0];
     memcpy(data, &rx[1], copy_len);
-#if NRF24_DIAG
-    if (rx_p_no == 0u) {
-        nrf24_log_pipe0_raw(data, copy_len, rx_p_no);
-    }
-#endif
     if (nrf24_payload_is_garbage(data, copy_len)) {
         nrf24_drv_recover_rx();
         return -2;
@@ -664,12 +624,6 @@ bool nrf24_drv_poll(void)
 #else
     rx_p_no = (uint8_t)((status & NRF24_STATUS_RX_P_NO_MASK) >> NRF24_STATUS_RX_P_NO_SHIFT);
 #endif
-#if NRF24_DIAG
-    if ((status & NRF24_STATUS_RX_DR) != 0u || (fifo_status & NRF24_FIFO_RX_EMPTY) == 0u) {
-        nrf24_log_pipe_seen(rx_p_no, status, fifo_status);
-    }
-#endif
-
     if (((status & NRF24_STATUS_RX_DR) == 0u) &&
         ((fifo_status & NRF24_FIFO_RX_EMPTY) != 0u)) {
         return false;

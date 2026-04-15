@@ -24,12 +24,12 @@
 #ifndef NRF24_SINGLE_PIPE_RFTEST
 #define NRF24_SINGLE_PIPE_RFTEST 0
 #endif
-#ifndef NRF24_DUAL_PIPE_COEX_TEST
-#define NRF24_DUAL_PIPE_COEX_TEST 1
+#ifndef NRF24_DUAL_PIPE_BASELINE
+#define NRF24_DUAL_PIPE_BASELINE 1
 #endif
 
-#if NRF24_SINGLE_PIPE_RFTEST && NRF24_DUAL_PIPE_COEX_TEST
-#error "NRF24_SINGLE_PIPE_RFTEST and NRF24_DUAL_PIPE_COEX_TEST are mutually exclusive"
+#if NRF24_SINGLE_PIPE_RFTEST && NRF24_DUAL_PIPE_BASELINE
+#error "NRF24_SINGLE_PIPE_RFTEST and NRF24_DUAL_PIPE_BASELINE are mutually exclusive"
 #endif
 #ifndef PIPE0_TEST_RP_TO_ESP
 #define PIPE0_TEST_RP_TO_ESP 1
@@ -72,7 +72,7 @@ static void log_pipe0_decoded(const rf_test_packet_t *packet)
 }
 #endif
 
-#if !RFV2_DISABLE_DIAG && !NRF24_DUAL_PIPE_COEX_TEST
+#if !RFV2_DISABLE_DIAG && !NRF24_DUAL_PIPE_BASELINE
 static uint16_t rfv2_next_seq(uint16_t seq)
 {
     if (seq == RFV2_SEQ_RESERVED || seq == RFV2_SEQ_MAX) {
@@ -155,7 +155,7 @@ int main(void) {
     uint16_t rf_test_expected_ack_seq = 0;
     uint32_t rf_test_ack_deadline_ms = 0;
 #endif
-#if !RFV2_DISABLE_DIAG && !NRF24_DUAL_PIPE_COEX_TEST
+#if !RFV2_DISABLE_DIAG && !NRF24_DUAL_PIPE_BASELINE
     uint16_t heartbeat_seq = RFV2_SEQ_FIRST_VALID;
     uint32_t last_heartbeat_ms = 0;
 #endif
@@ -164,7 +164,7 @@ int main(void) {
     sleep_ms(2000);
     (void)nrf24_radio_init_tx();
     last_rf_test_ms = to_ms_since_boot(get_absolute_time()) - RF_TEST_INTERVAL_MS;
-#if !RFV2_DISABLE_DIAG && !NRF24_SINGLE_PIPE_RFTEST && !NRF24_DUAL_PIPE_COEX_TEST
+#if !RFV2_DISABLE_DIAG && !NRF24_SINGLE_PIPE_RFTEST && !NRF24_DUAL_PIPE_BASELINE
     last_heartbeat_ms = to_ms_since_boot(get_absolute_time()) - RFV2_HEARTBEAT_INTERVAL_MS;
 #endif
 
@@ -199,7 +199,7 @@ int main(void) {
             last_rf_test_ms = now_ms;
         }
 
-#if !RFV2_DISABLE_DIAG && !NRF24_SINGLE_PIPE_RFTEST && !NRF24_DUAL_PIPE_COEX_TEST
+#if !RFV2_DISABLE_DIAG && !NRF24_SINGLE_PIPE_RFTEST && !NRF24_DUAL_PIPE_BASELINE
         if ((now_ms - last_heartbeat_ms) >= RFV2_HEARTBEAT_INTERVAL_MS) {
                 rfv2_frame_t heartbeat_frame;
                 bool heartbeat_sent;
