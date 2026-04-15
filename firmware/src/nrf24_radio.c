@@ -16,10 +16,14 @@
 #define NRF24_DIAG 1
 #endif
 #ifndef NRF24_SINGLE_PIPE_RFTEST
-#define NRF24_SINGLE_PIPE_RFTEST 1
+#define NRF24_SINGLE_PIPE_RFTEST 0
 #endif
 #ifndef NRF24_DUAL_PIPE_COEX_TEST
 #define NRF24_DUAL_PIPE_COEX_TEST 1
+#endif
+
+#if NRF24_SINGLE_PIPE_RFTEST && NRF24_DUAL_PIPE_COEX_TEST
+#error "NRF24_SINGLE_PIPE_RFTEST and NRF24_DUAL_PIPE_COEX_TEST are mutually exclusive"
 #endif
 
 #define NRF24_SPI_PORT                  spi0

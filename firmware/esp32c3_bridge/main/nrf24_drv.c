@@ -21,10 +21,14 @@ static const char *TAG = "nrf24_drv";
 #define NRF24_DIAG 1
 #endif
 #ifndef NRF24_SINGLE_PIPE_RFTEST
-#define NRF24_SINGLE_PIPE_RFTEST 1
+#define NRF24_SINGLE_PIPE_RFTEST 0
 #endif
 #ifndef NRF24_DUAL_PIPE_COEX_TEST
 #define NRF24_DUAL_PIPE_COEX_TEST 1
+#endif
+
+#if NRF24_SINGLE_PIPE_RFTEST && NRF24_DUAL_PIPE_COEX_TEST
+#error "NRF24_SINGLE_PIPE_RFTEST and NRF24_DUAL_PIPE_COEX_TEST are mutually exclusive"
 #endif
 
 #define NRF24_PIN_SCK                   GPIO_NUM_4
@@ -557,29 +561,49 @@ int nrf24_drv_recv_any(uint8_t *data, size_t max_len, uint8_t *pipe_out, size_t 
     }
 
     if (nrf24_read_register(NRF24_REG_STATUS, &status) != ESP_OK) {
+        nrf24_drv_recover_rx();
         return -1;
     }
     if (nrf24_read_register(NRF24_REG_FIFO_STATUS, &fifo_status) != ESP_OK) {
+        nrf24_drv_recover_rx();
         return -1;
     }
 
+    {
+        const bool rx_dr_set = (status & NRF24_STATUS_RX_DR) != 0u;
+        const bool fifo_empty = (fifo_status & NRF24_FIFO_RX_EMPTY) != 0u;
+
 #if NRF24_SINGLE_PIPE_RFTEST
-    rx_p_no = 0u;
+        rx_p_no = 0u;
 #else
-    rx_p_no = (uint8_t)((status & NRF24_STATUS_RX_P_NO_MASK) >> NRF24_STATUS_RX_P_NO_SHIFT);
+        rx_p_no = (uint8_t)((status & NRF24_STATUS_RX_P_NO_MASK) >> NRF24_STATUS_RX_P_NO_SHIFT);
 #endif
 #if NRF24_DIAG
-    if ((status & NRF24_STATUS_RX_DR) != 0u || (fifo_status & NRF24_FIFO_RX_EMPTY) == 0u) {
-        nrf24_log_pipe_seen(rx_p_no, status, fifo_status);
-    }
+        if (rx_dr_set || !fifo_empty) {
+            nrf24_log_pipe_seen(rx_p_no, status, fifo_status);
+        }
 #endif
-    if ((status & NRF24_STATUS_RX_DR) == 0u || (fifo_status & NRF24_FIFO_RX_EMPTY) != 0u
+
+        if (!rx_dr_set && fifo_empty) {
+            return 0;
+        }
+
+        if (rx_dr_set && fifo_empty) {
+            nrf24_drv_recover_rx();
+            return -1;
+        }
+
+        if (!rx_dr_set && !fifo_empty) {
+            nrf24_drv_recover_rx();
+            return -1;
+        }
+
 #if !NRF24_SINGLE_PIPE_RFTEST
-        || rx_p_no == NRF24_STATUS_RX_P_NO_EMPTY
+        if (rx_p_no == NRF24_STATUS_RX_P_NO_EMPTY) {
+            nrf24_drv_recover_rx();
+            return -1;
+        }
 #endif
-    ) {
-        nrf24_drv_recover_rx();
-        return 0;
     }
 
     tx[0] = NRF24_CMD_R_RX_PAYLOAD;
@@ -627,9 +651,11 @@ bool nrf24_drv_poll(void)
     }
 
     if (nrf24_read_register(NRF24_REG_STATUS, &status) != ESP_OK) {
+        nrf24_drv_recover_rx();
         return false;
     }
     if (nrf24_read_register(NRF24_REG_FIFO_STATUS, &fifo_status) != ESP_OK) {
+        nrf24_drv_recover_rx();
         return false;
     }
 
@@ -644,11 +670,20 @@ bool nrf24_drv_poll(void)
     }
 #endif
 
-    if (((status & NRF24_STATUS_RX_DR) == 0u) ||
+    if (((status & NRF24_STATUS_RX_DR) == 0u) &&
         ((fifo_status & NRF24_FIFO_RX_EMPTY) != 0u)) {
-        if ((status & NRF24_STATUS_RX_DR) != 0u || (fifo_status & NRF24_FIFO_RX_EMPTY) == 0u) {
-            nrf24_drv_recover_rx();
-        }
+        return false;
+    }
+
+    if (((status & NRF24_STATUS_RX_DR) != 0u) &&
+        ((fifo_status & NRF24_FIFO_RX_EMPTY) != 0u)) {
+        nrf24_drv_recover_rx();
+        return false;
+    }
+
+    if (((status & NRF24_STATUS_RX_DR) == 0u) &&
+        ((fifo_status & NRF24_FIFO_RX_EMPTY) == 0u)) {
+        nrf24_drv_recover_rx();
         return false;
     }
 

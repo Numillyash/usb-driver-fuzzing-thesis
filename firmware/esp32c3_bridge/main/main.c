@@ -24,10 +24,14 @@
 #define PIPE0_DIRECTION_TEST 1
 #endif
 #ifndef NRF24_SINGLE_PIPE_RFTEST
-#define NRF24_SINGLE_PIPE_RFTEST 1
+#define NRF24_SINGLE_PIPE_RFTEST 0
 #endif
 #ifndef NRF24_DUAL_PIPE_COEX_TEST
 #define NRF24_DUAL_PIPE_COEX_TEST 1
+#endif
+
+#if NRF24_SINGLE_PIPE_RFTEST && NRF24_DUAL_PIPE_COEX_TEST
+#error "NRF24_SINGLE_PIPE_RFTEST and NRF24_DUAL_PIPE_COEX_TEST are mutually exclusive"
 #endif
 #ifndef PIPE0_TEST_RP_TO_ESP
 #define PIPE0_TEST_RP_TO_ESP 1
@@ -321,7 +325,7 @@ void app_main(void)
                 log_rxraw(&packet, nrf24_drv_last_status());
 #endif
 #if RF_DEBUG >= 2
-                log_rxhex(rx_buf, sizeof(rx_buf));
+                log_rxhex(rx_buf, rx_payload_len);
 #endif
 
                 if (packet.magic == RF_TEST_PACKET_MAGIC && packet.version == RF_TEST_PACKET_VERSION) {
