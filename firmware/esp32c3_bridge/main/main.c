@@ -17,6 +17,9 @@
 #ifndef PIPE0_PROBE_DIAG
 #define PIPE0_PROBE_DIAG 1
 #endif
+#ifndef RFV2_DISABLE_DIAG
+#define RFV2_DISABLE_DIAG 1
+#endif
 
 #define BRIDGE_HEARTBEAT_INTERVAL_MS 5000
 #define RFV2_PING_INTERVAL_MS 7000
@@ -31,6 +34,7 @@
 
 static const char *TAG = "bridge_main";
 
+#if !RFV2_DISABLE_DIAG
 static uint16_t rfv2_next_seq(uint16_t seq)
 {
     if (seq == RFV2_SEQ_RESERVED || seq == RFV2_SEQ_MAX) {
@@ -107,6 +111,7 @@ static void log_hfv2(const rfv2_frame_t *frame)
         (unsigned long)heartbeat.uptime_ms,
         fault_flags);
 }
+#endif
 
 #if RF_DEBUG >= 1
 static void log_rxraw(const rf_test_packet_t *packet, uint8_t status)
@@ -146,8 +151,6 @@ static void log_rxhex(const uint8_t *buf, size_t len)
 void app_main(void)
 {
     TickType_t last_heartbeat_tick;
-    TickType_t last_ping_tick;
-    TickType_t last_status_tick;
 #if PIPE0_PROBE_DIAG
     TickType_t last_pipe0_probe_tick;
     uint16_t pipe0_probe_seq = 1;
@@ -156,8 +159,12 @@ void app_main(void)
     uint32_t garbage_rx = 0;
     uint32_t ack_tx_ok = 0;
     uint32_t ack_tx_fail = 0;
-    uint32_t ping_nonce = 1;
     uint16_t last_seq = 0;
+    uint8_t rx_buf[RFV2_FRAME_SIZE];
+#if !RFV2_DISABLE_DIAG
+    TickType_t last_ping_tick;
+    TickType_t last_status_tick;
+    uint32_t ping_nonce = 1;
     uint16_t request_seq = RFV2_SEQ_FIRST_VALID;
     uint16_t ping_wait_seq = RFV2_SEQ_RESERVED;
     uint16_t status_wait_seq = RFV2_SEQ_RESERVED;
@@ -166,13 +173,15 @@ void app_main(void)
     bool status_in_flight = false;
     TickType_t ping_deadline_tick = 0;
     TickType_t status_deadline_tick = 0;
-    uint8_t rx_buf[RFV2_FRAME_SIZE];
+#endif
 
     bridge_uart_init();
     nrf24_drv_init();
     last_heartbeat_tick = xTaskGetTickCount();
+#if !RFV2_DISABLE_DIAG
     last_ping_tick = last_heartbeat_tick;
     last_status_tick = last_heartbeat_tick;
+#endif
 #if PIPE0_PROBE_DIAG
     last_pipe0_probe_tick = last_heartbeat_tick;
 #endif
@@ -196,6 +205,7 @@ void app_main(void)
             last_heartbeat_tick = now;
         }
 
+#if !RFV2_DISABLE_DIAG
         if (!ping_in_flight && (now - last_ping_tick) >= pdMS_TO_TICKS(RFV2_PING_INTERVAL_MS)) {
             rfv2_frame_t ping_frame;
             const uint16_t current_ping_seq = request_seq;
@@ -236,6 +246,7 @@ void app_main(void)
             }
             last_status_tick = now;
         }
+#endif
 
 #if PIPE0_PROBE_DIAG
         if ((now - last_pipe0_probe_tick) >= pdMS_TO_TICKS(PIPE0_PROBE_INTERVAL_MS)) {
@@ -316,7 +327,9 @@ void app_main(void)
                             (unsigned)nrf24_drv_last_status());
                     }
                 }
-            } else if (rx_pipe == 1u && rx_len == (int)sizeof(rfv2_frame_t)) {
+            }
+#if !RFV2_DISABLE_DIAG
+            else if (rx_pipe == 1u && rx_len == (int)sizeof(rfv2_frame_t)) {
                 rfv2_frame_t frame;
 
                 memcpy(&frame, rx_buf, sizeof(frame));
@@ -364,8 +377,10 @@ void app_main(void)
                     }
                 }
             }
+#endif
         }
 
+#if !RFV2_DISABLE_DIAG
         if (ping_in_flight && now >= ping_deadline_tick) {
             ESP_LOGI(
                 TAG,
@@ -381,6 +396,7 @@ void app_main(void)
             status_in_flight = false;
             status_wait_seq = RFV2_SEQ_RESERVED;
         }
+#endif
 
         vTaskDelay(pdMS_TO_TICKS(10));
     }

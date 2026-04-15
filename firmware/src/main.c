@@ -15,6 +15,9 @@
 #ifndef PIPE0_PROBE_DIAG
 #define PIPE0_PROBE_DIAG 1
 #endif
+#ifndef RFV2_DISABLE_DIAG
+#define RFV2_DISABLE_DIAG 1
+#endif
 
 #define RF_TEST_INTERVAL_MS 1000u
 #define RF_TEST_ACK_TIMEOUT_MS 75u
@@ -97,18 +100,22 @@ static void build_rfv2_status(rfv2_frame_t *frame, uint16_t seq, uint16_t active
 
 int main(void) {
     uint16_t seq = 0;
-    uint16_t heartbeat_seq = RFV2_SEQ_FIRST_VALID;
     uint32_t last_rf_test_ms = 0;
-    uint32_t last_heartbeat_ms = 0;
     bool rf_test_ack_pending = false;
     uint16_t rf_test_expected_ack_seq = 0;
     uint32_t rf_test_ack_deadline_ms = 0;
+#if !RFV2_DISABLE_DIAG
+    uint16_t heartbeat_seq = RFV2_SEQ_FIRST_VALID;
+    uint32_t last_heartbeat_ms = 0;
+#endif
 
     stdio_init_all();
     sleep_ms(2000);
     (void)nrf24_radio_init_tx();
     last_rf_test_ms = to_ms_since_boot(get_absolute_time()) - RF_TEST_INTERVAL_MS;
+#if !RFV2_DISABLE_DIAG
     last_heartbeat_ms = to_ms_since_boot(get_absolute_time()) - RFV2_HEARTBEAT_INTERVAL_MS;
+#endif
 
     while (true) {
         const uint32_t now_ms = to_ms_since_boot(get_absolute_time());
@@ -139,6 +146,7 @@ int main(void) {
             last_rf_test_ms = now_ms;
         }
 
+#if !RFV2_DISABLE_DIAG
         if ((now_ms - last_heartbeat_ms) >= RFV2_HEARTBEAT_INTERVAL_MS) {
                 rfv2_frame_t heartbeat_frame;
                 bool heartbeat_sent;
@@ -153,6 +161,7 @@ int main(void) {
                 heartbeat_seq = rfv2_next_seq(heartbeat_seq);
                 last_heartbeat_ms = now_ms;
         }
+#endif
 
         {
             uint8_t rx_pipe = 0xffu;
@@ -181,8 +190,10 @@ int main(void) {
                     printf("portable_demo: PIPE0_PROBERX seq=%u\r\n",
                            (unsigned)packet.seq);
                 }
-            } else if (rx_len == (int)sizeof(rfv2_frame_t) &&
-                       rx_pipe == 1u) {
+            }
+#if !RFV2_DISABLE_DIAG
+            else if (rx_len == (int)sizeof(rfv2_frame_t) &&
+                     rx_pipe == 1u) {
                 rfv2_frame_t rx_frame;
                 memcpy(&rx_frame, rx_buf, sizeof(rx_frame));
 
@@ -226,6 +237,7 @@ int main(void) {
                        (unsigned)status_payload.scenario_state);
                 }
             }
+#endif
         }
 
         if (rf_test_ack_pending && (int32_t)(now_ms - rf_test_ack_deadline_ms) >= 0) {
