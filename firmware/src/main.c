@@ -250,12 +250,6 @@ int main(void) {
                            (unsigned)packet.seq,
                            (unsigned)nrf24_radio_last_status());
                     rf_test_ack_pending = false;
-                } else if (packet.magic == RF_TEST_PACKET_MAGIC &&
-                           packet.version == RF_TEST_PACKET_VERSION &&
-                           packet.msg_type == RF_TEST_MSG_DATA &&
-                           packet.arg0 == PIPE0_PROBE_ARG0) {
-                    printf("portable_demo: PIPE0_PROBERX seq=%u\r\n",
-                           (unsigned)packet.seq);
                 }
             }
 #if !RFV2_DISABLE_DIAG
@@ -304,6 +298,7 @@ int main(void) {
                        (unsigned)status_payload.scenario_state);
                 }
             }
+#endif
 #endif
         }
 
