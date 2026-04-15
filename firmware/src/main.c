@@ -18,6 +18,19 @@
 #ifndef RFV2_DISABLE_DIAG
 #define RFV2_DISABLE_DIAG 1
 #endif
+#ifndef PIPE0_DIRECTION_TEST
+#define PIPE0_DIRECTION_TEST 1
+#endif
+#ifndef PIPE0_TEST_RP_TO_ESP
+#define PIPE0_TEST_RP_TO_ESP 1
+#endif
+#ifndef PIPE0_TEST_ESP_TO_RP
+#define PIPE0_TEST_ESP_TO_RP 0
+#endif
+
+#if PIPE0_TEST_RP_TO_ESP && PIPE0_TEST_ESP_TO_RP
+#error "PIPE0 direction test modes are mutually exclusive"
+#endif
 
 #define RF_TEST_INTERVAL_MS 1000u
 #define RF_TEST_ACK_TIMEOUT_MS 75u
@@ -25,6 +38,28 @@
 #define RFV2_PING_POLL_MS 10u
 #define PIPE0_PROBE_ARG0 UINT32_C(0x50424F30)
 
+static void log_pipe0_raw16(const uint8_t *buf, size_t len)
+{
+    const size_t dump_len = len < RF_TEST_PAYLOAD_SIZE ? len : RF_TEST_PAYLOAD_SIZE;
+
+    printf("portable_demo: PIPE0_RAW len=%u", (unsigned)len);
+    for (size_t i = 0; i < dump_len; ++i) {
+        printf(" %02x", (unsigned)buf[i]);
+    }
+    printf("\r\n");
+}
+
+static void log_pipe0_decoded(const rf_test_packet_t *packet)
+{
+    printf("portable_demo: PIPE0_DECODE seq=%u type=%u uptime_ms=%lu arg0=%lu flags=0x%04x\r\n",
+           (unsigned)packet->seq,
+           (unsigned)packet->msg_type,
+           (unsigned long)packet->uptime_ms,
+           (unsigned long)packet->arg0,
+           (unsigned)packet->flags);
+}
+
+#if !RFV2_DISABLE_DIAG
 static uint16_t rfv2_next_seq(uint16_t seq)
 {
     if (seq == RFV2_SEQ_RESERVED || seq == RFV2_SEQ_MAX) {
@@ -97,13 +132,16 @@ static void build_rfv2_status(rfv2_frame_t *frame, uint16_t seq, uint16_t active
     build_rfv2_header(frame, RFV2_PKT_STATUS, seq, (uint8_t)sizeof(payload));
     memcpy(frame->payload, &payload, sizeof(payload));
 }
+#endif
 
 int main(void) {
     uint16_t seq = 0;
     uint32_t last_rf_test_ms = 0;
+#if !(PIPE0_DIRECTION_TEST && PIPE0_TEST_RP_TO_ESP)
     bool rf_test_ack_pending = false;
     uint16_t rf_test_expected_ack_seq = 0;
     uint32_t rf_test_ack_deadline_ms = 0;
+#endif
 #if !RFV2_DISABLE_DIAG
     uint16_t heartbeat_seq = RFV2_SEQ_FIRST_VALID;
     uint32_t last_heartbeat_ms = 0;
@@ -120,6 +158,7 @@ int main(void) {
     while (true) {
         const uint32_t now_ms = to_ms_since_boot(get_absolute_time());
 
+#if !(PIPE0_DIRECTION_TEST && PIPE0_TEST_ESP_TO_RP)
         if ((now_ms - last_rf_test_ms) >= RF_TEST_INTERVAL_MS) {
             rf_test_packet_t packet = {
                 .magic = RF_TEST_PACKET_MAGIC,
@@ -137,14 +176,17 @@ int main(void) {
                    sent ? 1u : 0u,
                    (unsigned)nrf24_radio_last_status());
 
+#if !(PIPE0_DIRECTION_TEST && PIPE0_TEST_RP_TO_ESP)
             if (sent) {
                 rf_test_ack_pending = true;
                 rf_test_expected_ack_seq = packet.seq;
                 rf_test_ack_deadline_ms = now_ms + RF_TEST_ACK_TIMEOUT_MS;
             }
+#endif
 
             last_rf_test_ms = now_ms;
         }
+#endif
 
 #if !RFV2_DISABLE_DIAG
         if ((now_ms - last_heartbeat_ms) >= RFV2_HEARTBEAT_INTERVAL_MS) {
@@ -169,6 +211,20 @@ int main(void) {
             uint8_t rx_buf[RFV2_FRAME_SIZE];
             const int rx_len = nrf24_radio_recv_any(rx_buf, sizeof(rx_buf), &rx_pipe, &rx_payload_len, RFV2_PING_POLL_MS);
 
+#if PIPE0_DIRECTION_TEST && PIPE0_TEST_ESP_TO_RP
+            if (rx_len > 0 && rx_pipe == 0u && rx_payload_len == sizeof(rf_test_packet_t)) {
+                rf_test_packet_t packet;
+
+                memcpy(&packet, rx_buf, sizeof(packet));
+                printf("portable_demo: PIPE0_PROBERX len=%u\r\n", (unsigned)rx_payload_len);
+                log_pipe0_raw16(rx_buf, rx_payload_len);
+
+                if (packet.magic == RF_TEST_PACKET_MAGIC &&
+                    packet.version == RF_TEST_PACKET_VERSION) {
+                    log_pipe0_decoded(&packet);
+                }
+            }
+#elif !(PIPE0_DIRECTION_TEST && PIPE0_TEST_RP_TO_ESP)
             if (rx_len > 0 && rx_pipe == 0u && rx_payload_len == sizeof(rf_test_packet_t)) {
                 rf_test_packet_t packet;
 
@@ -238,14 +294,17 @@ int main(void) {
                 }
             }
 #endif
+#endif
         }
 
+#if !(PIPE0_DIRECTION_TEST && PIPE0_TEST_RP_TO_ESP)
         if (rf_test_ack_pending && (int32_t)(now_ms - rf_test_ack_deadline_ms) >= 0) {
             printf("portable_demo: ack timeout seq=%u status=0x%02x\r\n",
                    (unsigned)rf_test_expected_ack_seq,
                    (unsigned)nrf24_radio_last_status());
             rf_test_ack_pending = false;
         }
+#endif
 
         sleep_ms(5);
     }

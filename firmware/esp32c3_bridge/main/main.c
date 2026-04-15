@@ -20,6 +20,19 @@
 #ifndef RFV2_DISABLE_DIAG
 #define RFV2_DISABLE_DIAG 1
 #endif
+#ifndef PIPE0_DIRECTION_TEST
+#define PIPE0_DIRECTION_TEST 1
+#endif
+#ifndef PIPE0_TEST_RP_TO_ESP
+#define PIPE0_TEST_RP_TO_ESP 1
+#endif
+#ifndef PIPE0_TEST_ESP_TO_RP
+#define PIPE0_TEST_ESP_TO_RP 0
+#endif
+
+#if PIPE0_TEST_RP_TO_ESP && PIPE0_TEST_ESP_TO_RP
+#error "PIPE0 direction test modes are mutually exclusive"
+#endif
 
 #define BRIDGE_HEARTBEAT_INTERVAL_MS 5000
 #define RFV2_PING_INTERVAL_MS 7000
@@ -33,6 +46,18 @@
 #endif
 
 static const char *TAG = "bridge_main";
+
+static void log_pipe0_decoded(const rf_test_packet_t *packet)
+{
+    ESP_LOGI(
+        TAG,
+        "PIPE0_RFTEST seq=%u type=%u uptime_ms=%lu arg0=%lu flags=0x%04x",
+        (unsigned)packet->seq,
+        (unsigned)packet->msg_type,
+        (unsigned long)packet->uptime_ms,
+        (unsigned long)packet->arg0,
+        (unsigned)packet->flags);
+}
 
 #if !RFV2_DISABLE_DIAG
 static uint16_t rfv2_next_seq(uint16_t seq)
@@ -151,7 +176,7 @@ static void log_rxhex(const uint8_t *buf, size_t len)
 void app_main(void)
 {
     TickType_t last_heartbeat_tick;
-#if PIPE0_PROBE_DIAG
+#if PIPE0_PROBE_DIAG && PIPE0_DIRECTION_TEST && PIPE0_TEST_ESP_TO_RP
     TickType_t last_pipe0_probe_tick;
     uint16_t pipe0_probe_seq = 1;
 #endif
@@ -182,7 +207,7 @@ void app_main(void)
     last_ping_tick = last_heartbeat_tick;
     last_status_tick = last_heartbeat_tick;
 #endif
-#if PIPE0_PROBE_DIAG
+#if PIPE0_PROBE_DIAG && PIPE0_DIRECTION_TEST && PIPE0_TEST_ESP_TO_RP
     last_pipe0_probe_tick = last_heartbeat_tick;
 #endif
 
@@ -248,7 +273,7 @@ void app_main(void)
         }
 #endif
 
-#if PIPE0_PROBE_DIAG
+#if PIPE0_PROBE_DIAG && PIPE0_DIRECTION_TEST && PIPE0_TEST_ESP_TO_RP
         if ((now - last_pipe0_probe_tick) >= pdMS_TO_TICKS(PIPE0_PROBE_INTERVAL_MS)) {
             rf_test_packet_t probe_packet = {
                 .magic = RF_TEST_PACKET_MAGIC,
@@ -292,6 +317,11 @@ void app_main(void)
 #endif
 
                 if (packet.magic == RF_TEST_PACKET_MAGIC && packet.version == RF_TEST_PACKET_VERSION) {
+#if PIPE0_DIRECTION_TEST && PIPE0_TEST_RP_TO_ESP
+                    valid_rx++;
+                    last_seq = packet.seq;
+                    log_pipe0_decoded(&packet);
+#elif !(PIPE0_DIRECTION_TEST && PIPE0_TEST_ESP_TO_RP)
                     if (packet.msg_type == RF_TEST_MSG_DATA) {
                         rf_test_packet_t ack_packet = {
                             .magic = RF_TEST_PACKET_MAGIC,
@@ -326,6 +356,7 @@ void app_main(void)
                             ack_ok == (int)sizeof(ack_packet),
                             (unsigned)nrf24_drv_last_status());
                     }
+#endif
                 }
             }
 #if !RFV2_DISABLE_DIAG

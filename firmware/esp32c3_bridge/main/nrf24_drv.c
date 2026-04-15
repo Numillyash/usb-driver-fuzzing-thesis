@@ -199,6 +199,11 @@ static void nrf24_log_addr5(const char *label, const uint8_t *addr)
 
 static void nrf24_dump_state(const char *label)
 {
+    uint8_t rf_ch = 0;
+    uint8_t rf_setup = 0;
+    uint8_t setup_aw = 0;
+    uint8_t en_aa = 0;
+    uint8_t setup_retr = 0;
     uint8_t config = 0;
     uint8_t en_rxaddr = 0;
     uint8_t status = 0;
@@ -211,6 +216,11 @@ static void nrf24_dump_state(const char *label)
     uint8_t rx_addr_p1[5] = { 0 };
     uint8_t tx_addr[5] = { 0 };
 
+    (void)nrf24_read_register(NRF24_REG_RF_CH, &rf_ch);
+    (void)nrf24_read_register(NRF24_REG_RF_SETUP, &rf_setup);
+    (void)nrf24_read_register(NRF24_REG_SETUP_AW, &setup_aw);
+    (void)nrf24_read_register(NRF24_REG_EN_AA, &en_aa);
+    (void)nrf24_read_register(NRF24_REG_SETUP_RETR, &setup_retr);
     (void)nrf24_read_register(NRF24_REG_CONFIG, &config);
     (void)nrf24_read_register(NRF24_REG_EN_RXADDR, &en_rxaddr);
     (void)nrf24_read_register(NRF24_REG_STATUS, &status);
@@ -225,8 +235,13 @@ static void nrf24_dump_state(const char *label)
 
     ESP_LOGI(
         TAG,
-        "%s CFG=0x%02x EN_RXADDR=0x%02x STATUS=0x%02x FIFO=0x%02x RX_PW_P0=%u RX_PW_P1=%u FEATURE=0x%02x DYNPD=0x%02x",
+        "%s RF_CH=0x%02x RF_SETUP=0x%02x SETUP_AW=0x%02x EN_AA=0x%02x SETUP_RETR=0x%02x CFG=0x%02x EN_RXADDR=0x%02x STATUS=0x%02x FIFO=0x%02x RX_PW_P0=%u RX_PW_P1=%u FEATURE=0x%02x DYNPD=0x%02x",
         label,
+        (unsigned)rf_ch,
+        (unsigned)rf_setup,
+        (unsigned)setup_aw,
+        (unsigned)en_aa,
+        (unsigned)setup_retr,
         (unsigned)config,
         (unsigned)en_rxaddr,
         (unsigned)status,

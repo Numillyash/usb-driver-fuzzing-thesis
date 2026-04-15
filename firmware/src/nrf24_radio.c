@@ -173,6 +173,17 @@ static void nrf24_diag_print_addr5(const char *label, const uint8_t *addr)
 
 static void nrf24_diag_dump_state(const char *label)
 {
+    const uint8_t rf_ch = nrf24_read_register(NRF24_REG_RF_CH);
+    const uint8_t rf_setup = nrf24_read_register(NRF24_REG_RF_SETUP);
+    const uint8_t setup_aw = nrf24_read_register(NRF24_REG_SETUP_AW);
+    const uint8_t en_aa = nrf24_read_register(NRF24_REG_EN_AA);
+    const uint8_t setup_retr = nrf24_read_register(NRF24_REG_SETUP_RETR);
+    const uint8_t config = nrf24_read_register(NRF24_REG_CONFIG);
+    const uint8_t en_rxaddr = nrf24_read_register(NRF24_REG_EN_RXADDR);
+    const uint8_t status = nrf24_read_register(NRF24_REG_STATUS);
+    const uint8_t fifo_status = nrf24_read_register(NRF24_REG_FIFO_STATUS);
+    const uint8_t rx_pw_p0 = nrf24_read_register(NRF24_REG_RX_PW_P0);
+    const uint8_t rx_pw_p1 = nrf24_read_register(NRF24_REG_RX_PW_P1);
     uint8_t rx_addr_p0[5] = { 0 };
     uint8_t rx_addr_p1[5] = { 0 };
     uint8_t tx_addr[5] = { 0 };
@@ -181,14 +192,19 @@ static void nrf24_diag_dump_state(const char *label)
     nrf24_read_register_buf(NRF24_REG_RX_ADDR_P1, rx_addr_p1, sizeof(rx_addr_p1));
     nrf24_read_register_buf(NRF24_REG_TX_ADDR, tx_addr, sizeof(tx_addr));
 
-    printf("nrf24[%s] CFG=0x%02x EN_RXADDR=0x%02x STATUS=0x%02x FIFO=0x%02x RX_PW_P0=%u RX_PW_P1=%u\r\n",
+    printf("nrf24[%s] RF_CH=0x%02x RF_SETUP=0x%02x SETUP_AW=0x%02x EN_AA=0x%02x SETUP_RETR=0x%02x CFG=0x%02x EN_RXADDR=0x%02x STATUS=0x%02x FIFO=0x%02x RX_PW_P0=%u RX_PW_P1=%u\r\n",
            label,
-           (unsigned)nrf24_read_register(NRF24_REG_CONFIG),
-           (unsigned)nrf24_read_register(NRF24_REG_EN_RXADDR),
-           (unsigned)nrf24_read_register(NRF24_REG_STATUS),
-           (unsigned)nrf24_read_register(NRF24_REG_FIFO_STATUS),
-           (unsigned)nrf24_read_register(NRF24_REG_RX_PW_P0),
-           (unsigned)nrf24_read_register(NRF24_REG_RX_PW_P1));
+           (unsigned)rf_ch,
+           (unsigned)rf_setup,
+           (unsigned)setup_aw,
+           (unsigned)en_aa,
+           (unsigned)setup_retr,
+           (unsigned)config,
+           (unsigned)en_rxaddr,
+           (unsigned)status,
+           (unsigned)fifo_status,
+           (unsigned)rx_pw_p0,
+           (unsigned)rx_pw_p1);
     nrf24_diag_print_addr5("RX_ADDR_P0", rx_addr_p0);
     nrf24_diag_print_addr5("RX_ADDR_P1", rx_addr_p1);
     nrf24_diag_print_addr5("TX_ADDR", tx_addr);
