@@ -297,6 +297,18 @@ static int nrf24_rx_pipe_number(void)
     return (int)rx_p_no;
 }
 
+static size_t nrf24_payload_size_for_pipe(uint8_t pipe_no)
+{
+    if (pipe_no == 0u) {
+        return RF_TEST_PAYLOAD_SIZE;
+    }
+    if (pipe_no == 1u) {
+        return RFV2_FRAME_SIZE;
+    }
+
+    return 0u;
+}
+
 bool nrf24_radio_init_tx(void)
 {
     spi_init(NRF24_SPI_PORT, NRF24_SPI_BAUDRATE);
@@ -411,59 +423,75 @@ bool nrf24_radio_send_frame_v2(const void *data, size_t len)
 
 int nrf24_radio_recv_fixed(void *data, size_t len, uint32_t timeout_ms)
 {
-    absolute_time_t deadline;
-    uint8_t payload[RF_TEST_PAYLOAD_SIZE];
+    uint8_t pipe_no = 0xffu;
+    size_t payload_len = 0u;
+    uint8_t rx_buf[RFV2_FRAME_SIZE];
+    const int rx_len = nrf24_radio_recv_any(rx_buf, sizeof(rx_buf), &pipe_no, &payload_len, timeout_ms);
 
     if (!g_radio_ready || data == NULL || len != RF_TEST_PAYLOAD_SIZE) {
         return -1;
     }
 
-    nrf24_restore_prx();
-#if NRF24_DIAG
-    printf("nrf24 rf_test entering_ack_wait timeout_ms=%u\r\n",
-           (unsigned)(timeout_ms == 0 ? NRF24_RX_TIMEOUT_MS : timeout_ms));
-#endif
-    deadline = make_timeout_time_ms(timeout_ms == 0 ? NRF24_RX_TIMEOUT_MS : timeout_ms);
-
-    while (!time_reached(deadline)) {
-        if (nrf24_rx_available() && nrf24_rx_pipe_number() == 0) {
-            nrf24_read_payload(payload, sizeof(payload));
-            memcpy(data, payload, sizeof(payload));
-            nrf24_write_register(NRF24_REG_STATUS, NRF24_STATUS_CLEAR_IRQS);
-#if NRF24_DIAG
-            printf("nrf24 rf_test recv_raw len=%u status=0x%02x\r\n",
-                   (unsigned)sizeof(payload),
-                   (unsigned)g_last_status);
-#endif
-            return (int)sizeof(payload);
-        }
-        sleep_ms(1);
+    if (rx_len > 0 && pipe_no == 0u && payload_len == RF_TEST_PAYLOAD_SIZE) {
+        memcpy(data, rx_buf, RF_TEST_PAYLOAD_SIZE);
+        return (int)payload_len;
     }
 
-#if NRF24_DIAG
-    printf("nrf24 rf_test recv_raw len=0 status=0x%02x\r\n", (unsigned)g_last_status);
-#endif
-    return 0;
+    return rx_len > 0 ? 0 : rx_len;
 }
 
 int nrf24_radio_recv_frame_v2(void *data, size_t len, uint32_t timeout_ms)
 {
-    absolute_time_t deadline;
-    uint8_t payload[RFV2_FRAME_SIZE];
+    uint8_t pipe_no = 0xffu;
+    size_t payload_len = 0u;
+    uint8_t rx_buf[RFV2_FRAME_SIZE];
+    const int rx_len = nrf24_radio_recv_any(rx_buf, sizeof(rx_buf), &pipe_no, &payload_len, timeout_ms);
 
     if (!g_radio_ready || data == NULL || len != RFV2_FRAME_SIZE) {
         return -1;
     }
 
-    nrf24_restore_prx();
+    if (rx_len > 0 && pipe_no == 1u && payload_len == RFV2_FRAME_SIZE) {
+        memcpy(data, rx_buf, RFV2_FRAME_SIZE);
+        return (int)payload_len;
+    }
+
+    return rx_len > 0 ? 0 : rx_len;
+}
+
+int nrf24_radio_recv_any(void *data, size_t max_len, uint8_t *pipe_out, size_t *payload_len_out, uint32_t timeout_ms)
+{
+    absolute_time_t deadline;
+    uint8_t payload[RFV2_FRAME_SIZE];
+
+    if (!g_radio_ready || data == NULL || max_len < RFV2_FRAME_SIZE) {
+        return -1;
+    }
+
     deadline = make_timeout_time_ms(timeout_ms == 0 ? NRF24_RX_TIMEOUT_MS : timeout_ms);
 
     while (!time_reached(deadline)) {
-        if (nrf24_rx_available() && nrf24_rx_pipe_number() == 1) {
-            nrf24_read_payload(payload, sizeof(payload));
-            memcpy(data, payload, sizeof(payload));
+        if (nrf24_rx_available()) {
+            const int pipe_no = nrf24_rx_pipe_number();
+            const size_t payload_len = pipe_no >= 0 ? nrf24_payload_size_for_pipe((uint8_t)pipe_no) : 0u;
+
+            if (pipe_no < 0 || payload_len == 0u || payload_len > max_len) {
+                sleep_ms(1);
+                continue;
+            }
+
+            nrf24_read_payload(payload, payload_len);
+            memcpy(data, payload, payload_len);
             nrf24_write_register(NRF24_REG_STATUS, NRF24_STATUS_CLEAR_IRQS);
-            return (int)sizeof(payload);
+
+            if (pipe_out != NULL) {
+                *pipe_out = (uint8_t)pipe_no;
+            }
+            if (payload_len_out != NULL) {
+                *payload_len_out = payload_len;
+            }
+
+            return (int)payload_len;
         }
         sleep_ms(1);
     }

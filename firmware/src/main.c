@@ -100,6 +100,9 @@ int main(void) {
     uint16_t heartbeat_seq = RFV2_SEQ_FIRST_VALID;
     uint32_t last_rf_test_ms = 0;
     uint32_t last_heartbeat_ms = 0;
+    bool rf_test_ack_pending = false;
+    uint16_t rf_test_expected_ack_seq = 0;
+    uint32_t rf_test_ack_deadline_ms = 0;
 
     stdio_init_all();
     sleep_ms(2000);
@@ -121,8 +124,6 @@ int main(void) {
                 .flags = RF_TEST_FLAG_NONE,
             };
             const bool sent = nrf24_radio_send_fixed(&packet, sizeof(packet));
-            rf_test_packet_t ack_packet;
-            int ack_len = 0;
 
             printf("portable_demo: rf_test seq=%u sent=%u status=0x%02x\r\n",
                    (unsigned)packet.seq,
@@ -130,21 +131,9 @@ int main(void) {
                    (unsigned)nrf24_radio_last_status());
 
             if (sent) {
-                ack_len = nrf24_radio_recv_fixed(&ack_packet, sizeof(ack_packet), RF_TEST_ACK_TIMEOUT_MS);
-            }
-
-            if (ack_len == (int)sizeof(ack_packet) &&
-                ack_packet.magic == RF_TEST_PACKET_MAGIC &&
-                ack_packet.version == RF_TEST_PACKET_VERSION &&
-                ack_packet.msg_type == RF_TEST_MSG_ACK &&
-                ack_packet.seq == packet.seq) {
-                printf("portable_demo: ack seq=%u status=0x%02x\r\n",
-                       (unsigned)ack_packet.seq,
-                       (unsigned)nrf24_radio_last_status());
-            } else if (sent) {
-                printf("portable_demo: ack timeout seq=%u status=0x%02x\r\n",
-                       (unsigned)packet.seq,
-                       (unsigned)nrf24_radio_last_status());
+                rf_test_ack_pending = true;
+                rf_test_expected_ack_seq = packet.seq;
+                rf_test_ack_deadline_ms = now_ms + RF_TEST_ACK_TIMEOUT_MS;
             }
 
             last_rf_test_ms = now_ms;
@@ -166,13 +155,40 @@ int main(void) {
         }
 
         {
-            rfv2_frame_t rx_frame;
-            const int rx_len = nrf24_radio_recv_frame_v2(&rx_frame, sizeof(rx_frame), RFV2_PING_POLL_MS);
+            uint8_t rx_pipe = 0xffu;
+            size_t rx_payload_len = 0u;
+            uint8_t rx_buf[RFV2_FRAME_SIZE];
+            const int rx_len = nrf24_radio_recv_any(rx_buf, sizeof(rx_buf), &rx_pipe, &rx_payload_len, RFV2_PING_POLL_MS);
 
-            if (rx_len == (int)sizeof(rx_frame) &&
-                rfv2_header_is_valid(&rx_frame) &&
-                rx_frame.header.pkt_type == RFV2_PKT_PING &&
-                rx_frame.header.payload_len == sizeof(rfv2_ping_payload_t)) {
+            if (rx_len > 0 && rx_pipe == 0u && rx_payload_len == sizeof(rf_test_packet_t)) {
+                rf_test_packet_t packet;
+
+                memcpy(&packet, rx_buf, sizeof(packet));
+
+                if (packet.magic == RF_TEST_PACKET_MAGIC &&
+                    packet.version == RF_TEST_PACKET_VERSION &&
+                    packet.msg_type == RF_TEST_MSG_ACK &&
+                    rf_test_ack_pending &&
+                    packet.seq == rf_test_expected_ack_seq) {
+                    printf("portable_demo: ack seq=%u status=0x%02x\r\n",
+                           (unsigned)packet.seq,
+                           (unsigned)nrf24_radio_last_status());
+                    rf_test_ack_pending = false;
+                } else if (packet.magic == RF_TEST_PACKET_MAGIC &&
+                           packet.version == RF_TEST_PACKET_VERSION &&
+                           packet.msg_type == RF_TEST_MSG_DATA &&
+                           packet.arg0 == PIPE0_PROBE_ARG0) {
+                    printf("portable_demo: PIPE0_PROBERX seq=%u\r\n",
+                           (unsigned)packet.seq);
+                }
+            } else if (rx_len == (int)sizeof(rfv2_frame_t) &&
+                       rx_pipe == 1u) {
+                rfv2_frame_t rx_frame;
+                memcpy(&rx_frame, rx_buf, sizeof(rx_frame));
+
+                if (rfv2_header_is_valid(&rx_frame) &&
+                    rx_frame.header.pkt_type == RFV2_PKT_PING &&
+                    rx_frame.header.payload_len == sizeof(rfv2_ping_payload_t)) {
                 rfv2_ping_payload_t ping_payload;
                 rfv2_frame_t pong_frame;
                 rfv2_pong_payload_t pong_payload;
@@ -189,10 +205,9 @@ int main(void) {
                 printf("portable_demo: rfv2 pong seq=%u nonce=%lu\r\n",
                        (unsigned)pong_frame.header.seq,
                        (unsigned long)pong_payload.nonce);
-            } else if (rx_len == (int)sizeof(rx_frame) &&
-                       rfv2_header_is_valid(&rx_frame) &&
-                       rx_frame.header.pkt_type == RFV2_PKT_GET_STATUS &&
-                       rx_frame.header.payload_len == 0u) {
+                } else if (rfv2_header_is_valid(&rx_frame) &&
+                           rx_frame.header.pkt_type == RFV2_PKT_GET_STATUS &&
+                           rx_frame.header.payload_len == 0u) {
                 rfv2_frame_t status_frame;
                 rfv2_status_payload_t status_payload;
 
@@ -209,24 +224,16 @@ int main(void) {
                        (unsigned)status_payload.system_state,
                        (unsigned)status_payload.usb_state,
                        (unsigned)status_payload.scenario_state);
+                }
             }
         }
 
-#if PIPE0_PROBE_DIAG
-        {
-            rf_test_packet_t probe_packet;
-            const int probe_len = nrf24_radio_recv_fixed(&probe_packet, sizeof(probe_packet), 1u);
-
-            if (probe_len == (int)sizeof(probe_packet) &&
-                probe_packet.magic == RF_TEST_PACKET_MAGIC &&
-                probe_packet.version == RF_TEST_PACKET_VERSION &&
-                probe_packet.msg_type == RF_TEST_MSG_DATA &&
-                probe_packet.arg0 == PIPE0_PROBE_ARG0) {
-                printf("portable_demo: PIPE0_PROBERX seq=%u\r\n",
-                       (unsigned)probe_packet.seq);
-            }
+        if (rf_test_ack_pending && (int32_t)(now_ms - rf_test_ack_deadline_ms) >= 0) {
+            printf("portable_demo: ack timeout seq=%u status=0x%02x\r\n",
+                   (unsigned)rf_test_expected_ack_seq,
+                   (unsigned)nrf24_radio_last_status());
+            rf_test_ack_pending = false;
         }
-#endif
 
         sleep_ms(5);
     }
