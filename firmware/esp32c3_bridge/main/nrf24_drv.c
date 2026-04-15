@@ -20,6 +20,9 @@ static const char *TAG = "nrf24_drv";
 #ifndef NRF24_DIAG
 #define NRF24_DIAG 1
 #endif
+#ifndef NRF24_SINGLE_PIPE_RFTEST
+#define NRF24_SINGLE_PIPE_RFTEST 1
+#endif
 
 #define NRF24_PIN_SCK                   GPIO_NUM_4
 #define NRF24_PIN_MOSI                  GPIO_NUM_6
@@ -70,7 +73,9 @@ static const char *TAG = "nrf24_drv";
 #define NRF24_FIFO_RX_EMPTY             0x01u
 
 static const uint8_t k_rf_test_addr[5] = { 'R', 'F', 'T', '0', '1' };
+#if !NRF24_SINGLE_PIPE_RFTEST
 static const uint8_t k_rfv2_addr[5] = { 'R', 'F', 'V', '2', '1' };
+#endif
 
 static spi_device_handle_t g_spi;
 static bool g_ready;
@@ -209,11 +214,7 @@ static void nrf24_dump_state(const char *label)
     uint8_t status = 0;
     uint8_t fifo_status = 0;
     uint8_t rx_pw_p0 = 0;
-    uint8_t rx_pw_p1 = 0;
-    uint8_t feature = 0;
-    uint8_t dynpd = 0;
     uint8_t rx_addr_p0[5] = { 0 };
-    uint8_t rx_addr_p1[5] = { 0 };
     uint8_t tx_addr[5] = { 0 };
 
     (void)nrf24_read_register(NRF24_REG_RF_CH, &rf_ch);
@@ -226,16 +227,12 @@ static void nrf24_dump_state(const char *label)
     (void)nrf24_read_register(NRF24_REG_STATUS, &status);
     (void)nrf24_read_register(NRF24_REG_FIFO_STATUS, &fifo_status);
     (void)nrf24_read_register(NRF24_REG_RX_PW_P0, &rx_pw_p0);
-    (void)nrf24_read_register(NRF24_REG_RX_PW_P1, &rx_pw_p1);
-    (void)nrf24_read_register(NRF24_REG_FEATURE, &feature);
-    (void)nrf24_read_register(NRF24_REG_DYNPD, &dynpd);
     (void)nrf24_read_register_buf(NRF24_REG_RX_ADDR_P0, rx_addr_p0, sizeof(rx_addr_p0));
-    (void)nrf24_read_register_buf(NRF24_REG_RX_ADDR_P1, rx_addr_p1, sizeof(rx_addr_p1));
     (void)nrf24_read_register_buf(NRF24_REG_TX_ADDR, tx_addr, sizeof(tx_addr));
 
     ESP_LOGI(
         TAG,
-        "%s RF_CH=0x%02x RF_SETUP=0x%02x SETUP_AW=0x%02x EN_AA=0x%02x SETUP_RETR=0x%02x CFG=0x%02x EN_RXADDR=0x%02x STATUS=0x%02x FIFO=0x%02x RX_PW_P0=%u RX_PW_P1=%u FEATURE=0x%02x DYNPD=0x%02x",
+        "%s RF_CH=0x%02x RF_SETUP=0x%02x SETUP_AW=0x%02x EN_AA=0x%02x SETUP_RETR=0x%02x CFG=0x%02x EN_RXADDR=0x%02x STATUS=0x%02x FIFO=0x%02x RX_PW_P0=%u",
         label,
         (unsigned)rf_ch,
         (unsigned)rf_setup,
@@ -246,12 +243,8 @@ static void nrf24_dump_state(const char *label)
         (unsigned)en_rxaddr,
         (unsigned)status,
         (unsigned)fifo_status,
-        (unsigned)rx_pw_p0,
-        (unsigned)rx_pw_p1,
-        (unsigned)feature,
-        (unsigned)dynpd);
+        (unsigned)rx_pw_p0);
     nrf24_log_addr5("RX_ADDR_P0", rx_addr_p0);
-    nrf24_log_addr5("RX_ADDR_P1", rx_addr_p1);
     nrf24_log_addr5("TX_ADDR", tx_addr);
 }
 
@@ -282,23 +275,15 @@ static void nrf24_log_pipe0_raw(const uint8_t *data, size_t len, uint8_t pipe_no
 
 static size_t nrf24_payload_size_for_pipe(uint8_t rx_p_no)
 {
-    if (rx_p_no == 0u) {
-        return RF_TEST_PAYLOAD_SIZE;
-    }
-    if (rx_p_no == 1u) {
-        return RFV2_FRAME_SIZE;
-    }
-
-    return 0u;
+    (void)rx_p_no;
+    return RF_TEST_PAYLOAD_SIZE;
 }
 
 static esp_err_t nrf24_configure_prx_pipes(void)
 {
-    ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_EN_RXADDR, 0x03u));
+    ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_EN_RXADDR, 0x01u));
     ESP_ERROR_CHECK(nrf24_write_register_buf(NRF24_REG_RX_ADDR_P0, k_rf_test_addr, sizeof(k_rf_test_addr)));
-    ESP_ERROR_CHECK(nrf24_write_register_buf(NRF24_REG_RX_ADDR_P1, k_rfv2_addr, sizeof(k_rfv2_addr)));
     ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_RX_PW_P0, RF_TEST_PAYLOAD_SIZE));
-    ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_RX_PW_P1, RFV2_FRAME_SIZE));
     ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_DYNPD, 0x00u));
     ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_FEATURE, 0x00u));
     return ESP_OK;
@@ -460,6 +445,11 @@ int nrf24_drv_send(const uint8_t *data, size_t len)
 
 int nrf24_drv_send_frame_v2(const uint8_t *data, size_t len)
 {
+#if NRF24_SINGLE_PIPE_RFTEST
+    (void)data;
+    (void)len;
+    return -1;
+#else
     uint8_t tx[1 + RFV2_FRAME_SIZE] = { 0 };
     uint8_t rx[1 + RFV2_FRAME_SIZE] = { 0 };
     TickType_t deadline;
@@ -499,6 +489,7 @@ int nrf24_drv_send_frame_v2(const uint8_t *data, size_t len)
     nrf24_dump_state("post_tx_rfv2_timeout");
 #endif
     return -1;
+#endif
 }
 
 int nrf24_drv_recv(uint8_t *data, size_t max_len, uint8_t *pipe_out)
@@ -521,13 +512,21 @@ int nrf24_drv_recv(uint8_t *data, size_t max_len, uint8_t *pipe_out)
         return -1;
     }
 
+#if NRF24_SINGLE_PIPE_RFTEST
+    rx_p_no = 0u;
+#else
     rx_p_no = (uint8_t)((status & NRF24_STATUS_RX_P_NO_MASK) >> NRF24_STATUS_RX_P_NO_SHIFT);
+#endif
 #if NRF24_DIAG
     if ((status & NRF24_STATUS_RX_DR) != 0u || (fifo_status & NRF24_FIFO_RX_EMPTY) == 0u) {
         nrf24_log_pipe_seen(rx_p_no, status, fifo_status);
     }
 #endif
-    if ((status & NRF24_STATUS_RX_DR) == 0u || rx_p_no == NRF24_STATUS_RX_P_NO_EMPTY || (fifo_status & NRF24_FIFO_RX_EMPTY) != 0u) {
+    if ((status & NRF24_STATUS_RX_DR) == 0u || (fifo_status & NRF24_FIFO_RX_EMPTY) != 0u
+#if !NRF24_SINGLE_PIPE_RFTEST
+        || rx_p_no == NRF24_STATUS_RX_P_NO_EMPTY
+#endif
+    ) {
         nrf24_drv_recover_rx();
         return 0;
     }
@@ -580,7 +579,11 @@ bool nrf24_drv_poll(void)
         return false;
     }
 
+#if NRF24_SINGLE_PIPE_RFTEST
+    rx_p_no = 0u;
+#else
     rx_p_no = (uint8_t)((status & NRF24_STATUS_RX_P_NO_MASK) >> NRF24_STATUS_RX_P_NO_SHIFT);
+#endif
 #if NRF24_DIAG
     if ((status & NRF24_STATUS_RX_DR) != 0u || (fifo_status & NRF24_FIFO_RX_EMPTY) == 0u) {
         nrf24_log_pipe_seen(rx_p_no, status, fifo_status);
@@ -588,13 +591,19 @@ bool nrf24_drv_poll(void)
 #endif
 
     if (((status & NRF24_STATUS_RX_DR) == 0u) ||
-        (rx_p_no == NRF24_STATUS_RX_P_NO_EMPTY) ||
         ((fifo_status & NRF24_FIFO_RX_EMPTY) != 0u)) {
         if ((status & NRF24_STATUS_RX_DR) != 0u || (fifo_status & NRF24_FIFO_RX_EMPTY) == 0u) {
             nrf24_drv_recover_rx();
         }
         return false;
     }
+
+#if !NRF24_SINGLE_PIPE_RFTEST
+    if (rx_p_no == NRF24_STATUS_RX_P_NO_EMPTY) {
+        nrf24_drv_recover_rx();
+        return false;
+    }
+#endif
 
     return true;
 }

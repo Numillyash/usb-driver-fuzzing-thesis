@@ -15,6 +15,9 @@
 #ifndef NRF24_DIAG
 #define NRF24_DIAG 1
 #endif
+#ifndef NRF24_SINGLE_PIPE_RFTEST
+#define NRF24_SINGLE_PIPE_RFTEST 1
+#endif
 
 #define NRF24_SPI_PORT                  spi0
 #define NRF24_PIN_SCK                   2
@@ -66,7 +69,9 @@
 #define NRF24_FIFO_RX_EMPTY             0x01u
 
 static const uint8_t k_rf_test_addr[5] = { 'R', 'F', 'T', '0', '1' };
+#if !NRF24_SINGLE_PIPE_RFTEST
 static const uint8_t k_rfv2_addr[5] = { 'R', 'F', 'V', '2', '1' };
+#endif
 
 static uint8_t g_last_status;
 static bool g_radio_ready;
@@ -183,16 +188,13 @@ static void nrf24_diag_dump_state(const char *label)
     const uint8_t status = nrf24_read_register(NRF24_REG_STATUS);
     const uint8_t fifo_status = nrf24_read_register(NRF24_REG_FIFO_STATUS);
     const uint8_t rx_pw_p0 = nrf24_read_register(NRF24_REG_RX_PW_P0);
-    const uint8_t rx_pw_p1 = nrf24_read_register(NRF24_REG_RX_PW_P1);
     uint8_t rx_addr_p0[5] = { 0 };
-    uint8_t rx_addr_p1[5] = { 0 };
     uint8_t tx_addr[5] = { 0 };
 
     nrf24_read_register_buf(NRF24_REG_RX_ADDR_P0, rx_addr_p0, sizeof(rx_addr_p0));
-    nrf24_read_register_buf(NRF24_REG_RX_ADDR_P1, rx_addr_p1, sizeof(rx_addr_p1));
     nrf24_read_register_buf(NRF24_REG_TX_ADDR, tx_addr, sizeof(tx_addr));
 
-    printf("nrf24[%s] RF_CH=0x%02x RF_SETUP=0x%02x SETUP_AW=0x%02x EN_AA=0x%02x SETUP_RETR=0x%02x CFG=0x%02x EN_RXADDR=0x%02x STATUS=0x%02x FIFO=0x%02x RX_PW_P0=%u RX_PW_P1=%u\r\n",
+    printf("nrf24[%s] RF_CH=0x%02x RF_SETUP=0x%02x SETUP_AW=0x%02x EN_AA=0x%02x SETUP_RETR=0x%02x CFG=0x%02x EN_RXADDR=0x%02x STATUS=0x%02x FIFO=0x%02x RX_PW_P0=%u\r\n",
            label,
            (unsigned)rf_ch,
            (unsigned)rf_setup,
@@ -203,10 +205,8 @@ static void nrf24_diag_dump_state(const char *label)
            (unsigned)en_rxaddr,
            (unsigned)status,
            (unsigned)fifo_status,
-           (unsigned)rx_pw_p0,
-           (unsigned)rx_pw_p1);
+           (unsigned)rx_pw_p0);
     nrf24_diag_print_addr5("RX_ADDR_P0", rx_addr_p0);
-    nrf24_diag_print_addr5("RX_ADDR_P1", rx_addr_p1);
     nrf24_diag_print_addr5("TX_ADDR", tx_addr);
 }
 #endif
@@ -225,11 +225,9 @@ static void nrf24_write_payload(const uint8_t *data, size_t len)
 
 static void nrf24_configure_prx_pipes(void)
 {
-    nrf24_write_register(NRF24_REG_EN_RXADDR, 0x03u);
+    nrf24_write_register(NRF24_REG_EN_RXADDR, 0x01u);
     nrf24_write_register_buf(NRF24_REG_RX_ADDR_P0, k_rf_test_addr, sizeof(k_rf_test_addr));
-    nrf24_write_register_buf(NRF24_REG_RX_ADDR_P1, k_rfv2_addr, sizeof(k_rfv2_addr));
     nrf24_write_register(NRF24_REG_RX_PW_P0, RF_TEST_PAYLOAD_SIZE);
-    nrf24_write_register(NRF24_REG_RX_PW_P1, RFV2_FRAME_SIZE);
     nrf24_write_register(NRF24_REG_DYNPD, 0x00u);
     nrf24_write_register(NRF24_REG_FEATURE, 0x00u);
 }
@@ -299,6 +297,14 @@ static bool nrf24_rx_available(void)
 
 static int nrf24_rx_pipe_number(void)
 {
+#if NRF24_SINGLE_PIPE_RFTEST
+    (void)nrf24_read_register(NRF24_REG_STATUS);
+    if ((nrf24_read_register(NRF24_REG_FIFO_STATUS) & NRF24_FIFO_RX_EMPTY) != 0u) {
+        return -1;
+    }
+
+    return 0;
+#else
     const uint8_t status = nrf24_read_register(NRF24_REG_STATUS);
     const uint8_t fifo_status = nrf24_read_register(NRF24_REG_FIFO_STATUS);
     const uint8_t rx_p_no = (uint8_t)((status & NRF24_STATUS_RX_P_NO_MASK) >> NRF24_STATUS_RX_P_NO_SHIFT);
@@ -311,18 +317,13 @@ static int nrf24_rx_pipe_number(void)
     }
 
     return (int)rx_p_no;
+#endif
 }
 
 static size_t nrf24_payload_size_for_pipe(uint8_t pipe_no)
 {
-    if (pipe_no == 0u) {
-        return RF_TEST_PAYLOAD_SIZE;
-    }
-    if (pipe_no == 1u) {
-        return RFV2_FRAME_SIZE;
-    }
-
-    return 0u;
+    (void)pipe_no;
+    return RF_TEST_PAYLOAD_SIZE;
 }
 
 bool nrf24_radio_init_tx(void)
@@ -405,6 +406,11 @@ bool nrf24_radio_send_fixed(const void *data, size_t len)
 
 bool nrf24_radio_send_frame_v2(const void *data, size_t len)
 {
+#if NRF24_SINGLE_PIPE_RFTEST
+    (void)data;
+    (void)len;
+    return false;
+#else
     uint8_t payload[RFV2_FRAME_SIZE];
 
     if (!g_radio_ready || data == NULL || len != RFV2_FRAME_SIZE) {
@@ -435,6 +441,7 @@ bool nrf24_radio_send_frame_v2(const void *data, size_t len)
 
     nrf24_restore_prx();
     return false;
+#endif
 }
 
 int nrf24_radio_recv_fixed(void *data, size_t len, uint32_t timeout_ms)
@@ -458,6 +465,12 @@ int nrf24_radio_recv_fixed(void *data, size_t len, uint32_t timeout_ms)
 
 int nrf24_radio_recv_frame_v2(void *data, size_t len, uint32_t timeout_ms)
 {
+#if NRF24_SINGLE_PIPE_RFTEST
+    (void)data;
+    (void)len;
+    (void)timeout_ms;
+    return 0;
+#else
     uint8_t pipe_no = 0xffu;
     size_t payload_len = 0u;
     uint8_t rx_buf[RFV2_FRAME_SIZE];
@@ -473,6 +486,7 @@ int nrf24_radio_recv_frame_v2(void *data, size_t len, uint32_t timeout_ms)
     }
 
     return rx_len > 0 ? 0 : rx_len;
+#endif
 }
 
 int nrf24_radio_recv_any(void *data, size_t max_len, uint8_t *pipe_out, size_t *payload_len_out, uint32_t timeout_ms)
