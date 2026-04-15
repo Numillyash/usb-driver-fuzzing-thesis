@@ -26,6 +26,9 @@
 #ifndef NRF24_SINGLE_PIPE_RFTEST
 #define NRF24_SINGLE_PIPE_RFTEST 1
 #endif
+#ifndef NRF24_DUAL_PIPE_COEX_TEST
+#define NRF24_DUAL_PIPE_COEX_TEST 1
+#endif
 #ifndef PIPE0_TEST_RP_TO_ESP
 #define PIPE0_TEST_RP_TO_ESP 1
 #endif
@@ -64,7 +67,7 @@ static void log_pipe0_decoded(const rf_test_packet_t *packet)
         (unsigned)packet->flags);
 }
 
-#if !RFV2_DISABLE_DIAG && !NRF24_SINGLE_PIPE_RFTEST
+#if !RFV2_DISABLE_DIAG && !NRF24_SINGLE_PIPE_RFTEST && !NRF24_DUAL_PIPE_COEX_TEST
 static uint16_t rfv2_next_seq(uint16_t seq)
 {
     if (seq == RFV2_SEQ_RESERVED || seq == RFV2_SEQ_MAX) {
@@ -191,7 +194,7 @@ void app_main(void)
     uint32_t ack_tx_fail = 0;
     uint16_t last_seq = 0;
     uint8_t rx_buf[RFV2_FRAME_SIZE];
-#if !RFV2_DISABLE_DIAG && !NRF24_SINGLE_PIPE_RFTEST
+#if !RFV2_DISABLE_DIAG && !NRF24_SINGLE_PIPE_RFTEST && !NRF24_DUAL_PIPE_COEX_TEST
     TickType_t last_ping_tick;
     TickType_t last_status_tick;
     uint32_t ping_nonce = 1;
@@ -208,7 +211,7 @@ void app_main(void)
     bridge_uart_init();
     nrf24_drv_init();
     last_heartbeat_tick = xTaskGetTickCount();
-#if !RFV2_DISABLE_DIAG && !NRF24_SINGLE_PIPE_RFTEST
+#if !RFV2_DISABLE_DIAG && !NRF24_SINGLE_PIPE_RFTEST && !NRF24_DUAL_PIPE_COEX_TEST
     last_ping_tick = last_heartbeat_tick;
     last_status_tick = last_heartbeat_tick;
 #endif
@@ -235,7 +238,7 @@ void app_main(void)
             last_heartbeat_tick = now;
         }
 
-#if !RFV2_DISABLE_DIAG && !NRF24_SINGLE_PIPE_RFTEST
+#if !RFV2_DISABLE_DIAG && !NRF24_SINGLE_PIPE_RFTEST && !NRF24_DUAL_PIPE_COEX_TEST
         if (!ping_in_flight && (now - last_ping_tick) >= pdMS_TO_TICKS(RFV2_PING_INTERVAL_MS)) {
             rfv2_frame_t ping_frame;
             const uint16_t current_ping_seq = request_seq;
@@ -301,16 +304,16 @@ void app_main(void)
         }
 #endif
 
-        if (nrf24_drv_poll()) {
+        {
             uint8_t rx_pipe = 0xffu;
-            const int rx_len = nrf24_drv_recv(rx_buf, sizeof(rx_buf), &rx_pipe);
+            size_t rx_payload_len = 0u;
+            const int rx_len = nrf24_drv_recv_any(rx_buf, sizeof(rx_buf), &rx_pipe, &rx_payload_len);
 
             if (rx_len == -2) {
                 garbage_rx++;
-                continue;
             }
-
-            if (rx_pipe == 0u && rx_len == (int)sizeof(rf_test_packet_t)) {
+            else if (rx_pipe == 0u && rx_len == (int)sizeof(rf_test_packet_t) &&
+                     rx_payload_len == sizeof(rf_test_packet_t)) {
                 rf_test_packet_t packet;
                 memcpy(&packet, rx_buf, sizeof(packet));
 
@@ -326,7 +329,7 @@ void app_main(void)
                     valid_rx++;
                     last_seq = packet.seq;
                     log_pipe0_decoded(&packet);
-#elif !(PIPE0_DIRECTION_TEST && PIPE0_TEST_ESP_TO_RP) && !NRF24_SINGLE_PIPE_RFTEST
+#elif !(PIPE0_DIRECTION_TEST && PIPE0_TEST_ESP_TO_RP) && !NRF24_SINGLE_PIPE_RFTEST && !NRF24_DUAL_PIPE_COEX_TEST
                     if (packet.msg_type == RF_TEST_MSG_DATA) {
                         rf_test_packet_t ack_packet = {
                             .magic = RF_TEST_PACKET_MAGIC,
@@ -364,7 +367,7 @@ void app_main(void)
 #endif
                 }
             }
-#if !RFV2_DISABLE_DIAG && !NRF24_SINGLE_PIPE_RFTEST
+#if !RFV2_DISABLE_DIAG && !NRF24_SINGLE_PIPE_RFTEST && !NRF24_DUAL_PIPE_COEX_TEST
             else if (rx_pipe == 1u && rx_len == (int)sizeof(rfv2_frame_t)) {
                 rfv2_frame_t frame;
 
@@ -416,7 +419,7 @@ void app_main(void)
 #endif
         }
 
-#if !RFV2_DISABLE_DIAG && !NRF24_SINGLE_PIPE_RFTEST
+#if !RFV2_DISABLE_DIAG && !NRF24_SINGLE_PIPE_RFTEST && !NRF24_DUAL_PIPE_COEX_TEST
         if (ping_in_flight && now >= ping_deadline_tick) {
             ESP_LOGI(
                 TAG,
