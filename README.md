@@ -120,13 +120,16 @@ build/portable_demo.uf2
 
 ## Текущее наполнение firmware
 
-Сейчас в репозитории сохранён минимальный проверенный target `portable_demo`:
+Сейчас в репозитории сохранены два RP2040 target:
 
 - `firmware/src/main.c` — базовый USB CDC smoke-test;
+- `firmware/src/usb_case_main.c` — безопасный baseline `usb_case_demo` для USB descriptor/enumeration экспериментов;
 - `firmware/include/` — типы и черновые интерфейсы control plane, сценариев и логирования;
-- `firmware/CMakeLists.txt` — сборка `portable_demo` под `waveshare_rp2040_zero`.
+- `firmware/CMakeLists.txt` — сборка `portable_demo` и `usb_case_demo` под `waveshare_rp2040_zero`.
 
 Новая документация и заголовки описывают следующую стадию развития, но не внедряют runtime-логику и не меняют текущий smoke-test.
+
+Описание безопасного baseline для USB-кейсов: [docs/usb_case_firmware.md](docs/usb_case_firmware.md).
 
 ## Документация
 

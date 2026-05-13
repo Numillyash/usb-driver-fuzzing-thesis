@@ -43,3 +43,20 @@ pico_enable_stdio_usb(portable_demo 1)
 pico_enable_stdio_uart(portable_demo 0)
 
 pico_add_extra_outputs(portable_demo)
+
+add_executable(usb_case_demo
+    src/usb_case_main.c
+)
+
+target_include_directories(usb_case_demo PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}/include
+)
+
+target_link_libraries(usb_case_demo
+    pico_stdlib
+)
+
+pico_enable_stdio_usb(usb_case_demo 1)
+pico_enable_stdio_uart(usb_case_demo 0)
+
+pico_add_extra_outputs(usb_case_demo)
