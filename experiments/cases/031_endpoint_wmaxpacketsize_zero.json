@@ -1,0 +1,12 @@
+{
+  "case_id": "031",
+  "name": "endpoint_wmaxpacketsize_zero",
+  "group": "interface_endpoint",
+  "base_persona": "cdc_acm",
+  "description": "Для активного endpoint задано wMaxPacketSize=0.",
+  "mutation": "endpoint_descriptor.wMaxPacketSize установлено в ноль для рабочего endpoint.",
+  "expected_windows": "Вероятен отказ конфигурирования интерфейса и сообщение о некорректном endpoint.",
+  "expected_linux": "Ожидается ошибка валидации endpoint descriptor и отказ инициализации интерфейса.",
+  "risk_level": "low",
+  "notes": "Проверяется реакция валидации критического поля endpoint descriptor."
+}

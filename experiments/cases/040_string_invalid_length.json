@@ -1,0 +1,12 @@
+{
+  "case_id": "040",
+  "name": "string_invalid_length",
+  "group": "string_descriptor",
+  "base_persona": "cdc_acm",
+  "description": "Неконсистентная длина в заголовке string descriptor.",
+  "mutation": "string_descriptor.bLength не соответствует фактической длине строки.",
+  "expected_windows": "Вероятно игнорирование строки, предупреждение в журнале или отказ при критическом индексе.",
+  "expected_linux": "Ожидаются сообщения о некорректном string descriptor с возможным fallback на отсутствие строк.",
+  "risk_level": "low",
+  "notes": "Ограничено анализом устойчивости парсинга строковых дескрипторов."
+}

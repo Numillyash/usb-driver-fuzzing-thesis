@@ -1,0 +1,12 @@
+{
+  "case_id": "041",
+  "name": "string_missing_index",
+  "group": "string_descriptor",
+  "base_persona": "cdc_acm",
+  "description": "В device/configuration descriptor указан индекс строки, для которого отсутствует реализация string descriptor.",
+  "mutation": "iManufacturer, iProduct или iSerialNumber указывает на несуществующий строковый индекс.",
+  "expected_windows": "Ожидается перечисление с частичной потерей строковой информации либо предупреждением.",
+  "expected_linux": "Ожидается перечисление с fallback-поведением и диагностическим сообщением о недоступной строке.",
+  "risk_level": "low",
+  "notes": "Сценарий безопасен; исследуется обработка отсутствующих строковых индексов."
+}

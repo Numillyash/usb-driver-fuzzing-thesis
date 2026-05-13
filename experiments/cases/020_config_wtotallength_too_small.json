@@ -1,0 +1,12 @@
+{
+  "case_id": "020",
+  "name": "config_wtotallength_too_small",
+  "group": "config_descriptor",
+  "base_persona": "composite_cdc_hid",
+  "description": "Поле wTotalLength в configuration descriptor меньше фактической суммарной длины.",
+  "mutation": "configuration_descriptor.wTotalLength занижено относительно реальной структуры конфигурации.",
+  "expected_windows": "Вероятна частичная инициализация интерфейсов либо отказ с ошибкой конфигурации.",
+  "expected_linux": "Ожидаются сообщения о неполной конфигурации и потенциальный отказ перечисления.",
+  "risk_level": "low",
+  "notes": "Проверка устойчивости парсинга усеченной конфигурации."
+}

@@ -1,0 +1,12 @@
+{
+  "case_id": "011",
+  "name": "device_blength_too_long",
+  "group": "device_descriptor",
+  "base_persona": "cdc_acm",
+  "description": "Поле bLength в device descriptor больше нормативного значения.",
+  "mutation": "device_descriptor.bLength увеличено выше 18 байт.",
+  "expected_windows": "Возможна частичная обработка с предупреждением или отказ перечисления.",
+  "expected_linux": "Ожидается диагностическое сообщение о несоответствии длины и потенциальный отказ перечисления.",
+  "risk_level": "low",
+  "notes": "Проверяется устойчивость к избыточной длине заголовка device descriptor."
+}

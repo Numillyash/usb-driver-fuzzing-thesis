@@ -1,0 +1,12 @@
+{
+  "case_id": "022",
+  "name": "config_bnuminterfaces_mismatch",
+  "group": "config_descriptor",
+  "base_persona": "composite_cdc_hid",
+  "description": "Поле bNumInterfaces не соответствует фактически объявленному числу interface descriptor.",
+  "mutation": "configuration_descriptor.bNumInterfaces преднамеренно рассогласовано с реальным количеством интерфейсов.",
+  "expected_windows": "Возможна частичная инициализация или ошибка при разборе композитной конфигурации.",
+  "expected_linux": "Вероятны сообщения о рассогласовании и неполная привязка драйверов интерфейсов.",
+  "risk_level": "low",
+  "notes": "Кейс направлен на анализ поведения PnP при структурной неконсистентности."
+}

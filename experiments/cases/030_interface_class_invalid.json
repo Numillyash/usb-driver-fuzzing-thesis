@@ -1,0 +1,12 @@
+{
+  "case_id": "030",
+  "name": "interface_class_invalid",
+  "group": "interface_endpoint",
+  "base_persona": "composite_cdc_hid",
+  "description": "Некорректное значение bInterfaceClass для одного из интерфейсов композитного устройства.",
+  "mutation": "interface_descriptor.bInterfaceClass установлено в невалидное/зарезервированное значение.",
+  "expected_windows": "Вероятна потеря привязки драйвера для затронутого интерфейса при сохранении остальных.",
+  "expected_linux": "Ожидается частичная инициализация с отказом привязки драйвера для невалидного интерфейса.",
+  "risk_level": "low",
+  "notes": "Исследуется локальная устойчивость к ошибке классификации интерфейса."
+}

@@ -1,0 +1,12 @@
+{
+  "case_id": "002",
+  "name": "baseline_composite_cdc_hid",
+  "group": "baseline",
+  "base_persona": "composite_cdc_hid",
+  "description": "Контрольный сценарий композитного устройства с интерфейсами CDC и HID без аномалий.",
+  "mutation": "none",
+  "expected_windows": "Успешное перечисление композитного устройства и корректная инициализация функций CDC/HID.",
+  "expected_linux": "Успешное перечисление композитного устройства и загрузка соответствующих драйверов интерфейсов.",
+  "risk_level": "low",
+  "notes": "Используется как baseline для межинтерфейсных аномалий."
+}

@@ -1,0 +1,12 @@
+{
+  "case_id": "021",
+  "name": "config_wtotallength_too_large",
+  "group": "config_descriptor",
+  "base_persona": "composite_cdc_hid",
+  "description": "Поле wTotalLength в configuration descriptor больше фактической суммарной длины.",
+  "mutation": "configuration_descriptor.wTotalLength завышено относительно реально передаваемых данных.",
+  "expected_windows": "Возможны повторные попытки чтения дескриптора, предупреждения или отказ конфигурирования.",
+  "expected_linux": "Ожидаются диагностические сообщения о несоответствии длины и возможный отказ инициализации.",
+  "risk_level": "low",
+  "notes": "Сценарий безопасен и ограничен контролем целостности дескриптора."
+}

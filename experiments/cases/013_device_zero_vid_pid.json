@@ -1,0 +1,12 @@
+{
+  "case_id": "013",
+  "name": "device_zero_vid_pid",
+  "group": "device_descriptor",
+  "base_persona": "cdc_acm",
+  "description": "Использование нулевых идентификаторов VID и PID.",
+  "mutation": "device_descriptor.idVendor=0x0000 и idProduct=0x0000.",
+  "expected_windows": "Вероятны предупреждения о некорректной идентификации устройства и отказ штатной привязки.",
+  "expected_linux": "Ожидается перечисление с диагностическими сообщениями либо отказ из-за недопустимых идентификаторов.",
+  "risk_level": "low",
+  "notes": "Безопасный тест на реакцию механизмов идентификации."
+}
