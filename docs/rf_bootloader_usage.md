@@ -4,7 +4,7 @@
 
 Реализован минимальный внеполосный (out-of-band) стендовый путь:
 
-1. Оператор отправляет в `esp32c3_bridge` по UART команду `bootloader`.
+1. Оператор отправляет в `esp32c3_bridge` команду `bootloader` через USB Serial/JTAG COM-порт ESP32-C3.
 2. ESP32-C3 отправляет один фиксированный `rf_test_packet_t` с `msg_type=RF_TEST_MSG_BOOTLOADER_REQ`.
 3. `usb_case_demo` на RP2040 неблокирующе опрашивает nRF24.
 4. При валидном пакете RP2040 печатает диагностику и вызывает `reset_usb_boot(0, 0)`.
@@ -47,12 +47,16 @@ docker compose run --rm -T esp32c3-dev idf.py build
 - `bootloader_req tx ok`
 - `bootloader_req tx fail`
 
+## Troubleshooting
+
+- Для ESP32-C3 команды `help`/`bootloader` принимаются через USB Serial/JTAG COM-порт (например, `VID:PID=303A:1001`), а не через внешний UART0.
+
 ## Локальная процедура теста на Windows
 
 1. Собрать RP2040 и ESP32-C3 прошивки.
 2. Прошить RP2040 в `usb_case_demo.uf2`.
 3. Прошить ESP32-C3 в `esp32c3_bridge`.
-4. Открыть UART-монитор ESP32-C3 (115200).
+4. Открыть COM-порт ESP32-C3 USB Serial/JTAG в терминале.
 5. Убедиться, что видна подсказка `commands: help bootloader`.
 6. Ввести `bootloader`.
 7. Проверить ответ ESP32-C3 `bootloader_req tx ok`.
