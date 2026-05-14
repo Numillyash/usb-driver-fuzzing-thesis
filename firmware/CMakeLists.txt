@@ -46,6 +46,7 @@ pico_add_extra_outputs(portable_demo)
 
 add_executable(usb_case_demo
     src/usb_case_main.c
+    src/nrf24_radio.c
     src/usb_case_descriptor_layer.c
 )
 
@@ -55,6 +56,8 @@ target_include_directories(usb_case_demo PRIVATE
 
 target_link_libraries(usb_case_demo
     pico_stdlib
+    hardware_gpio
+    hardware_spi
 )
 
 pico_enable_stdio_usb(usb_case_demo 1)

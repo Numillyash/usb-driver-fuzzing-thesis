@@ -4,11 +4,15 @@
 
 #include "pico/bootrom.h"
 #include "pico/stdlib.h"
+#include "rf_test_packet.h"
+#include "nrf24_radio.h"
 #include "usb_case_config.h"
 #include "usb_case_descriptor_layer.h"
 
 #define USB_CASE_HEARTBEAT_INTERVAL_MS 2000u
 #define USB_CASE_CMD_BUF_SIZE 64u
+#define USB_CASE_RF_POLL_TIMEOUT_MS 1u
+#define USB_CASE_RF_BOOTLOADER_ARG0 UINT32_C(0x424F4F54)
 
 static void usb_case_print_help(void)
 {
@@ -64,10 +68,13 @@ int main(void)
     char cmd_buf[USB_CASE_CMD_BUF_SIZE];
     size_t cmd_len = 0u;
     usb_case_descriptor_profile_t descriptor_profile;
+    bool rf_ready = false;
 
     stdio_init_all();
     sleep_ms(1500);
     descriptor_profile = usb_case_get_descriptor_profile();
+    rf_ready = nrf24_radio_init_tx();
+    printf("usb_case_demo: rf_init=%u\r\n", rf_ready ? 1u : 0u);
 
     while (true) {
         const uint32_t now_ms = to_ms_since_boot(get_absolute_time());
@@ -122,6 +129,31 @@ int main(void)
             } else {
                 cmd_len = 0u;
                 printf("command too long\r\n");
+            }
+        }
+
+        if (rf_ready) {
+            uint8_t rx_pipe = 0xffu;
+            size_t rx_payload_len = 0u;
+            rf_test_packet_t packet;
+            const int rx_len = nrf24_radio_recv_any(
+                &packet,
+                sizeof(packet),
+                &rx_pipe,
+                &rx_payload_len,
+                USB_CASE_RF_POLL_TIMEOUT_MS);
+
+            if (rx_len == (int)sizeof(packet) &&
+                rx_pipe == 0u &&
+                rx_payload_len == sizeof(packet) &&
+                packet.magic == RF_TEST_PACKET_MAGIC &&
+                packet.version == RF_TEST_PACKET_VERSION &&
+                packet.msg_type == RF_TEST_MSG_BOOTLOADER_REQ &&
+                packet.arg0 == USB_CASE_RF_BOOTLOADER_ARG0) {
+                printf("usb_case_demo: RF bootloader request received\r\n");
+                printf("usb_case_demo: entering USB bootloader\r\n");
+                sleep_ms(20);
+                reset_usb_boot(0, 0);
             }
         }
 

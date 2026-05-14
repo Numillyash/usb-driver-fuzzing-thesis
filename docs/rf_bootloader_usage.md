@@ -1,0 +1,73 @@
+# Минимальный OOB RF путь команды `bootloader`
+
+## Назначение
+
+Реализован минимальный внеполосный (out-of-band) стендовый путь:
+
+1. Оператор отправляет в `esp32c3_bridge` по UART команду `bootloader`.
+2. ESP32-C3 отправляет один фиксированный `rf_test_packet_t` с `msg_type=RF_TEST_MSG_BOOTLOADER_REQ`.
+3. `usb_case_demo` на RP2040 неблокирующе опрашивает nRF24.
+4. При валидном пакете RP2040 печатает диагностику и вызывает `reset_usb_boot(0, 0)`.
+
+## Формат пакета
+
+Используется существующий fixed-payload формат `rf_test_packet_t` (16 байт):
+
+- `magic = 0x5246` (`RF_TEST_PACKET_MAGIC`)
+- `version = 1` (`RF_TEST_PACKET_VERSION`)
+- `msg_type = 3` (`RF_TEST_MSG_BOOTLOADER_REQ`)
+- `seq = локальный счётчик ESP32-C3`
+- `uptime_ms = uptime ESP32-C3`
+- `arg0 = 0x424F4F54` (`'BOOT'`)
+- `flags = 0`
+
+В `usb_case_demo` пакет принимается только при совпадении `magic/version/msg_type/arg0`.
+
+## Команды сборки
+
+RP2040:
+
+```bash
+./tools/build-container.sh
+```
+
+ESP32-C3:
+
+```bash
+docker compose run --rm -T esp32c3-dev idf.py build
+```
+
+## Ожидаемые serial-команды (ESP32-C3)
+
+- `help` — показать доступные команды.
+- `bootloader` — отправить RF bootloader request.
+
+Ожидаемые ответы ESP32-C3:
+
+- `bootloader_req tx ok`
+- `bootloader_req tx fail`
+
+## Локальная процедура теста на Windows
+
+1. Собрать RP2040 и ESP32-C3 прошивки.
+2. Прошить RP2040 в `usb_case_demo.uf2`.
+3. Прошить ESP32-C3 в `esp32c3_bridge`.
+4. Открыть UART-монитор ESP32-C3 (115200).
+5. Убедиться, что видна подсказка `commands: help bootloader`.
+6. Ввести `bootloader`.
+7. Проверить ответ ESP32-C3 `bootloader_req tx ok`.
+8. Проверить логи RP2040:
+   - `usb_case_demo: RF bootloader request received`
+   - `usb_case_demo: entering USB bootloader`
+9. Проверить переэнумерацию RP2040 как BOOTSEL mass-storage.
+
+## План отката
+
+1. Удалить `RF_TEST_MSG_BOOTLOADER_REQ` из `rf_test_packet.h`.
+2. Удалить обработку RF bootloader request из `usb_case_demo`.
+3. Удалить команду `bootloader` из `esp32c3_bridge`.
+4. Повторно прогнать baseline проверку `portable_demo` по `docs/test_procedure_rf_roundtrip.md`.
+
+## Ограничение
+
+Команда работает только пока RP2040-прошивка жива и nRF24 на RP2040 успешно инициализирован.

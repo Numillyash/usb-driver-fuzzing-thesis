@@ -50,10 +50,60 @@
 #define RFV2_STATUS_INTERVAL_MS 10000
 #define RFV2_STATUS_TIMEOUT_MS 1500
 #define PIPE0_PROBE_INTERVAL_MS 3000
+#define BRIDGE_CMD_BUF_SIZE 64
+#define BOOTLOADER_REQ_ARG0 UINT32_C(0x424F4F54)
 #if PIPE0_PROBE_DIAG && PIPE0_DIRECTION_TEST && PIPE0_TEST_ESP_TO_RP
 #define PIPE0_PROBE_ARG0 UINT32_C(0x50424F30)
 #endif
 static const char *TAG = "bridge_main";
+
+static void bridge_print_help(void)
+{
+    bridge_uart_write_str("commands: help bootloader\r\n");
+}
+
+static bool bridge_send_bootloader_req(uint16_t seq, TickType_t now_ticks)
+{
+    const rf_test_packet_t packet = {
+        .magic = RF_TEST_PACKET_MAGIC,
+        .version = RF_TEST_PACKET_VERSION,
+        .msg_type = RF_TEST_MSG_BOOTLOADER_REQ,
+        .seq = seq,
+        .uptime_ms = (uint32_t)pdTICKS_TO_MS(now_ticks),
+        .arg0 = BOOTLOADER_REQ_ARG0,
+        .flags = RF_TEST_FLAG_NONE,
+    };
+    const int sent = nrf24_drv_send((const uint8_t *)&packet, sizeof(packet));
+
+    if (sent == (int)sizeof(packet)) {
+        bridge_uart_write_str("bootloader_req tx ok\r\n");
+        ESP_LOGI(TAG, "bootloader_req tx ok seq=%u status=0x%02x", (unsigned)seq, (unsigned)nrf24_drv_last_status());
+        return true;
+    }
+
+    bridge_uart_write_str("bootloader_req tx fail\r\n");
+    ESP_LOGW(TAG, "bootloader_req tx fail seq=%u status=0x%02x", (unsigned)seq, (unsigned)nrf24_drv_last_status());
+    return false;
+}
+
+static void bridge_handle_command(const char *cmd, uint16_t *bootloader_seq, TickType_t now_ticks)
+{
+    if (strcmp(cmd, "help") == 0) {
+        bridge_print_help();
+        return;
+    }
+
+    if (strcmp(cmd, "bootloader") == 0) {
+        (void)bridge_send_bootloader_req(*bootloader_seq, now_ticks);
+        (*bootloader_seq)++;
+        return;
+    }
+
+    if (cmd[0] != '\0') {
+        bridge_uart_write_str("unknown command\r\n");
+        bridge_print_help();
+    }
+}
 
 #if PIPE0_DIRECTION_TEST && PIPE0_TEST_RP_TO_ESP
 static void log_pipe0_decoded(const rf_test_packet_t *packet)
@@ -160,6 +210,9 @@ void app_main(void)
     uint32_t ack_tx_ok = 0;
     uint32_t ack_tx_fail = 0;
     uint16_t last_seq = 0;
+    uint16_t bootloader_req_seq = 1;
+    char cmd_buf[BRIDGE_CMD_BUF_SIZE];
+    size_t cmd_len = 0;
     uint8_t rx_buf[RFV2_FRAME_SIZE];
 #if !RFV2_DISABLE_DIAG && !NRF24_SINGLE_PIPE_RFTEST && !NRF24_DUAL_PIPE_BASELINE
     TickType_t last_ping_tick;
@@ -188,9 +241,39 @@ void app_main(void)
 
     bridge_uart_write_str("esp32c3_bridge: boot\r\n");
     bridge_uart_write_str("esp32c3_bridge: nrf24 rx bring-up mode\r\n");
+    bridge_print_help();
 
     while (1) {
         const TickType_t now = xTaskGetTickCount();
+        uint8_t uart_buf[32];
+        const int uart_read_len = bridge_uart_read(uart_buf, sizeof(uart_buf), 0);
+
+        for (int i = 0; i < uart_read_len; ++i) {
+            const char ch = (char)uart_buf[i];
+
+            if (ch == '\r' || ch == '\n') {
+                if (cmd_len > 0) {
+                    cmd_buf[cmd_len] = '\0';
+                    bridge_handle_command(cmd_buf, &bootloader_req_seq, now);
+                    cmd_len = 0;
+                }
+                continue;
+            }
+
+            if (ch == '\b' || ch == 127) {
+                if (cmd_len > 0) {
+                    cmd_len--;
+                }
+                continue;
+            }
+
+            if (cmd_len < (sizeof(cmd_buf) - 1u)) {
+                cmd_buf[cmd_len++] = ch;
+            } else {
+                cmd_len = 0;
+                bridge_uart_write_str("command too long\r\n");
+            }
+        }
 
         if ((now - last_heartbeat_tick) >= pdMS_TO_TICKS(BRIDGE_HEARTBEAT_INTERVAL_MS)) {
             ESP_LOGI(

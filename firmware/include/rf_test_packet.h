@@ -13,7 +13,8 @@ extern "C" {
 
 typedef enum {
     RF_TEST_MSG_DATA = 1,
-    RF_TEST_MSG_ACK = 2
+    RF_TEST_MSG_ACK = 2,
+    RF_TEST_MSG_BOOTLOADER_REQ = 3
 } rf_test_msg_type_t;
 
 typedef enum {
