@@ -14,19 +14,55 @@
 #define USB_CASE_RF_POLL_TIMEOUT_MS 1u
 #define USB_CASE_RF_BOOTLOADER_ARG0 UINT32_C(0x424F4F54)
 
+typedef enum {
+    RF_RX_STATUS_NONE = 0u,
+    RF_RX_STATUS_VALID_BOOTLOADER = 1u,
+    RF_RX_STATUS_WRONG_PIPE = 2u,
+    RF_RX_STATUS_WRONG_LEN = 3u,
+    RF_RX_STATUS_BAD_MAGIC = 4u,
+    RF_RX_STATUS_BAD_VERSION = 5u,
+    RF_RX_STATUS_BAD_MSG_TYPE = 6u,
+    RF_RX_STATUS_BAD_ARG0 = 7u,
+} usb_case_rf_last_status_t;
+
 typedef struct {
     bool rf_ready;
     const char *rf_role;
+    uint32_t rf_raw_rx_count;
+    uint32_t rf_wrong_pipe_count;
+    uint32_t rf_wrong_len_count;
+    uint32_t rf_bad_magic_count;
     uint32_t rf_bootloader_rx_count;
     uint32_t rf_bootloader_bad_count;
     uint8_t rf_last_msg_type;
     uint16_t rf_last_seq;
+    uint8_t rf_last_rx_len;
+    uint8_t rf_last_pipe;
+    uint8_t rf_last_payload_len;
     uint8_t rf_last_status;
 } usb_case_rf_state_t;
 
+static void usb_case_print_rfdiag(void)
+{
+    nrf24_radio_diag_t diag = { 0 };
+
+    if (!nrf24_radio_read_diag(&diag)) {
+        printf("rfdiag=unavailable\r\n");
+        return;
+    }
+
+    printf("rfdiag_RF_CH=0x%02x\r\n", (unsigned)diag.rf_ch);
+    printf("rfdiag_CONFIG=0x%02x\r\n", (unsigned)diag.config);
+    printf("rfdiag_EN_RXADDR=0x%02x\r\n", (unsigned)diag.en_rxaddr);
+    printf("rfdiag_RX_PW_P0=%u\r\n", (unsigned)diag.rx_pw_p0);
+    printf("rfdiag_RX_PW_P1=%u\r\n", (unsigned)diag.rx_pw_p1);
+    printf("rfdiag_STATUS=0x%02x\r\n", (unsigned)diag.status);
+    printf("rfdiag_FIFO_STATUS=0x%02x\r\n", (unsigned)diag.fifo_status);
+}
+
 static void usb_case_print_help(void)
 {
-    printf("available commands: help info ping bootloader\r\n");
+    printf("available commands: help info ping bootloader rfdiag\r\n");
 }
 
 static void usb_case_print_info(const usb_case_descriptor_profile_t *descriptor_profile, const usb_case_rf_state_t *rf_state)
@@ -41,11 +77,19 @@ static void usb_case_print_info(const usb_case_descriptor_profile_t *descriptor_
     printf("descriptor_active_transport=%s\r\n", descriptor_profile->active_transport);
     printf("rf_ready=%u\r\n", rf_state->rf_ready ? 1u : 0u);
     printf("rf_listener_mode=%s\r\n", rf_state->rf_role);
+    printf("rf_raw_rx_count=%lu\r\n", (unsigned long)rf_state->rf_raw_rx_count);
+    printf("rf_wrong_pipe_count=%lu\r\n", (unsigned long)rf_state->rf_wrong_pipe_count);
+    printf("rf_wrong_len_count=%lu\r\n", (unsigned long)rf_state->rf_wrong_len_count);
+    printf("rf_bad_magic_count=%lu\r\n", (unsigned long)rf_state->rf_bad_magic_count);
     printf("rf_bootloader_rx_count=%lu\r\n", (unsigned long)rf_state->rf_bootloader_rx_count);
     printf("rf_bootloader_bad_count=%lu\r\n", (unsigned long)rf_state->rf_bootloader_bad_count);
     printf("rf_last_msg_type=%u\r\n", (unsigned)rf_state->rf_last_msg_type);
     printf("rf_last_seq=%u\r\n", (unsigned)rf_state->rf_last_seq);
-    printf("rf_last_status=0x%02x\r\n", (unsigned)rf_state->rf_last_status);
+    printf("rf_last_rx_len=%u\r\n", (unsigned)rf_state->rf_last_rx_len);
+    printf("rf_last_pipe=%u\r\n", (unsigned)rf_state->rf_last_pipe);
+    printf("rf_last_payload_len=%u\r\n", (unsigned)rf_state->rf_last_payload_len);
+    printf("rf_last_status=%u\r\n", (unsigned)rf_state->rf_last_status);
+    usb_case_print_rfdiag();
 }
 
 static void usb_case_handle_command(
@@ -75,6 +119,11 @@ static void usb_case_handle_command(
         return;
     }
 
+    if (strcmp(cmd, "rfdiag") == 0) {
+        usb_case_print_rfdiag();
+        return;
+    }
+
     if (cmd[0] != '\0') {
         printf("unknown command: %s\r\n", cmd);
         usb_case_print_help();
@@ -91,18 +140,24 @@ int main(void)
     usb_case_rf_state_t rf_state = {
         .rf_ready = false,
         .rf_role = "rx_listener",
+        .rf_raw_rx_count = 0u,
+        .rf_wrong_pipe_count = 0u,
+        .rf_wrong_len_count = 0u,
+        .rf_bad_magic_count = 0u,
         .rf_bootloader_rx_count = 0u,
         .rf_bootloader_bad_count = 0u,
         .rf_last_msg_type = 0u,
         .rf_last_seq = 0u,
-        .rf_last_status = 0u,
+        .rf_last_rx_len = 0u,
+        .rf_last_pipe = 0xffu,
+        .rf_last_payload_len = 0u,
+        .rf_last_status = RF_RX_STATUS_NONE,
     };
 
     stdio_init_all();
     sleep_ms(1500);
     descriptor_profile = usb_case_get_descriptor_profile();
     rf_state.rf_ready = nrf24_radio_init_rx();
-    rf_state.rf_last_status = nrf24_radio_last_status();
     printf("usb_case_demo: rf_init=%u\r\n", rf_state.rf_ready ? 1u : 0u);
 
     while (true) {
@@ -172,27 +227,68 @@ int main(void)
                 &rx_pipe,
                 &rx_payload_len,
                 USB_CASE_RF_POLL_TIMEOUT_MS);
-            rf_state.rf_last_status = nrf24_radio_last_status();
 
             if (rx_len > 0) {
-                if (rx_len == (int)sizeof(packet) && rx_pipe == 0u && rx_payload_len == sizeof(packet)) {
-                    rf_state.rf_last_msg_type = packet.msg_type;
-                    rf_state.rf_last_seq = packet.seq;
-                    if (packet.magic == RF_TEST_PACKET_MAGIC &&
-                        packet.version == RF_TEST_PACKET_VERSION &&
-                        packet.msg_type == RF_TEST_MSG_BOOTLOADER_REQ &&
-                        packet.arg0 == USB_CASE_RF_BOOTLOADER_ARG0) {
-                        rf_state.rf_bootloader_rx_count++;
-                        printf("usb_case_demo: RF bootloader request received\r\n");
-                        printf("usb_case_demo: entering USB bootloader\r\n");
-                        sleep_ms(20);
-                        reset_usb_boot(0, 0);
-                    } else {
-                        rf_state.rf_bootloader_bad_count++;
-                    }
-                } else {
-                    rf_state.rf_bootloader_bad_count++;
+                rf_state.rf_raw_rx_count++;
+                rf_state.rf_last_rx_len = (uint8_t)rx_len;
+                rf_state.rf_last_pipe = rx_pipe;
+                rf_state.rf_last_payload_len = (uint8_t)rx_payload_len;
+
+                if (rx_pipe != 0u) {
+                    rf_state.rf_wrong_pipe_count++;
+                    rf_state.rf_last_status = RF_RX_STATUS_WRONG_PIPE;
+                    sleep_ms(10);
+                    continue;
                 }
+
+                if (rx_len != (int)sizeof(packet) || rx_payload_len != sizeof(packet)) {
+                    rf_state.rf_wrong_len_count++;
+                    rf_state.rf_bootloader_bad_count++;
+                    rf_state.rf_last_status = RF_RX_STATUS_WRONG_LEN;
+                    sleep_ms(10);
+                    continue;
+                }
+
+                rf_state.rf_last_msg_type = packet.msg_type;
+                rf_state.rf_last_seq = packet.seq;
+
+                if (packet.magic != RF_TEST_PACKET_MAGIC) {
+                    rf_state.rf_bad_magic_count++;
+                    rf_state.rf_bootloader_bad_count++;
+                    rf_state.rf_last_status = RF_RX_STATUS_BAD_MAGIC;
+                    sleep_ms(10);
+                    continue;
+                }
+
+                if (packet.version != RF_TEST_PACKET_VERSION) {
+                    rf_state.rf_bootloader_bad_count++;
+                    rf_state.rf_last_status = RF_RX_STATUS_BAD_VERSION;
+                    sleep_ms(10);
+                    continue;
+                }
+
+                if (packet.msg_type != RF_TEST_MSG_BOOTLOADER_REQ) {
+                    rf_state.rf_bootloader_bad_count++;
+                    rf_state.rf_last_status = RF_RX_STATUS_BAD_MSG_TYPE;
+                    sleep_ms(10);
+                    continue;
+                }
+
+                if (packet.arg0 != USB_CASE_RF_BOOTLOADER_ARG0) {
+                    rf_state.rf_bootloader_bad_count++;
+                    rf_state.rf_last_status = RF_RX_STATUS_BAD_ARG0;
+                    sleep_ms(10);
+                    continue;
+                }
+
+                rf_state.rf_bootloader_rx_count++;
+                rf_state.rf_last_status = RF_RX_STATUS_VALID_BOOTLOADER;
+                printf("usb_case_demo: RF bootloader request received\r\n");
+                printf("usb_case_demo: entering USB bootloader\r\n");
+                sleep_ms(20);
+                reset_usb_boot(0, 0);
+            } else {
+                rf_state.rf_last_status = RF_RX_STATUS_NONE;
             }
         }
 

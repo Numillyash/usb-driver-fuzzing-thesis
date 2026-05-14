@@ -17,6 +17,7 @@ int nrf24_drv_recv(uint8_t *data, size_t max_len, uint8_t *pipe_out);
 bool nrf24_drv_poll(void);
 void nrf24_drv_recover_rx(void);
 uint8_t nrf24_drv_last_status(void);
+void nrf24_drv_log_compact_config(const char *label);
 
 #ifdef __cplusplus
 }

@@ -5,7 +5,7 @@
 Реализован минимальный внеполосный (out-of-band) стендовый путь:
 
 1. Оператор отправляет в `esp32c3_bridge` команду `bootloader` через USB Serial/JTAG COM-порт ESP32-C3.
-2. ESP32-C3 отправляет один фиксированный `rf_test_packet_t` с `msg_type=RF_TEST_MSG_BOOTLOADER_REQ`.
+2. ESP32-C3 отправляет серию фиксированных `rf_test_packet_t` с `msg_type=RF_TEST_MSG_BOOTLOADER_REQ` (несколько попыток подряд).
 3. `usb_case_demo` на RP2040 неблокирующе опрашивает nRF24.
 4. При валидном пакете RP2040 печатает диагностику и вызывает `reset_usb_boot(0, 0)`.
 
@@ -46,12 +46,14 @@ docker compose run --rm -T esp32c3-dev idf.py build
 
 - `bootloader_req tx ok`
 - `bootloader_req tx fail`
+- Лог по попыткам: `bootloader_req attempt=N ... status=...`
 
 ## Troubleshooting
 
 - Для ESP32-C3 команды `help`/`bootloader` принимаются через USB Serial/JTAG COM-порт (например, `VID:PID=303A:1001`), а не через внешний UART0.
-- На RP2040 выполните команду `info` и проверьте поля `rf_ready`, `rf_listener_mode`, `rf_bootloader_rx_count`, `rf_bootloader_bad_count`, `rf_last_msg_type`, `rf_last_seq`, `rf_last_status`.
-- Если на ESP32-C3 видно `bootloader_req tx ok`, но `rf_bootloader_rx_count` остаётся `0`, вероятна рассинхронизация RF RX-конфигурации: адрес/канал/роль приёмника.
+- На RP2040 выполните команду `info` и проверьте поля `rf_ready`, `rf_listener_mode`, `rf_raw_rx_count`, `rf_wrong_pipe_count`, `rf_wrong_len_count`, `rf_bad_magic_count`, `rf_bootloader_rx_count`, `rf_bootloader_bad_count`, `rf_last_msg_type`, `rf_last_seq`, `rf_last_rx_len`, `rf_last_pipe`, `rf_last_payload_len`, `rf_last_status`.
+- Если на ESP32-C3 видно `bootloader_req tx ok`, но на RP2040 `rf_raw_rx_count=0`, вероятна рассинхронизация RF-направления/адреса/канала/pipe.
+- Если растёт `rf_wrong_len_count` или `rf_bad_magic_count`, вероятно есть несовпадение формата RF-пакета между передатчиком и приёмником.
 
 ## Локальная процедура теста на Windows
 

@@ -579,3 +579,23 @@ uint8_t nrf24_radio_last_status(void)
 {
     return g_last_status;
 }
+
+bool nrf24_radio_read_diag(nrf24_radio_diag_t *diag_out)
+{
+    if (!g_radio_ready || diag_out == NULL) {
+        return false;
+    }
+
+    diag_out->rf_ch = nrf24_read_register(NRF24_REG_RF_CH);
+    diag_out->config = nrf24_read_register(NRF24_REG_CONFIG);
+    diag_out->en_rxaddr = nrf24_read_register(NRF24_REG_EN_RXADDR);
+    diag_out->rx_pw_p0 = nrf24_read_register(NRF24_REG_RX_PW_P0);
+#if NRF24_DUAL_PIPE_BASELINE
+    diag_out->rx_pw_p1 = nrf24_read_register(NRF24_REG_RX_PW_P1);
+#else
+    diag_out->rx_pw_p1 = 0u;
+#endif
+    diag_out->status = nrf24_read_register(NRF24_REG_STATUS);
+    diag_out->fifo_status = nrf24_read_register(NRF24_REG_FIFO_STATUS);
+    return true;
+}

@@ -17,6 +17,16 @@ int nrf24_radio_recv_any(void *data, size_t max_len, uint8_t *pipe_out, size_t *
 int nrf24_radio_recv_fixed(void *data, size_t len, uint32_t timeout_ms);
 int nrf24_radio_recv_frame_v2(void *data, size_t len, uint32_t timeout_ms);
 uint8_t nrf24_radio_last_status(void);
+typedef struct {
+    uint8_t rf_ch;
+    uint8_t config;
+    uint8_t en_rxaddr;
+    uint8_t rx_pw_p0;
+    uint8_t rx_pw_p1;
+    uint8_t status;
+    uint8_t fifo_status;
+} nrf24_radio_diag_t;
+bool nrf24_radio_read_diag(nrf24_radio_diag_t *diag_out);
 
 #ifdef __cplusplus
 }

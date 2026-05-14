@@ -52,6 +52,8 @@
 #define PIPE0_PROBE_INTERVAL_MS 3000
 #define BRIDGE_CMD_BUF_SIZE 64
 #define BOOTLOADER_REQ_ARG0 UINT32_C(0x424F4F54)
+#define BOOTLOADER_REQ_ATTEMPTS 5
+#define BOOTLOADER_REQ_RETRY_DELAY_MS 30
 #if PIPE0_PROBE_DIAG && PIPE0_DIRECTION_TEST && PIPE0_TEST_ESP_TO_RP
 #define PIPE0_PROBE_ARG0 UINT32_C(0x50424F30)
 #endif
@@ -86,6 +88,27 @@ static bool bridge_send_bootloader_req(uint16_t seq, TickType_t now_ticks)
     return false;
 }
 
+static void bridge_send_bootloader_req_burst(uint16_t *bootloader_seq, TickType_t now_ticks)
+{
+    nrf24_drv_log_compact_config("bootloader_req pre");
+    for (int attempt = 1; attempt <= BOOTLOADER_REQ_ATTEMPTS; ++attempt) {
+        const uint16_t seq = *bootloader_seq;
+        const bool ok = bridge_send_bootloader_req(seq, now_ticks);
+        ESP_LOGI(
+            TAG,
+            "bootloader_req attempt=%d seq=%u %s status=0x%02x",
+            attempt,
+            (unsigned)seq,
+            ok ? "tx ok" : "tx fail",
+            (unsigned)nrf24_drv_last_status());
+        (*bootloader_seq)++;
+        if (attempt < BOOTLOADER_REQ_ATTEMPTS) {
+            vTaskDelay(pdMS_TO_TICKS(BOOTLOADER_REQ_RETRY_DELAY_MS));
+        }
+    }
+    nrf24_drv_log_compact_config("bootloader_req post");
+}
+
 static void bridge_handle_command(const char *cmd, uint16_t *bootloader_seq, TickType_t now_ticks)
 {
     if (strcmp(cmd, "help") == 0) {
@@ -94,8 +117,7 @@ static void bridge_handle_command(const char *cmd, uint16_t *bootloader_seq, Tic
     }
 
     if (strcmp(cmd, "bootloader") == 0) {
-        (void)bridge_send_bootloader_req(*bootloader_seq, now_ticks);
-        (*bootloader_seq)++;
+        bridge_send_bootloader_req_burst(bootloader_seq, now_ticks);
         return;
     }
 

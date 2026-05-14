@@ -655,3 +655,33 @@ uint8_t nrf24_drv_last_status(void)
 {
     return g_last_status;
 }
+
+void nrf24_drv_log_compact_config(const char *label)
+{
+    uint8_t rf_ch = 0;
+    uint8_t status = 0;
+    uint8_t fifo_status = 0;
+    uint8_t tx_addr[5] = { 0 };
+    uint8_t rx_addr_p0[5] = { 0 };
+
+    if (!g_ready) {
+        ESP_LOGW(TAG, "%s nrf24 not ready", label != NULL ? label : "rf_cfg");
+        return;
+    }
+
+    (void)nrf24_read_register(NRF24_REG_RF_CH, &rf_ch);
+    (void)nrf24_read_register(NRF24_REG_STATUS, &status);
+    (void)nrf24_read_register(NRF24_REG_FIFO_STATUS, &fifo_status);
+    (void)nrf24_read_register_buf(NRF24_REG_TX_ADDR, tx_addr, sizeof(tx_addr));
+    (void)nrf24_read_register_buf(NRF24_REG_RX_ADDR_P0, rx_addr_p0, sizeof(rx_addr_p0));
+
+    ESP_LOGI(
+        TAG,
+        "%s RF_CH=0x%02x TX_ADDR=%02x:%02x:%02x:%02x:%02x RX_ADDR_P0=%02x:%02x:%02x:%02x:%02x STATUS=0x%02x FIFO_STATUS=0x%02x",
+        label != NULL ? label : "rf_cfg",
+        (unsigned)rf_ch,
+        (unsigned)tx_addr[0], (unsigned)tx_addr[1], (unsigned)tx_addr[2], (unsigned)tx_addr[3], (unsigned)tx_addr[4],
+        (unsigned)rx_addr_p0[0], (unsigned)rx_addr_p0[1], (unsigned)rx_addr_p0[2], (unsigned)rx_addr_p0[3], (unsigned)rx_addr_p0[4],
+        (unsigned)status,
+        (unsigned)fifo_status);
+}
