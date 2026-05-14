@@ -218,14 +218,12 @@ int main(void)
         }
 
         if (rf_state.rf_ready) {
-            uint8_t rx_pipe = 0xffu;
-            size_t rx_payload_len = 0u;
+            uint8_t rx_pipe = 0u;
+            size_t rx_payload_len = sizeof(rf_test_packet_t);
             rf_test_packet_t packet;
-            const int rx_len = nrf24_radio_recv_any(
+            const int rx_len = nrf24_radio_recv_rf_test_packet_raw(
                 &packet,
                 sizeof(packet),
-                &rx_pipe,
-                &rx_payload_len,
                 USB_CASE_RF_POLL_TIMEOUT_MS);
 
             if (rx_len > 0) {

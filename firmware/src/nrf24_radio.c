@@ -575,6 +575,40 @@ int nrf24_radio_recv_any(void *data, size_t max_len, uint8_t *pipe_out, size_t *
     return 0;
 }
 
+int nrf24_radio_recv_rf_test_packet_raw(void *data, size_t len, uint32_t timeout_ms)
+{
+    absolute_time_t deadline;
+    uint8_t payload[RF_TEST_PAYLOAD_SIZE];
+
+    if (!g_radio_ready || data == NULL || len < RF_TEST_PAYLOAD_SIZE) {
+        return -1;
+    }
+
+    deadline = make_timeout_time_ms(timeout_ms == 0 ? NRF24_RX_TIMEOUT_MS : timeout_ms);
+
+    while (!time_reached(deadline)) {
+        const uint8_t status = nrf24_read_register(NRF24_REG_STATUS);
+        const uint8_t fifo_status = nrf24_read_register(NRF24_REG_FIFO_STATUS);
+
+        if ((status & NRF24_STATUS_RX_DR) == 0u && (fifo_status & NRF24_FIFO_RX_EMPTY) != 0u) {
+            sleep_ms(1);
+            continue;
+        }
+        if ((fifo_status & NRF24_FIFO_RX_EMPTY) != 0u) {
+            nrf24_write_register(NRF24_REG_STATUS, NRF24_STATUS_RX_DR);
+            sleep_ms(1);
+            continue;
+        }
+
+        nrf24_read_payload(payload, sizeof(payload));
+        memcpy(data, payload, sizeof(payload));
+        nrf24_write_register(NRF24_REG_STATUS, NRF24_STATUS_CLEAR_IRQS);
+        return (int)sizeof(payload);
+    }
+
+    return 0;
+}
+
 uint8_t nrf24_radio_last_status(void)
 {
     return g_last_status;
