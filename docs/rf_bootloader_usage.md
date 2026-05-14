@@ -50,6 +50,8 @@ docker compose run --rm -T esp32c3-dev idf.py build
 ## Troubleshooting
 
 - Для ESP32-C3 команды `help`/`bootloader` принимаются через USB Serial/JTAG COM-порт (например, `VID:PID=303A:1001`), а не через внешний UART0.
+- На RP2040 выполните команду `info` и проверьте поля `rf_ready`, `rf_listener_mode`, `rf_bootloader_rx_count`, `rf_bootloader_bad_count`, `rf_last_msg_type`, `rf_last_seq`, `rf_last_status`.
+- Если на ESP32-C3 видно `bootloader_req tx ok`, но `rf_bootloader_rx_count` остаётся `0`, вероятна рассинхронизация RF RX-конфигурации: адрес/канал/роль приёмника.
 
 ## Локальная процедура теста на Windows
 

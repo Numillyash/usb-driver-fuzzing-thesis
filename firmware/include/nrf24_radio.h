@@ -10,6 +10,7 @@ extern "C" {
 #endif
 
 bool nrf24_radio_init_tx(void);
+bool nrf24_radio_init_rx(void);
 bool nrf24_radio_send_fixed(const void *data, size_t len);
 bool nrf24_radio_send_frame_v2(const void *data, size_t len);
 int nrf24_radio_recv_any(void *data, size_t max_len, uint8_t *pipe_out, size_t *payload_len_out, uint32_t timeout_ms);

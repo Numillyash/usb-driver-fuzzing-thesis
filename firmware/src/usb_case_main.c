@@ -14,12 +14,22 @@
 #define USB_CASE_RF_POLL_TIMEOUT_MS 1u
 #define USB_CASE_RF_BOOTLOADER_ARG0 UINT32_C(0x424F4F54)
 
+typedef struct {
+    bool rf_ready;
+    const char *rf_role;
+    uint32_t rf_bootloader_rx_count;
+    uint32_t rf_bootloader_bad_count;
+    uint8_t rf_last_msg_type;
+    uint16_t rf_last_seq;
+    uint8_t rf_last_status;
+} usb_case_rf_state_t;
+
 static void usb_case_print_help(void)
 {
     printf("available commands: help info ping bootloader\r\n");
 }
 
-static void usb_case_print_info(const usb_case_descriptor_profile_t *descriptor_profile)
+static void usb_case_print_info(const usb_case_descriptor_profile_t *descriptor_profile, const usb_case_rf_state_t *rf_state)
 {
     printf("case_id=%lu\r\n", (unsigned long)USB_CASE_ID);
     printf("case_name=%s\r\n", USB_CASE_NAME);
@@ -29,9 +39,19 @@ static void usb_case_print_info(const usb_case_descriptor_profile_t *descriptor_
     printf("descriptor_persona_name=%s\r\n", descriptor_profile->persona_name);
     printf("descriptor_switched=%u\r\n", descriptor_profile->descriptors_switched ? 1u : 0u);
     printf("descriptor_active_transport=%s\r\n", descriptor_profile->active_transport);
+    printf("rf_ready=%u\r\n", rf_state->rf_ready ? 1u : 0u);
+    printf("rf_listener_mode=%s\r\n", rf_state->rf_role);
+    printf("rf_bootloader_rx_count=%lu\r\n", (unsigned long)rf_state->rf_bootloader_rx_count);
+    printf("rf_bootloader_bad_count=%lu\r\n", (unsigned long)rf_state->rf_bootloader_bad_count);
+    printf("rf_last_msg_type=%u\r\n", (unsigned)rf_state->rf_last_msg_type);
+    printf("rf_last_seq=%u\r\n", (unsigned)rf_state->rf_last_seq);
+    printf("rf_last_status=0x%02x\r\n", (unsigned)rf_state->rf_last_status);
 }
 
-static void usb_case_handle_command(const char *cmd, const usb_case_descriptor_profile_t *descriptor_profile)
+static void usb_case_handle_command(
+    const char *cmd,
+    const usb_case_descriptor_profile_t *descriptor_profile,
+    const usb_case_rf_state_t *rf_state)
 {
     if (strcmp(cmd, "help") == 0) {
         usb_case_print_help();
@@ -39,7 +59,7 @@ static void usb_case_handle_command(const char *cmd, const usb_case_descriptor_p
     }
 
     if (strcmp(cmd, "info") == 0) {
-        usb_case_print_info(descriptor_profile);
+        usb_case_print_info(descriptor_profile, rf_state);
         return;
     }
 
@@ -68,13 +88,22 @@ int main(void)
     char cmd_buf[USB_CASE_CMD_BUF_SIZE];
     size_t cmd_len = 0u;
     usb_case_descriptor_profile_t descriptor_profile;
-    bool rf_ready = false;
+    usb_case_rf_state_t rf_state = {
+        .rf_ready = false,
+        .rf_role = "rx_listener",
+        .rf_bootloader_rx_count = 0u,
+        .rf_bootloader_bad_count = 0u,
+        .rf_last_msg_type = 0u,
+        .rf_last_seq = 0u,
+        .rf_last_status = 0u,
+    };
 
     stdio_init_all();
     sleep_ms(1500);
     descriptor_profile = usb_case_get_descriptor_profile();
-    rf_ready = nrf24_radio_init_tx();
-    printf("usb_case_demo: rf_init=%u\r\n", rf_ready ? 1u : 0u);
+    rf_state.rf_ready = nrf24_radio_init_rx();
+    rf_state.rf_last_status = nrf24_radio_last_status();
+    printf("usb_case_demo: rf_init=%u\r\n", rf_state.rf_ready ? 1u : 0u);
 
     while (true) {
         const uint32_t now_ms = to_ms_since_boot(get_absolute_time());
@@ -98,6 +127,7 @@ int main(void)
             printf("case_id=%lu\r\n", (unsigned long)USB_CASE_ID);
             printf("case_name=%s\r\n", USB_CASE_NAME);
             printf("case_group=%s\r\n", USB_CASE_GROUP);
+            printf("rf_ready=%u\r\n", rf_state.rf_ready ? 1u : 0u);
             last_log_ms = now_ms;
         }
 
@@ -111,7 +141,7 @@ int main(void)
             if (ch == '\r' || ch == '\n') {
                 if (cmd_len > 0u) {
                     cmd_buf[cmd_len] = '\0';
-                    usb_case_handle_command(cmd_buf, &descriptor_profile);
+                    usb_case_handle_command(cmd_buf, &descriptor_profile, &rf_state);
                     cmd_len = 0u;
                 }
                 continue;
@@ -132,7 +162,7 @@ int main(void)
             }
         }
 
-        if (rf_ready) {
+        if (rf_state.rf_ready) {
             uint8_t rx_pipe = 0xffu;
             size_t rx_payload_len = 0u;
             rf_test_packet_t packet;
@@ -142,18 +172,27 @@ int main(void)
                 &rx_pipe,
                 &rx_payload_len,
                 USB_CASE_RF_POLL_TIMEOUT_MS);
+            rf_state.rf_last_status = nrf24_radio_last_status();
 
-            if (rx_len == (int)sizeof(packet) &&
-                rx_pipe == 0u &&
-                rx_payload_len == sizeof(packet) &&
-                packet.magic == RF_TEST_PACKET_MAGIC &&
-                packet.version == RF_TEST_PACKET_VERSION &&
-                packet.msg_type == RF_TEST_MSG_BOOTLOADER_REQ &&
-                packet.arg0 == USB_CASE_RF_BOOTLOADER_ARG0) {
-                printf("usb_case_demo: RF bootloader request received\r\n");
-                printf("usb_case_demo: entering USB bootloader\r\n");
-                sleep_ms(20);
-                reset_usb_boot(0, 0);
+            if (rx_len > 0) {
+                if (rx_len == (int)sizeof(packet) && rx_pipe == 0u && rx_payload_len == sizeof(packet)) {
+                    rf_state.rf_last_msg_type = packet.msg_type;
+                    rf_state.rf_last_seq = packet.seq;
+                    if (packet.magic == RF_TEST_PACKET_MAGIC &&
+                        packet.version == RF_TEST_PACKET_VERSION &&
+                        packet.msg_type == RF_TEST_MSG_BOOTLOADER_REQ &&
+                        packet.arg0 == USB_CASE_RF_BOOTLOADER_ARG0) {
+                        rf_state.rf_bootloader_rx_count++;
+                        printf("usb_case_demo: RF bootloader request received\r\n");
+                        printf("usb_case_demo: entering USB bootloader\r\n");
+                        sleep_ms(20);
+                        reset_usb_boot(0, 0);
+                    } else {
+                        rf_state.rf_bootloader_bad_count++;
+                    }
+                } else {
+                    rf_state.rf_bootloader_bad_count++;
+                }
             }
         }
 

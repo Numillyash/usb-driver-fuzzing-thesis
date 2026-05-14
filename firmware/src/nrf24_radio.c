@@ -406,6 +406,18 @@ bool nrf24_radio_init_tx(void)
     return true;
 }
 
+bool nrf24_radio_init_rx(void)
+{
+    const bool ok = nrf24_radio_init_tx();
+
+    if (!ok) {
+        return false;
+    }
+
+    nrf24_restore_prx();
+    return true;
+}
+
 bool nrf24_radio_send_fixed(const void *data, size_t len)
 {
     absolute_time_t deadline;
