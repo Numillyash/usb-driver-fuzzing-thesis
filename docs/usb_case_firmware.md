@@ -10,6 +10,27 @@
 - сохранить существующий `portable_demo` неизменным и рабочим;
 - обеспечить простую идентификацию активного USB-кейса через compile-time параметры.
 
+## Текущий статус descriptor selection layer
+
+В `usb_case_demo` добавлен первый минимальный слой выбора descriptor-persona по `USB_CASE_ID`:
+
+- `000` -> persona `cdc_acm`;
+- `001` -> persona `hid_baseline_planned`.
+
+Важно: в текущем коммите это **слой выбора persona и явной диагностики**, а не полноценное переключение USB-дескрипторов TinyUSB.
+
+Что реально изменено сейчас:
+
+- добавлен изолированный модуль `firmware/src/usb_case_descriptor_layer.c`;
+- добавлена compile-time логика выбора persona в `firmware/include/usb_case_config.h`;
+- в runtime-логах `usb_case_demo` выводится активная persona и флаг `descriptor_switched`.
+
+Что пока только запланировано:
+
+- подключение явных TinyUSB descriptor callbacks (`tud_descriptor_*_cb`) для реального переключения CDC/HID descriptor-наборов.
+
+До внедрения callbacks active transport остаётся безопасным CDC stdio (`pico_enable_stdio_usb`), а `descriptor_switched=0`.
+
 ## Границы безопасности
 
 `usb_case_demo` предназначен только для безопасных USB-экспериментов:
@@ -27,6 +48,14 @@
 - `USB_CASE_ID` (по умолчанию `0`)
 - `USB_CASE_NAME` (по умолчанию `"baseline_cdc"`)
 - `USB_CASE_GROUP` (по умолчанию `"baseline"`)
+- `USB_CASE_BASE_PERSONA` (по умолчанию `"cdc_acm"`)
+- `USB_CASE_MUTATION_SUMMARY` (по умолчанию `"none"`)
+
+Дополнительно для слоя выбора persona:
+
+- `USB_CASE_PERSONA_CDC_ACM`
+- `USB_CASE_PERSONA_HID_BASELINE`
+- `USB_CASE_PERSONA_ID` (вычисляется из `USB_CASE_ID`, сейчас `001` -> HID persona, иначе CDC persona)
 
 ## Runtime диагностический вывод (CDC)
 
@@ -40,6 +69,15 @@ case_group=...
 ```
 
 Это позволяет фиксировать активный кейс в логах хоста и в артефактах эксперимента.
+
+Дополнительно один раз при старте выводятся:
+
+```text
+descriptor_persona_id=...
+descriptor_persona_name=...
+descriptor_switched=0
+descriptor_active_transport=pico_stdio_usb_cdc
+```
 
 ## Сборка
 

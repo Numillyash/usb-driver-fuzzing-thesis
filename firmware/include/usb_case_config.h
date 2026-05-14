@@ -27,4 +27,20 @@
 #define USB_CASE_MUTATION_SUMMARY "none"
 #endif
 
+/* Planned descriptor personas for usb_case_demo. */
+#define USB_CASE_PERSONA_CDC_ACM 0u
+#define USB_CASE_PERSONA_HID_BASELINE 1u
+
+/*
+ * Selection by case id for the first descriptor-layer iteration:
+ * - 000 -> baseline CDC/ACM persona
+ * - 001 -> baseline HID persona (planned; descriptor callbacks not wired yet)
+ * Other IDs fall back to CDC/ACM for safe behavior.
+ */
+#if (USB_CASE_ID == 1u)
+#define USB_CASE_PERSONA_ID USB_CASE_PERSONA_HID_BASELINE
+#else
+#define USB_CASE_PERSONA_ID USB_CASE_PERSONA_CDC_ACM
+#endif
+
 #endif /* USB_CASE_CONFIG_H */

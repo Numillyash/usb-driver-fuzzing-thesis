@@ -46,6 +46,7 @@ pico_add_extra_outputs(portable_demo)
 
 add_executable(usb_case_demo
     src/usb_case_main.c
+    src/usb_case_descriptor_layer.c
 )
 
 target_include_directories(usb_case_demo PRIVATE
