@@ -124,8 +124,9 @@ build/portable_demo.uf2
 
 - `firmware/src/main.c` — базовый USB CDC smoke-test;
 - `firmware/src/usb_case_main.c` — безопасный baseline `usb_case_demo` для USB descriptor/enumeration экспериментов;
+- `firmware/src/usb_case_descriptor_layer.c` — profile + custom TinyUSB descriptor callbacks (только для `usb_case_custom_demo`);
 - `firmware/include/` — типы и черновые интерфейсы control plane, сценариев и логирования;
-- `firmware/CMakeLists.txt` — сборка `portable_demo` и `usb_case_demo` под `waveshare_rp2040_zero`.
+- `firmware/CMakeLists.txt` — сборка `portable_demo`, `usb_case_demo` и `usb_case_custom_demo` под `waveshare_rp2040_zero`.
 
 Новая документация и заголовки описывают следующую стадию развития, но не внедряют runtime-логику и не меняют текущий smoke-test.
 
