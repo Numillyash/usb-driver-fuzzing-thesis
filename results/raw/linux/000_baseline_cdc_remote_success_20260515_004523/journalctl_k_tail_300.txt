@@ -1,0 +1,302 @@
+Journal file /var/log/journal/ff50ad21a15b4a37aa9896d0597d471d/system@000651ca5bf6cde3-421630d4c2ab05b7.journal~ is truncated, ignoring file.
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: Starting modprobe@loop.service - Load Kernel Module loop...
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: systemd-fsck-root.service - File System Check on Root Device was skipped because of an unmet condition check (ConditionPathExists=!/run/initramfs/fsck-root).
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: Starting systemd-modules-load.service - Load Kernel Modules...
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: systemd-pcrmachine.service - TPM2 PCR Machine ID Measurement was skipped because of an unmet condition check (ConditionSecurity=measured-uki).
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: Starting systemd-remount-fs.service - Remount Root and Kernel File Systems...
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: systemd-tpm2-setup-early.service - TPM2 SRK Setup (Early) was skipped because of an unmet condition check (ConditionSecurity=measured-uki).
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: Starting systemd-udev-trigger.service - Coldplug All udev Devices...
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: Mounted dev-hugepages.mount - Huge Pages File System.
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: Mounted dev-mqueue.mount - POSIX Message Queue File System.
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: Mounted sys-kernel-debug.mount - Kernel Debug File System.
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: Mounted sys-kernel-tracing.mount - Kernel Trace File System.
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: Finished kmod-static-nodes.service - Create List of Static Device Nodes.
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: modprobe@configfs.service: Deactivated successfully.
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: Finished modprobe@configfs.service - Load Kernel Module configfs.
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: modprobe@dm_mod.service: Deactivated successfully.
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: Finished modprobe@dm_mod.service - Load Kernel Module dm_mod.
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: modprobe@drm.service: Deactivated successfully.
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: Finished modprobe@drm.service - Load Kernel Module drm.
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: modprobe@efi_pstore.service: Deactivated successfully.
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: Finished modprobe@efi_pstore.service - Load Kernel Module efi_pstore.
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: modprobe@fuse.service: Deactivated successfully.
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: Finished modprobe@fuse.service - Load Kernel Module fuse.
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: modprobe@loop.service: Deactivated successfully.
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: Finished modprobe@loop.service - Load Kernel Module loop.
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: Mounting sys-fs-fuse-connections.mount - FUSE Control File System...
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: Mounting sys-kernel-config.mount - Kernel Configuration File System...
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: systemd-repart.service - Repartition Root Disk was skipped because no trigger condition checks were met.
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: Starting systemd-tmpfiles-setup-dev-early.service - Create Static Device Nodes in /dev gracefully...
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: Mounted sys-fs-fuse-connections.mount - FUSE Control File System.
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: Mounted sys-kernel-config.mount - Kernel Configuration File System.
+мая 14 20:23:48 numi-linux-otherpc kernel: EXT4-fs (sda2): re-mounted de4fc2d1-ba68-4609-bfdc-d1bfcc3bca06 r/w.
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: Finished systemd-remount-fs.service - Remount Root and Kernel File Systems.
+мая 14 20:23:48 numi-linux-otherpc kernel: lp: driver loaded but no devices found
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: Activating swap swap.img.swap - /swap.img...
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: systemd-hwdb-update.service - Rebuild Hardware Database was skipped because of an unmet condition check (ConditionNeedsUpdate=/etc).
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: systemd-pstore.service - Platform Persistent Storage Archival was skipped because of an unmet condition check (ConditionDirectoryNotEmpty=/sys/fs/pstore).
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: Starting systemd-random-seed.service - Load/Save OS Random Seed...
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: systemd-tpm2-setup.service - TPM2 SRK Setup was skipped because of an unmet condition check (ConditionSecurity=measured-uki).
+мая 14 20:23:48 numi-linux-otherpc kernel: ppdev: user-space parallel port driver
+мая 14 20:23:48 numi-linux-otherpc kernel: Adding 4194300k swap on /swap.img.  Priority:-2 extents:33 across:4587520k SS
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: Activated swap swap.img.swap - /swap.img.
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: Reached target swap.target - Swaps.
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: Finished systemd-modules-load.service - Load Kernel Modules.
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: Starting systemd-sysctl.service - Apply Kernel Variables...
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: Finished systemd-tmpfiles-setup-dev-early.service - Create Static Device Nodes in /dev gracefully.
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: Finished keyboard-setup.service - Set the console keyboard layout.
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: systemd-sysusers.service - Create System Users was skipped because no trigger condition checks were met.
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: Starting systemd-tmpfiles-setup-dev.service - Create Static Device Nodes in /dev...
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: Finished systemd-random-seed.service - Load/Save OS Random Seed.
+мая 14 20:23:48 numi-linux-otherpc systemd[1]: Started systemd-journald.service - Journal Service.
+мая 14 20:23:48 numi-linux-otherpc kernel: loop0: detected capacity change from 0 to 8
+мая 14 20:23:48 numi-linux-otherpc kernel: loop1: detected capacity change from 0 to 375648
+мая 14 20:23:48 numi-linux-otherpc kernel: loop2: detected capacity change from 0 to 383360
+мая 14 20:23:48 numi-linux-otherpc kernel: loop3: detected capacity change from 0 to 215440
+мая 14 20:23:48 numi-linux-otherpc kernel: loop4: detected capacity change from 0 to 113640
+мая 14 20:23:48 numi-linux-otherpc kernel: loop5: detected capacity change from 0 to 113640
+мая 14 20:23:48 numi-linux-otherpc kernel: loop6: detected capacity change from 0 to 151456
+мая 14 20:23:48 numi-linux-otherpc kernel: loop7: detected capacity change from 0 to 151512
+мая 14 20:23:48 numi-linux-otherpc kernel: loop8: detected capacity change from 0 to 136872
+мая 14 20:23:48 numi-linux-otherpc kernel: loop9: detected capacity change from 0 to 136904
+мая 14 20:23:48 numi-linux-otherpc kernel: loop10: detected capacity change from 0 to 99976
+мая 14 20:23:48 numi-linux-otherpc kernel: loop11: detected capacity change from 0 to 99976
+мая 14 20:23:48 numi-linux-otherpc kernel: loop12: detected capacity change from 0 to 512216
+мая 14 20:23:48 numi-linux-otherpc kernel: loop13: detected capacity change from 0 to 522136
+мая 14 20:23:48 numi-linux-otherpc kernel: loop15: detected capacity change from 0 to 33792
+мая 14 20:23:48 numi-linux-otherpc kernel: loop14: detected capacity change from 0 to 33680
+мая 14 20:23:48 numi-linux-otherpc kernel: loop16: detected capacity change from 0 to 3904
+мая 14 20:23:48 numi-linux-otherpc kernel: loop18: detected capacity change from 0 to 1057184
+мая 14 20:23:48 numi-linux-otherpc kernel: loop17: detected capacity change from 0 to 1088256
+мая 14 20:23:48 numi-linux-otherpc kernel: loop19: detected capacity change from 0 to 1266192
+мая 14 20:23:48 numi-linux-otherpc kernel: loop20: detected capacity change from 0 to 1241248
+мая 14 20:23:48 numi-linux-otherpc kernel: loop21: detected capacity change from 0 to 187776
+мая 14 20:23:48 numi-linux-otherpc kernel: loop22: detected capacity change from 0 to 595504
+мая 14 20:23:48 numi-linux-otherpc kernel: loop23: detected capacity change from 0 to 808920
+мая 14 20:23:48 numi-linux-otherpc kernel: loop24: detected capacity change from 0 to 31784
+мая 14 20:23:48 numi-linux-otherpc kernel: loop25: detected capacity change from 0 to 32128
+мая 14 20:23:48 numi-linux-otherpc kernel: loop27: detected capacity change from 0 to 100888
+мая 14 20:23:48 numi-linux-otherpc kernel: loop26: detected capacity change from 0 to 99056
+мая 14 20:23:48 numi-linux-otherpc kernel: loop28: detected capacity change from 0 to 1152
+мая 14 20:23:48 numi-linux-otherpc kernel: loop29: detected capacity change from 0 to 1160
+мая 14 20:23:48 numi-linux-otherpc kernel: loop30: detected capacity change from 0 to 171664
+мая 14 20:23:48 numi-linux-otherpc kernel: loop31: detected capacity change from 0 to 175520
+мая 14 20:23:48 numi-linux-otherpc kernel: loop32: detected capacity change from 0 to 465000
+мая 14 20:23:48 numi-linux-otherpc kernel: loop33: detected capacity change from 0 to 1728
+мая 14 20:23:48 numi-linux-otherpc kernel: loop34: detected capacity change from 0 to 465008
+мая 14 20:23:48 numi-linux-otherpc systemd-journald[485]: Received client request to flush runtime journal.
+мая 14 20:23:48 numi-linux-otherpc systemd-journald[485]: File /var/log/journal/ff50ad21a15b4a37aa9896d0597d471d/system.journal corrupted or uncleanly shut down, renaming and replacing.
+мая 14 20:23:48 numi-linux-otherpc kernel: audit: type=1400 audit(1778779428.514:2): apparmor="STATUS" operation="profile_load" profile="unconfined" name="busybox" pid=665 comm="apparmor_parser"
+мая 14 20:23:48 numi-linux-otherpc kernel: audit: type=1400 audit(1778779428.514:3): apparmor="STATUS" operation="profile_load" profile="unconfined" name="brave" pid=663 comm="apparmor_parser"
+мая 14 20:23:48 numi-linux-otherpc kernel: audit: type=1400 audit(1778779428.514:4): apparmor="STATUS" operation="profile_load" profile="unconfined" name="ch-checkns" pid=667 comm="apparmor_parser"
+мая 14 20:23:48 numi-linux-otherpc kernel: audit: type=1400 audit(1778779428.514:5): apparmor="STATUS" operation="profile_load" profile="unconfined" name=4D6F6E676F444220436F6D70617373 pid=660 comm="apparmor_parser"
+мая 14 20:23:48 numi-linux-otherpc kernel: audit: type=1400 audit(1778779428.514:6): apparmor="STATUS" operation="profile_load" profile="unconfined" name="chrome" pid=669 comm="apparmor_parser"
+мая 14 20:23:48 numi-linux-otherpc kernel: audit: type=1400 audit(1778779428.514:7): apparmor="STATUS" operation="profile_load" profile="unconfined" name="cam" pid=666 comm="apparmor_parser"
+мая 14 20:23:48 numi-linux-otherpc kernel: audit: type=1400 audit(1778779428.514:8): apparmor="STATUS" operation="profile_load" profile="unconfined" name="buildah" pid=664 comm="apparmor_parser"
+мая 14 20:23:48 numi-linux-otherpc kernel: audit: type=1400 audit(1778779428.515:9): apparmor="STATUS" operation="profile_load" profile="unconfined" name="QtWebEngineProcess" pid=661 comm="apparmor_parser"
+мая 14 20:23:48 numi-linux-otherpc kernel: audit: type=1400 audit(1778779428.515:10): apparmor="STATUS" operation="profile_load" profile="unconfined" name="ch-run" pid=668 comm="apparmor_parser"
+мая 14 20:23:48 numi-linux-otherpc kernel: audit: type=1400 audit(1778779428.515:11): apparmor="STATUS" operation="profile_load" profile="unconfined" name="1password" pid=658 comm="apparmor_parser"
+мая 14 20:23:48 numi-linux-otherpc kernel: ccp 0000:08:00.2: ccp enabled
+мая 14 20:23:48 numi-linux-otherpc kernel: ccp 0000:08:00.2: psp enabled
+мая 14 20:23:48 numi-linux-otherpc kernel: kvm_amd: TSC scaling supported
+мая 14 20:23:48 numi-linux-otherpc kernel: kvm_amd: Nested Virtualization enabled
+мая 14 20:23:48 numi-linux-otherpc kernel: kvm_amd: Nested Paging enabled
+мая 14 20:23:48 numi-linux-otherpc kernel: kvm_amd: LBR virtualization supported
+мая 14 20:23:48 numi-linux-otherpc kernel: kvm_amd: SEV disabled (ASIDs 0 - 15)
+мая 14 20:23:48 numi-linux-otherpc kernel: kvm_amd: SEV-ES disabled (ASIDs 0 - 4294967295)
+мая 14 20:23:48 numi-linux-otherpc kernel: kvm_amd: Virtual VMLOAD VMSAVE supported
+мая 14 20:23:48 numi-linux-otherpc kernel: kvm_amd: Virtual GIF supported
+мая 14 20:23:48 numi-linux-otherpc kernel: piix4_smbus 0000:00:14.0: SMBus Host Controller at 0xb00, revision 0
+мая 14 20:23:48 numi-linux-otherpc kernel: piix4_smbus 0000:00:14.0: Using register 0x02 for SMBus port selection
+мая 14 20:23:48 numi-linux-otherpc kernel: i2c i2c-0: Successfully instantiated SPD at 0x50
+мая 14 20:23:48 numi-linux-otherpc kernel: i2c i2c-0: Successfully instantiated SPD at 0x51
+мая 14 20:23:48 numi-linux-otherpc kernel: RAPL PMU: API unit is 2^-32 Joules, 2 fixed counters, 163840 ms ovfl timer
+мая 14 20:23:48 numi-linux-otherpc kernel: RAPL PMU: hw unit of domain package 2^-16 Joules
+мая 14 20:23:48 numi-linux-otherpc kernel: RAPL PMU: hw unit of domain core 2^-16 Joules
+мая 14 20:23:48 numi-linux-otherpc kernel: piix4_smbus 0000:00:14.0: Auxiliary SMBus Host Controller at 0xb20
+мая 14 20:23:49 numi-linux-otherpc kernel: MCE: In-kernel MCE decoding enabled.
+мая 14 20:23:49 numi-linux-otherpc kernel: ee1004 0-0050: 512 byte EE1004-compliant SPD EEPROM, read-only
+мая 14 20:23:49 numi-linux-otherpc kernel: ee1004 0-0051: 512 byte EE1004-compliant SPD EEPROM, read-only
+мая 14 20:23:49 numi-linux-otherpc kernel: intel_rapl_common: Found RAPL domain package
+мая 14 20:23:49 numi-linux-otherpc kernel: intel_rapl_common: Found RAPL domain core
+мая 14 20:23:49 numi-linux-otherpc kernel: amd_atl: AMD Address Translation Library initialized
+мая 14 20:23:49 numi-linux-otherpc kernel: snd_hda_intel 0000:07:00.1: Force to non-snoop mode
+мая 14 20:23:49 numi-linux-otherpc kernel: input: HDA ATI HDMI HDMI/DP,pcm=3 as /devices/pci0000:00/0000:00:03.1/0000:07:00.1/sound/card0/input6
+мая 14 20:23:49 numi-linux-otherpc kernel: input: HDA ATI HDMI HDMI/DP,pcm=7 as /devices/pci0000:00/0000:00:03.1/0000:07:00.1/sound/card0/input7
+мая 14 20:23:49 numi-linux-otherpc kernel: input: HDA ATI HDMI HDMI/DP,pcm=8 as /devices/pci0000:00/0000:00:03.1/0000:07:00.1/sound/card0/input8
+мая 14 20:23:49 numi-linux-otherpc kernel: input: HDA ATI HDMI HDMI/DP,pcm=9 as /devices/pci0000:00/0000:00:03.1/0000:07:00.1/sound/card0/input9
+мая 14 20:23:49 numi-linux-otherpc kernel: input: HDA ATI HDMI HDMI/DP,pcm=10 as /devices/pci0000:00/0000:00:03.1/0000:07:00.1/sound/card0/input10
+мая 14 20:23:49 numi-linux-otherpc kernel: input: HDA ATI HDMI HDMI/DP,pcm=11 as /devices/pci0000:00/0000:00:03.1/0000:07:00.1/sound/card0/input11
+мая 14 20:23:49 numi-linux-otherpc kernel: snd_hda_codec_alc662 hdaudioC1D0: autoconfig for ALC892: line_outs=1 (0x14/0x0/0x0/0x0/0x0) type:line
+мая 14 20:23:49 numi-linux-otherpc kernel: snd_hda_codec_alc662 hdaudioC1D0:    speaker_outs=0 (0x0/0x0/0x0/0x0/0x0)
+мая 14 20:23:49 numi-linux-otherpc kernel: snd_hda_codec_alc662 hdaudioC1D0:    hp_outs=1 (0x1b/0x0/0x0/0x0/0x0)
+мая 14 20:23:49 numi-linux-otherpc kernel: snd_hda_codec_alc662 hdaudioC1D0:    mono: mono_out=0x0
+мая 14 20:23:49 numi-linux-otherpc kernel: snd_hda_codec_alc662 hdaudioC1D0:    inputs:
+мая 14 20:23:49 numi-linux-otherpc kernel: snd_hda_codec_alc662 hdaudioC1D0:      Rear Mic=0x18
+мая 14 20:23:49 numi-linux-otherpc kernel: snd_hda_codec_alc662 hdaudioC1D0:      Front Mic=0x19
+мая 14 20:23:49 numi-linux-otherpc kernel: snd_hda_codec_alc662 hdaudioC1D0:      Line=0x1a
+мая 14 20:23:49 numi-linux-otherpc kernel: input: HD-Audio Generic Rear Mic as /devices/pci0000:00/0000:00:08.1/0000:09:00.3/sound/card1/input12
+мая 14 20:23:49 numi-linux-otherpc kernel: input: HD-Audio Generic Front Mic as /devices/pci0000:00/0000:00:08.1/0000:09:00.3/sound/card1/input13
+мая 14 20:23:49 numi-linux-otherpc kernel: input: HD-Audio Generic Line as /devices/pci0000:00/0000:00:08.1/0000:09:00.3/sound/card1/input14
+мая 14 20:23:49 numi-linux-otherpc kernel: input: HD-Audio Generic Line Out as /devices/pci0000:00/0000:00:08.1/0000:09:00.3/sound/card1/input15
+мая 14 20:23:49 numi-linux-otherpc kernel: input: HD-Audio Generic Front Headphone as /devices/pci0000:00/0000:00:08.1/0000:09:00.3/sound/card1/input16
+мая 14 20:23:49 numi-linux-otherpc kernel: Process accounting resumed
+мая 14 20:23:50 numi-linux-otherpc kernel: nvme nvme0: using unchecked data buffer
+мая 14 20:23:50 numi-linux-otherpc kernel: block nvme0n1: No UUID available providing old NGUID
+мая 14 20:23:51 numi-linux-otherpc kernel: Generic FE-GE Realtek PHY r8169-0-500:00: attached PHY driver (mii_bus:phy_addr=r8169-0-500:00, irq=MAC)
+мая 14 20:23:51 numi-linux-otherpc kernel: r8169 0000:05:00.0 enp5s0: Link is Down
+мая 14 20:23:51 numi-linux-otherpc kernel: loop35: detected capacity change from 0 to 8
+мая 14 20:23:52 numi-linux-otherpc kernel: r8169 0000:05:00.0 enp5s0: Link is Up - 100Mbps/Full - flow control rx/tx
+мая 14 20:23:53 numi-linux-otherpc kernel: NET: Registered PF_QIPCRTR protocol family
+мая 14 20:23:53 numi-linux-otherpc kernel: [drm] amdgpu kernel modesetting enabled.
+мая 14 20:23:53 numi-linux-otherpc kernel: amdgpu: Virtual CRAT table created for CPU
+мая 14 20:23:53 numi-linux-otherpc kernel: amdgpu: Topology: Add CPU node
+мая 14 20:23:53 numi-linux-otherpc kernel: amdgpu 0000:07:00.0: amdgpu: initializing kernel modesetting (POLARIS10 0x1002:0x67DF 0x1458:0x2310 0xEF).
+мая 14 20:23:53 numi-linux-otherpc kernel: amdgpu 0000:07:00.0: amdgpu: register mmio base: 0xFCE00000
+мая 14 20:23:53 numi-linux-otherpc kernel: amdgpu 0000:07:00.0: amdgpu: register mmio size: 262144
+мая 14 20:23:53 numi-linux-otherpc kernel: amdgpu 0000:07:00.0: amdgpu: detected ip block number 0 <vi_common>
+мая 14 20:23:53 numi-linux-otherpc kernel: amdgpu 0000:07:00.0: amdgpu: detected ip block number 1 <gmc_v8_0>
+мая 14 20:23:53 numi-linux-otherpc kernel: amdgpu 0000:07:00.0: amdgpu: detected ip block number 2 <tonga_ih>
+мая 14 20:23:53 numi-linux-otherpc kernel: amdgpu 0000:07:00.0: amdgpu: detected ip block number 3 <gfx_v8_0>
+мая 14 20:23:53 numi-linux-otherpc kernel: amdgpu 0000:07:00.0: amdgpu: detected ip block number 4 <sdma_v3_0>
+мая 14 20:23:53 numi-linux-otherpc kernel: amdgpu 0000:07:00.0: amdgpu: detected ip block number 5 <powerplay>
+мая 14 20:23:53 numi-linux-otherpc kernel: amdgpu 0000:07:00.0: amdgpu: detected ip block number 6 <dm>
+мая 14 20:23:53 numi-linux-otherpc kernel: amdgpu 0000:07:00.0: amdgpu: detected ip block number 7 <uvd_v6_0>
+мая 14 20:23:53 numi-linux-otherpc kernel: amdgpu 0000:07:00.0: amdgpu: detected ip block number 8 <vce_v3_0>
+мая 14 20:23:53 numi-linux-otherpc kernel: amdgpu 0000:07:00.0: No more image in the PCI ROM
+мая 14 20:23:53 numi-linux-otherpc kernel: amdgpu 0000:07:00.0: amdgpu: Fetched VBIOS from ROM BAR
+мая 14 20:23:53 numi-linux-otherpc kernel: amdgpu: ATOM BIOS: xxx-xxx-xxx
+мая 14 20:23:53 numi-linux-otherpc kernel: [drm] UVD is enabled in VM mode
+мая 14 20:23:53 numi-linux-otherpc kernel: [drm] UVD ENC is enabled in VM mode
+мая 14 20:23:53 numi-linux-otherpc kernel: [drm] VCE enabled in VM mode
+мая 14 20:23:53 numi-linux-otherpc kernel: bridge: filtering via arp/ip/ip6tables is no longer available by default. Update your scripts to load br_netfilter if you need this.
+мая 14 20:23:53 numi-linux-otherpc kernel: amdgpu 0000:07:00.0: vgaarb: deactivate vga console
+мая 14 20:23:53 numi-linux-otherpc kernel: amdgpu 0000:07:00.0: amdgpu: Trusted Memory Zone (TMZ) feature not supported
+мая 14 20:23:53 numi-linux-otherpc kernel: amdgpu 0000:07:00.0: amdgpu: vm size is 64 GB, 2 levels, block size is 10-bit, fragment size is 9-bit
+мая 14 20:23:53 numi-linux-otherpc kernel: amdgpu 0000:07:00.0: amdgpu: VRAM: 8192M 0x000000F400000000 - 0x000000F5FFFFFFFF (8192M used)
+мая 14 20:23:53 numi-linux-otherpc kernel: amdgpu 0000:07:00.0: amdgpu: GART: 256M 0x000000FF00000000 - 0x000000FF0FFFFFFF
+мая 14 20:23:53 numi-linux-otherpc kernel: [drm] Detected VRAM RAM=8192M, BAR=256M
+мая 14 20:23:53 numi-linux-otherpc kernel: [drm] RAM width 256bits GDDR5
+мая 14 20:23:53 numi-linux-otherpc kernel: amdgpu 0000:07:00.0: amdgpu: amdgpu: 8192M of VRAM memory ready
+мая 14 20:23:53 numi-linux-otherpc kernel: amdgpu 0000:07:00.0: amdgpu: amdgpu: 7960M of GTT memory ready.
+мая 14 20:23:53 numi-linux-otherpc kernel: [drm] GART: num cpu pages 65536, num gpu pages 65536
+мая 14 20:23:53 numi-linux-otherpc kernel: br0: port 1(enp5s0) entered blocking state
+мая 14 20:23:53 numi-linux-otherpc kernel: br0: port 1(enp5s0) entered disabled state
+мая 14 20:23:53 numi-linux-otherpc kernel: [drm] PCIE GART of 256M enabled (table at 0x000000F400180000).
+мая 14 20:23:53 numi-linux-otherpc kernel: r8169 0000:05:00.0 enp5s0: entered allmulticast mode
+мая 14 20:23:53 numi-linux-otherpc kernel: r8169 0000:05:00.0 enp5s0: entered promiscuous mode
+мая 14 20:23:53 numi-linux-otherpc kernel: br0: port 1(enp5s0) entered blocking state
+мая 14 20:23:53 numi-linux-otherpc kernel: br0: port 1(enp5s0) entered forwarding state
+мая 14 20:23:53 numi-linux-otherpc kernel: [drm] Chained IB support enabled!
+мая 14 20:23:53 numi-linux-otherpc kernel: amdgpu: hwmgr_sw_init smu backed is polaris10_smu
+мая 14 20:23:53 numi-linux-otherpc kernel: [drm] Found UVD firmware Version: 1.130 Family ID: 16
+мая 14 20:23:53 numi-linux-otherpc kernel: [drm] Found VCE firmware Version: 53.26 Binary ID: 3
+мая 14 20:23:53 numi-linux-otherpc kernel: amdgpu 0000:07:00.0: amdgpu: [drm] Display Core v3.2.340 initialized on DCE 11.2
+мая 14 20:23:53 numi-linux-otherpc kernel: snd_hda_intel 0000:07:00.1: bound 0000:07:00.0 (ops amdgpu_dm_audio_component_bind_ops [amdgpu])
+мая 14 20:23:53 numi-linux-otherpc kernel: [drm] UVD and UVD ENC initialized successfully.
+мая 14 20:23:53 numi-linux-otherpc kernel: [drm] VCE initialized successfully.
+мая 14 20:23:53 numi-linux-otherpc kernel: kfd kfd: amdgpu: Allocated 3969056 bytes on gart
+мая 14 20:23:53 numi-linux-otherpc kernel: kfd kfd: amdgpu: Total number of KFD nodes to be created: 1
+мая 14 20:23:53 numi-linux-otherpc kernel: amdgpu: Virtual CRAT table created for GPU
+мая 14 20:23:53 numi-linux-otherpc kernel: amdgpu: Topology: Add dGPU node [0x67df:0x1002]
+мая 14 20:23:53 numi-linux-otherpc kernel: kfd kfd: amdgpu: added device 1002:67df
+мая 14 20:23:53 numi-linux-otherpc kernel: amdgpu 0000:07:00.0: amdgpu: SE 4, SH per SE 1, CU per SH 9, active_cu_number 32
+мая 14 20:23:53 numi-linux-otherpc kernel: amdgpu 0000:07:00.0: amdgpu: Using BACO for runtime pm
+мая 14 20:23:53 numi-linux-otherpc kernel: amdgpu 0000:07:00.0: [drm] Registered 6 planes with drm panic
+мая 14 20:23:53 numi-linux-otherpc kernel: [drm] Initialized amdgpu 3.64.0 for 0000:07:00.0 on minor 1
+мая 14 20:23:53 numi-linux-otherpc kernel: amdgpu 0000:07:00.0: amdgpu: [drm] Failed to setup vendor infoframe on connector HDMI-A-1: -22 
+мая 14 20:23:53 numi-linux-otherpc kernel: fbcon: amdgpudrmfb (fb0) is primary device
+мая 14 20:23:53 numi-linux-otherpc kernel: fbcon: Deferring console take-over
+мая 14 20:23:53 numi-linux-otherpc kernel: amdgpu 0000:07:00.0: [drm] fb0: amdgpudrmfb frame buffer device
+мая 14 20:23:53 numi-linux-otherpc kernel: Guest personality initialized and is inactive
+мая 14 20:23:53 numi-linux-otherpc kernel: VMCI host device registered (name=vmci, major=10, minor=261)
+мая 14 20:23:53 numi-linux-otherpc kernel: Initialized host personality
+мая 14 20:23:53 numi-linux-otherpc kernel: NET: Registered PF_VSOCK protocol family
+мая 14 20:23:53 numi-linux-otherpc kernel: kauditd_printk_skb: 214 callbacks suppressed
+мая 14 20:23:53 numi-linux-otherpc kernel: audit: type=1400 audit(1778779433.635:226): apparmor="STATUS" operation="profile_load" profile="unconfined" name="libvirt-2c255ddc-3e2e-4032-a76d-18ea923dace5" pid=2150 comm="apparmor_parser"
+мая 14 20:23:53 numi-linux-otherpc kernel: audit: type=1400 audit(1778779433.636:227): apparmor="STATUS" operation="profile_load" profile="unconfined" name="libvirt-2c255ddc-3e2e-4032-a76d-18ea923dace5//passt" pid=2150 comm="apparmor_parser"
+мая 14 20:23:53 numi-linux-otherpc kernel: audit: type=1400 audit(1778779433.723:228): apparmor="STATUS" operation="profile_replace" profile="unconfined" name="libvirt-2c255ddc-3e2e-4032-a76d-18ea923dace5" pid=2217 comm="apparmor_parser"
+мая 14 20:23:53 numi-linux-otherpc kernel: audit: type=1400 audit(1778779433.729:229): apparmor="STATUS" operation="profile_replace" info="same as current profile, skipping" profile="unconfined" name="libvirt-2c255ddc-3e2e-4032-a76d-18ea923dace5//passt" pid=2217 comm="apparmor_parser"
+мая 14 20:23:53 numi-linux-otherpc kernel: audit: type=1400 audit(1778779433.805:230): apparmor="STATUS" operation="profile_replace" profile="unconfined" name="libvirt-2c255ddc-3e2e-4032-a76d-18ea923dace5" pid=2277 comm="apparmor_parser"
+мая 14 20:23:53 numi-linux-otherpc kernel: audit: type=1400 audit(1778779433.821:231): apparmor="STATUS" operation="profile_replace" info="same as current profile, skipping" profile="unconfined" name="libvirt-2c255ddc-3e2e-4032-a76d-18ea923dace5//passt" pid=2277 comm="apparmor_parser"
+мая 14 20:23:53 numi-linux-otherpc kernel: audit: type=1400 audit(1778779433.896:232): apparmor="STATUS" operation="profile_replace" info="same as current profile, skipping" profile="unconfined" name="libvirt-2c255ddc-3e2e-4032-a76d-18ea923dace5" pid=2282 comm="apparmor_parser"
+мая 14 20:23:53 numi-linux-otherpc kernel: audit: type=1400 audit(1778779433.897:233): apparmor="STATUS" operation="profile_replace" info="same as current profile, skipping" profile="unconfined" name="libvirt-2c255ddc-3e2e-4032-a76d-18ea923dace5//passt" pid=2282 comm="apparmor_parser"
+мая 14 20:23:53 numi-linux-otherpc kernel: virbr0: port 1(vnet0) entered blocking state
+мая 14 20:23:53 numi-linux-otherpc kernel: virbr0: port 1(vnet0) entered disabled state
+мая 14 20:23:53 numi-linux-otherpc kernel: vnet0: entered allmulticast mode
+мая 14 20:23:53 numi-linux-otherpc kernel: vnet0: entered promiscuous mode
+мая 14 20:23:53 numi-linux-otherpc kernel: virbr0: port 1(vnet0) entered blocking state
+мая 14 20:23:53 numi-linux-otherpc kernel: virbr0: port 1(vnet0) entered listening state
+мая 14 20:23:53 numi-linux-otherpc kernel: audit: type=1400 audit(1778779433.983:234): apparmor="STATUS" operation="profile_replace" profile="unconfined" name="libvirt-2c255ddc-3e2e-4032-a76d-18ea923dace5" pid=2311 comm="apparmor_parser"
+мая 14 20:23:54 numi-linux-otherpc kernel: audit: type=1400 audit(1778779433.998:235): apparmor="STATUS" operation="profile_replace" info="same as current profile, skipping" profile="unconfined" name="libvirt-2c255ddc-3e2e-4032-a76d-18ea923dace5//passt" pid=2311 comm="apparmor_parser"
+мая 14 20:23:54 numi-linux-otherpc kernel: br0: port 2(vnet1) entered blocking state
+мая 14 20:23:54 numi-linux-otherpc kernel: br0: port 2(vnet1) entered disabled state
+мая 14 20:23:54 numi-linux-otherpc kernel: vnet1: entered allmulticast mode
+мая 14 20:23:54 numi-linux-otherpc kernel: vnet1: entered promiscuous mode
+мая 14 20:23:54 numi-linux-otherpc kernel: br0: port 2(vnet1) entered blocking state
+мая 14 20:23:54 numi-linux-otherpc kernel: br0: port 2(vnet1) entered forwarding state
+мая 14 20:23:54 numi-linux-otherpc systemd-journald[485]: File /var/log/journal/ff50ad21a15b4a37aa9896d0597d471d/user-1000.journal corrupted or uncleanly shut down, renaming and replacing.
+мая 14 20:23:55 numi-linux-otherpc kernel: virbr0: port 1(vnet0) entered learning state
+мая 14 20:23:56 numi-linux-otherpc kernel: rfkill: input handler disabled
+мая 14 20:23:57 numi-linux-otherpc kernel: virbr0: port 1(vnet0) entered forwarding state
+мая 14 20:23:57 numi-linux-otherpc kernel: virbr0: topology change detected, propagating
+мая 14 20:24:08 numi-linux-otherpc systemd-journald[485]: Time jumped backwards, rotating.
+мая 14 20:28:54 numi-linux-otherpc kernel: loop35: detected capacity change from 0 to 176448
+мая 14 20:28:55 numi-linux-otherpc kernel: kauditd_printk_skb: 3 callbacks suppressed
+мая 14 20:28:55 numi-linux-otherpc kernel: audit: type=1400 audit(1778779735.389:239): apparmor="STATUS" operation="profile_replace" info="same as current profile, skipping" profile="unconfined" name="/snap/snapd/26865/usr/lib/snapd/snap-confine" pid=5100 comm="apparmor_parser"
+мая 14 20:28:55 numi-linux-otherpc kernel: audit: type=1400 audit(1778779735.582:240): apparmor="STATUS" operation="profile_replace" profile="unconfined" name="snap.telegram-desktop.hook.configure" pid=5103 comm="apparmor_parser"
+мая 14 20:28:55 numi-linux-otherpc kernel: audit: type=1400 audit(1778779735.733:241): apparmor="STATUS" operation="profile_replace" profile="unconfined" name="snap-update-ns.telegram-desktop" pid=5102 comm="apparmor_parser"
+мая 14 20:28:55 numi-linux-otherpc kernel: audit: type=1400 audit(1778779735.757:242): apparmor="STATUS" operation="profile_replace" profile="unconfined" name="snap.telegram-desktop.telegram-desktop" pid=5104 comm="apparmor_parser"
+мая 14 20:28:55 numi-linux-otherpc kernel: audit: type=1400 audit(1778779735.765:243): apparmor="STATUS" operation="profile_replace" info="same as current profile, skipping" profile="unconfined" name="snap.mesa-2404.hook.install" pid=5110 comm="apparmor_parser"
+мая 14 20:28:55 numi-linux-otherpc kernel: audit: type=1400 audit(1778779735.765:244): apparmor="STATUS" operation="profile_replace" info="same as current profile, skipping" profile="unconfined" name="snap-update-ns.mesa-2404" pid=5106 comm="apparmor_parser"
+мая 14 20:28:55 numi-linux-otherpc kernel: audit: type=1400 audit(1778779735.766:245): apparmor="STATUS" operation="profile_replace" info="same as current profile, skipping" profile="unconfined" name="snap.mesa-2404.hook.post-refresh" pid=5111 comm="apparmor_parser"
+мая 14 20:28:55 numi-linux-otherpc kernel: audit: type=1400 audit(1778779735.768:246): apparmor="STATUS" operation="profile_replace" info="same as current profile, skipping" profile="unconfined" name="snap.mesa-2404.hook.connect-plug-kernel-gpu-2404" pid=5108 comm="apparmor_parser"
+мая 14 20:28:55 numi-linux-otherpc kernel: audit: type=1400 audit(1778779735.769:247): apparmor="STATUS" operation="profile_replace" info="same as current profile, skipping" profile="unconfined" name="snap.mesa-2404.component-monitor" pid=5107 comm="apparmor_parser"
+мая 14 20:28:55 numi-linux-otherpc kernel: audit: type=1400 audit(1778779735.769:248): apparmor="STATUS" operation="profile_replace" info="same as current profile, skipping" profile="unconfined" name="snap.mesa-2404.hook.disconnect-plug-kernel-gpu-2404" pid=5109 comm="apparmor_parser"
+мая 14 21:00:35 numi-linux-otherpc kernel: audit: type=1400 audit(1778781635.625:249): apparmor="DENIED" operation="open" class="file" profile="snap.firmware-updater.firmware-notifier" name="/proc/sys/vm/max_map_count" pid=5540 comm="firmware-notifi" requested_mask="r" denied_mask="r" fsuid=1000 ouid=0
+мая 14 21:22:56 numi-linux-otherpc kernel: audit: type=1107 audit(1778782976.505:250): pid=1156 uid=101 auid=4294967295 ses=4294967295 subj=unconfined msg='apparmor="DENIED" operation="dbus_method_call"  bus="system" path="/" interface="org.freedesktop.DBus.Peer" member="Ping" mask="send" name="org.freedesktop.Avahi" pid=2548 label="snap.cups.cupsd"
+                                               exe="/usr/bin/dbus-daemon" sauid=101 hostname=? addr=? terminal=?'
+мая 15 00:00:01 numi-linux-otherpc kernel: audit: type=1400 audit(1778792401.416:251): apparmor="DENIED" operation="capable" class="cap" profile="/usr/sbin/cupsd" pid=34824 comm="cupsd" capability=12  capname="net_admin"
+мая 15 00:00:35 numi-linux-otherpc kernel: audit: type=1400 audit(1778792435.553:252): apparmor="DENIED" operation="open" class="file" profile="snap.firmware-updater.firmware-notifier" name="/proc/sys/vm/max_map_count" pid=34886 comm="firmware-notifi" requested_mask="r" denied_mask="r" fsuid=1000 ouid=0
+мая 15 00:13:05 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 8 using xhci_hcd
+мая 15 00:13:06 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=000a, bcdDevice= 1.00
+мая 15 00:13:06 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+мая 15 00:13:06 numi-linux-otherpc kernel: usb 1-4: Product: Pico
+мая 15 00:13:06 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+мая 15 00:13:06 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E6625C48939D6E22
+мая 15 00:13:06 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+мая 15 00:38:11 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 8
+мая 15 00:38:11 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 9 using xhci_hcd
+мая 15 00:38:11 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=0003, bcdDevice= 1.00
+мая 15 00:38:11 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+мая 15 00:38:11 numi-linux-otherpc kernel: usb 1-4: Product: RP2 Boot
+мая 15 00:38:11 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+мая 15 00:38:11 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E0C9125B0D9B
+мая 15 00:38:11 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+мая 15 00:40:53 numi-linux-otherpc kernel: usbcore: registered new interface driver usb-storage
+мая 15 00:40:53 numi-linux-otherpc kernel: usbcore: registered new interface driver uas
+мая 15 00:42:08 numi-linux-otherpc kernel: usb-storage 1-4:1.0: USB Mass Storage device detected
+мая 15 00:42:08 numi-linux-otherpc kernel: scsi host9: usb-storage 1-4:1.0
+мая 15 00:42:08 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+мая 15 00:42:09 numi-linux-otherpc kernel: scsi 9:0:0:0: Direct-Access     RPI      RP2              3    PQ: 0 ANSI: 2
+мая 15 00:42:09 numi-linux-otherpc kernel: sd 9:0:0:0: Attached scsi generic sg1 type 0
+мая 15 00:42:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] 262144 512-byte logical blocks: (134 MB/128 MiB)
+мая 15 00:42:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Write Protect is off
+мая 15 00:42:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Mode Sense: 03 00 00 00
+мая 15 00:42:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] No Caching mode page found
+мая 15 00:42:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Assuming drive cache: write through
+мая 15 00:42:09 numi-linux-otherpc kernel:  sdb: sdb1
+мая 15 00:42:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Attached SCSI removable disk
+мая 15 00:42:23 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 9
+мая 15 00:42:23 numi-linux-otherpc kernel: FAT-fs (sdb1): unable to read boot sector to mark fs as dirty
+мая 15 00:42:23 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 10 using xhci_hcd
+мая 15 00:42:23 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=000a, bcdDevice= 1.00
+мая 15 00:42:23 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+мая 15 00:42:23 numi-linux-otherpc kernel: usb 1-4: Product: Pico
+мая 15 00:42:23 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+мая 15 00:42:23 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E6625C48939D6E22
+мая 15 00:42:23 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+мая 15 00:42:43 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+мая 15 00:42:43 numi-linux-otherpc kernel: cdc_acm 1-4:1.0: ttyACM0: USB ACM device
+мая 15 00:42:43 numi-linux-otherpc kernel: usbcore: registered new interface driver cdc_acm
+мая 15 00:42:43 numi-linux-otherpc kernel: cdc_acm: USB Abstract Control Model driver for USB modems and ISDN adapters
