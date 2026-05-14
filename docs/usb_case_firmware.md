@@ -79,6 +79,56 @@ descriptor_switched=0
 descriptor_active_transport=pico_stdio_usb_cdc
 ```
 
+## CDC-командный интерфейс (удалённое управление)
+
+`usb_case_demo` поддерживает безопасный текстовый интерфейс команд через тот же CDC serial канал.
+
+Поддерживаемые команды:
+
+- `help`
+- `info`
+- `ping`
+- `bootloader`
+
+Особенности:
+
+- парсинг простой и безопасный (строковые команды, без выполнения команд хоста);
+- интерфейс не эмулирует клавиатуру и не содержит BadUSB-полезных нагрузок;
+- команды обрабатываются только в `usb_case_demo`.
+
+Примеры:
+
+```text
+> help
+available commands: help info ping bootloader
+```
+
+```text
+> ping
+pong
+```
+
+```text
+> info
+case_id=...
+case_name=...
+case_group=...
+case_base_persona=...
+mutation_summary=...
+descriptor_persona_name=...
+descriptor_switched=...
+descriptor_active_transport=...
+```
+
+Команда переключения в BOOTSEL/UF2:
+
+```text
+> bootloader
+usb_case_demo: entering USB bootloader
+```
+
+После вывода этой строки прошивка вызывает `reset_usb_boot(0, 0)` и переводит RP2040 в USB bootloader режим.
+
 ## Сборка
 
 Базовый quick-start для `portable_demo` сохраняется без изменений.

@@ -1,16 +1,68 @@
 #include <stdint.h>
 #include <stdio.h>
+#include <string.h>
 
+#include "pico/bootrom.h"
 #include "pico/stdlib.h"
 #include "usb_case_config.h"
 #include "usb_case_descriptor_layer.h"
 
 #define USB_CASE_HEARTBEAT_INTERVAL_MS 2000u
+#define USB_CASE_CMD_BUF_SIZE 64u
+
+static void usb_case_print_help(void)
+{
+    printf("available commands: help info ping bootloader\r\n");
+}
+
+static void usb_case_print_info(const usb_case_descriptor_profile_t *descriptor_profile)
+{
+    printf("case_id=%lu\r\n", (unsigned long)USB_CASE_ID);
+    printf("case_name=%s\r\n", USB_CASE_NAME);
+    printf("case_group=%s\r\n", USB_CASE_GROUP);
+    printf("case_base_persona=%s\r\n", USB_CASE_BASE_PERSONA);
+    printf("mutation_summary=%s\r\n", USB_CASE_MUTATION_SUMMARY);
+    printf("descriptor_persona_name=%s\r\n", descriptor_profile->persona_name);
+    printf("descriptor_switched=%u\r\n", descriptor_profile->descriptors_switched ? 1u : 0u);
+    printf("descriptor_active_transport=%s\r\n", descriptor_profile->active_transport);
+}
+
+static void usb_case_handle_command(const char *cmd, const usb_case_descriptor_profile_t *descriptor_profile)
+{
+    if (strcmp(cmd, "help") == 0) {
+        usb_case_print_help();
+        return;
+    }
+
+    if (strcmp(cmd, "info") == 0) {
+        usb_case_print_info(descriptor_profile);
+        return;
+    }
+
+    if (strcmp(cmd, "ping") == 0) {
+        printf("pong\r\n");
+        return;
+    }
+
+    if (strcmp(cmd, "bootloader") == 0) {
+        printf("usb_case_demo: entering USB bootloader\r\n");
+        sleep_ms(20);
+        reset_usb_boot(0, 0);
+        return;
+    }
+
+    if (cmd[0] != '\0') {
+        printf("unknown command: %s\r\n", cmd);
+        usb_case_print_help();
+    }
+}
 
 int main(void)
 {
     uint32_t last_log_ms = 0u;
     bool profile_printed = false;
+    char cmd_buf[USB_CASE_CMD_BUF_SIZE];
+    size_t cmd_len = 0u;
     usb_case_descriptor_profile_t descriptor_profile;
 
     stdio_init_all();
@@ -40,6 +92,37 @@ int main(void)
             printf("case_name=%s\r\n", USB_CASE_NAME);
             printf("case_group=%s\r\n", USB_CASE_GROUP);
             last_log_ms = now_ms;
+        }
+
+        for (;;) {
+            int ch = getchar_timeout_us(0);
+
+            if (ch == PICO_ERROR_TIMEOUT) {
+                break;
+            }
+
+            if (ch == '\r' || ch == '\n') {
+                if (cmd_len > 0u) {
+                    cmd_buf[cmd_len] = '\0';
+                    usb_case_handle_command(cmd_buf, &descriptor_profile);
+                    cmd_len = 0u;
+                }
+                continue;
+            }
+
+            if (ch == '\b' || ch == 127) {
+                if (cmd_len > 0u) {
+                    cmd_len--;
+                }
+                continue;
+            }
+
+            if (cmd_len < (USB_CASE_CMD_BUF_SIZE - 1u)) {
+                cmd_buf[cmd_len++] = (char)ch;
+            } else {
+                cmd_len = 0u;
+                printf("command too long\r\n");
+            }
         }
 
         sleep_ms(10);
