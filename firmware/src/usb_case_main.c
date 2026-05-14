@@ -8,6 +8,9 @@
 #include "nrf24_radio.h"
 #include "usb_case_config.h"
 #include "usb_case_descriptor_layer.h"
+#if defined(USB_CASE_MANUAL_TINYUSB_INIT) && (USB_CASE_MANUAL_TINYUSB_INIT == 1)
+#include "tusb.h"
+#endif
 
 #define USB_CASE_HEARTBEAT_INTERVAL_MS 2000u
 #define USB_CASE_CMD_BUF_SIZE 64u
@@ -155,21 +158,22 @@ int main(void)
     };
 
     stdio_init_all();
+#if defined(USB_CASE_MANUAL_TINYUSB_INIT) && (USB_CASE_MANUAL_TINYUSB_INIT == 1)
+    tusb_init();
+#endif
     sleep_ms(1500);
     descriptor_profile = usb_case_get_descriptor_profile();
     rf_state.rf_ready = nrf24_radio_init_rx();
     printf("usb_case_demo: rf_init=%u\r\n", rf_state.rf_ready ? 1u : 0u);
 
     while (true) {
+#if defined(USB_CASE_MANUAL_TINYUSB_INIT) && (USB_CASE_MANUAL_TINYUSB_INIT == 1)
+        tud_task();
+#endif
         const uint32_t now_ms = to_ms_since_boot(get_absolute_time());
+        const bool cdc_available = usb_case_persona_has_cdc();
 
         if (!profile_printed) {
-            /*
-             * Current implementation status:
-             * - persona selection by USB_CASE_ID is active;
-             * - actual USB descriptor switching is not wired yet;
-             * - active USB transport remains safe CDC stdio.
-             */
             printf("descriptor_persona_id=%lu\r\n", (unsigned long)descriptor_profile.persona_id);
             printf("descriptor_persona_name=%s\r\n", descriptor_profile.persona_name);
             printf("descriptor_switched=%u\r\n", descriptor_profile.descriptors_switched ? 1u : 0u);
@@ -186,34 +190,36 @@ int main(void)
             last_log_ms = now_ms;
         }
 
-        for (;;) {
-            int ch = getchar_timeout_us(0);
+        if (cdc_available) {
+            for (;;) {
+                int ch = getchar_timeout_us(0);
 
-            if (ch == PICO_ERROR_TIMEOUT) {
-                break;
-            }
+                if (ch == PICO_ERROR_TIMEOUT) {
+                    break;
+                }
 
-            if (ch == '\r' || ch == '\n') {
-                if (cmd_len > 0u) {
-                    cmd_buf[cmd_len] = '\0';
-                    usb_case_handle_command(cmd_buf, &descriptor_profile, &rf_state);
+                if (ch == '\r' || ch == '\n') {
+                    if (cmd_len > 0u) {
+                        cmd_buf[cmd_len] = '\0';
+                        usb_case_handle_command(cmd_buf, &descriptor_profile, &rf_state);
+                        cmd_len = 0u;
+                    }
+                    continue;
+                }
+
+                if (ch == '\b' || ch == 127) {
+                    if (cmd_len > 0u) {
+                        cmd_len--;
+                    }
+                    continue;
+                }
+
+                if (cmd_len < (USB_CASE_CMD_BUF_SIZE - 1u)) {
+                    cmd_buf[cmd_len++] = (char)ch;
+                } else {
                     cmd_len = 0u;
+                    printf("command too long\r\n");
                 }
-                continue;
-            }
-
-            if (ch == '\b' || ch == 127) {
-                if (cmd_len > 0u) {
-                    cmd_len--;
-                }
-                continue;
-            }
-
-            if (cmd_len < (USB_CASE_CMD_BUF_SIZE - 1u)) {
-                cmd_buf[cmd_len++] = (char)ch;
-            } else {
-                cmd_len = 0u;
-                printf("command too long\r\n");
             }
         }
 

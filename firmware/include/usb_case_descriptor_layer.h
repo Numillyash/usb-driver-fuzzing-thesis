@@ -12,5 +12,6 @@ typedef struct usb_case_descriptor_profile {
 } usb_case_descriptor_profile_t;
 
 usb_case_descriptor_profile_t usb_case_get_descriptor_profile(void);
+bool usb_case_persona_has_cdc(void);
 
 #endif /* USB_CASE_DESCRIPTOR_LAYER_H */

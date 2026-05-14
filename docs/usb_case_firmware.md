@@ -1,8 +1,11 @@
-# usb_case_demo: безопасный baseline для USB descriptor-экспериментов
+# usb_case firmware targets: baseline и custom descriptor layer
 
 ## Назначение
 
-`usb_case_demo` — отдельный firmware-target для безопасных экспериментов уровня USB descriptor/enumeration на RP2040 (Waveshare RP2040 Zero).
+В репозитории используются два отдельных firmware-target для безопасных USB descriptor/enumeration экспериментов на RP2040 (Waveshare RP2040 Zero):
+
+- `usb_case_demo` — CDC baseline с `pico_stdio_usb` (команды `help/info/ping/bootloader/rfdiag`, heartbeat, RF bootloader recovery).
+- `usb_case_custom_demo` — отдельный target для кастомных TinyUSB descriptor callbacks (включая inert HID/no-CDC сценарии), без `pico_stdio_usb`.
 
 Цель target:
 
@@ -10,26 +13,18 @@
 - сохранить существующий `portable_demo` неизменным и рабочим;
 - обеспечить простую идентификацию активного USB-кейса через compile-time параметры.
 
-## Текущий статус descriptor selection layer
+## Разделение ответственности target-ов
 
-В `usb_case_demo` добавлен первый минимальный слой выбора descriptor-persona по `USB_CASE_ID`:
+`usb_case_demo` намеренно не определяет `tud_descriptor_*` callbacks, чтобы не конфликтовать с Pico SDK `pico_stdio_usb/stdio_usb_descriptors.c`.
+
+Кастомные callbacks TinyUSB (`tud_descriptor_device_cb`, `tud_descriptor_configuration_cb`, `tud_descriptor_string_cb`, HID callbacks) собраны только в `usb_case_custom_demo`.
+
+В `usb_case_custom_demo` сохраняется compile-time переключение descriptor persona по `USB_CASE_ID`:
 
 - `000` -> persona `cdc_acm`;
-- `001` -> persona `hid_baseline_planned`.
+- `001` -> persona `hid_generic_no_input` (инертный HID, без инжекции ввода).
 
-Важно: в текущем коммите это **слой выбора persona и явной диагностики**, а не полноценное переключение USB-дескрипторов TinyUSB.
-
-Что реально изменено сейчас:
-
-- добавлен изолированный модуль `firmware/src/usb_case_descriptor_layer.c`;
-- добавлена compile-time логика выбора persona в `firmware/include/usb_case_config.h`;
-- в runtime-логах `usb_case_demo` выводится активная persona и флаг `descriptor_switched`.
-
-Что пока только запланировано:
-
-- подключение явных TinyUSB descriptor callbacks (`tud_descriptor_*_cb`) для реального переключения CDC/HID descriptor-наборов.
-
-До внедрения callbacks active transport остаётся безопасным CDC stdio (`pico_enable_stdio_usb`), а `descriptor_switched=0`.
+Для `001` публикуется inert HID-only interface (без инжекции ввода, без выполнения команд на хосте).
 
 ## Границы безопасности
 
@@ -57,7 +52,7 @@
 - `USB_CASE_PERSONA_HID_BASELINE`
 - `USB_CASE_PERSONA_ID` (вычисляется из `USB_CASE_ID`, сейчас `001` -> HID persona, иначе CDC persona)
 
-## Runtime диагностический вывод (CDC)
+## Runtime диагностический вывод (CDC baseline)
 
 Прошивка периодически выводит:
 
@@ -75,13 +70,20 @@ case_group=...
 ```text
 descriptor_persona_id=...
 descriptor_persona_name=...
-descriptor_switched=0
-descriptor_active_transport=pico_stdio_usb_cdc
+descriptor_switched=1
+descriptor_active_transport=...
 ```
+
+## Доступность CDC
+
+- `usb_case_demo`: CDC всегда доступен через `pico_stdio_usb`.
+- `usb_case_custom_demo`:
+  - `000_baseline_cdc`: CDC доступен (через custom TinyUSB callbacks).
+  - `001_baseline_hid_no_input`: CDC отсутствует, ожидается HID/hidraw enumeration.
 
 ## CDC-командный интерфейс (удалённое управление)
 
-`usb_case_demo` поддерживает безопасный текстовый интерфейс команд через тот же CDC serial канал.
+`usb_case_demo` поддерживает безопасный текстовый интерфейс команд через CDC serial.
 
 Поддерживаемые команды:
 
@@ -133,17 +135,25 @@ usb_case_demo: entering USB bootloader
 
 Базовый quick-start для `portable_demo` сохраняется без изменений.
 
-Для сборки `usb_case_demo` в уже сконфигурированном build-каталоге:
+Для сборки target-ов в уже сконфигурированном build-каталоге:
 
 ```bash
 cmake --build build --target usb_case_demo
+cmake --build build --target usb_case_custom_demo
 ```
 
 Артефакт:
 
 ```text
 build/usb_case_demo.uf2
+build/usb_case_custom_demo.uf2
 ```
+
+## Remote runner
+
+`tools/run-remote-linux-case.sh` в текущем виде ориентирован на CDC-путь (`usb_case_demo`, serial smoke-test).
+
+Для no-CDC сценариев `usb_case_custom_demo` требуется отдельный no-serial режим запуска/сбора артефактов (без шага serial smoke-test).
 
 ## Генерация compile-time конфигурации из JSON-кейса
 
