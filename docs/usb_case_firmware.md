@@ -56,3 +56,43 @@ cmake --build build --target usb_case_demo
 ```text
 build/usb_case_demo.uf2
 ```
+
+## Генерация compile-time конфигурации из JSON-кейса
+
+Для `usb_case_demo` можно автоматически сгенерировать заголовок `usb_case_config.generated.h` из файла кейса `experiments/cases/*.json`.
+
+Скрипт: `tools/gen_usb_case_config.py` (только Python standard library).
+
+### Что генерируется
+
+В generated-header задаются макросы:
+
+- `USB_CASE_ID`
+- `USB_CASE_NAME`
+- `USB_CASE_GROUP`
+- `USB_CASE_BASE_PERSONA`
+- `USB_CASE_MUTATION_SUMMARY`
+
+Если generated-header отсутствует, `firmware/include/usb_case_config.h` автоматически использует безопасные значения по умолчанию, и сборка `usb_case_demo` остаётся рабочей.
+
+### Примеры использования
+
+Список доступных кейсов:
+
+```bash
+python3 tools/gen_usb_case_config.py --list
+```
+
+Генерация в путь по умолчанию (`firmware/include/usb_case_config.generated.h`):
+
+```bash
+python3 tools/gen_usb_case_config.py experiments/cases/020_config_wtotallength_too_small.json
+```
+
+Генерация в произвольный путь:
+
+```bash
+python3 tools/gen_usb_case_config.py \
+  experiments/cases/000_baseline_cdc.json \
+  --output /tmp/usb_case_config.generated.h
+```

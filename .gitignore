@@ -63,3 +63,6 @@ firmware/esp32c3_bridge/sdkconfig
 
 # Codex local marker
 .codex
+
+# Generated USB experiment case config
+firmware/include/usb_case_config.generated.h
