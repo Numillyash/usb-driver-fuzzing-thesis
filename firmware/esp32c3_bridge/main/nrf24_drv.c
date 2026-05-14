@@ -327,9 +327,17 @@ static esp_err_t nrf24_prepare_tx(const uint8_t *tx_addr)
 {
     nrf24_ce_low();
     ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_STATUS, NRF24_STATUS_CLEAR_IRQS));
+    ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_RF_CH, NRF24_RF_CHANNEL));
+    ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_RF_SETUP, NRF24_RF_SETUP_250KBPS_LOW_PWR));
+    ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_SETUP_AW, NRF24_SETUP_AW_5BYTES));
+    ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_EN_AA, 0x00u));
+    ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_SETUP_RETR, 0x00u));
+    ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_EN_RXADDR, NRF24_DUAL_PIPE_BASELINE ? 0x03u : 0x01u));
     ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_DYNPD, 0x00u));
     ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_FEATURE, 0x00u));
     ESP_ERROR_CHECK(nrf24_write_register_buf(NRF24_REG_TX_ADDR, tx_addr, 5u));
+    ESP_ERROR_CHECK(nrf24_write_register_buf(NRF24_REG_RX_ADDR_P0, tx_addr, 5u));
+    ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_RX_PW_P0, RF_TEST_PAYLOAD_SIZE));
     ESP_ERROR_CHECK(nrf24_write_register(NRF24_REG_CONFIG, NRF24_CONFIG_TX));
     esp_rom_delay_us(150);
     ESP_ERROR_CHECK(nrf24_command(NRF24_CMD_FLUSH_TX, NULL));
@@ -337,6 +345,16 @@ static esp_err_t nrf24_prepare_tx(const uint8_t *tx_addr)
     (void)tx_addr;
 #endif
     return ESP_OK;
+}
+
+void nrf24_drv_restore_rftest_tx_config(void)
+{
+    if (!g_ready) {
+        return;
+    }
+
+    ESP_ERROR_CHECK(nrf24_prepare_tx(k_rf_test_addr));
+    ESP_ERROR_CHECK(nrf24_set_rx_mode());
 }
 
 static esp_err_t nrf24_restore_prx(void)

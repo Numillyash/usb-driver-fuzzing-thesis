@@ -75,6 +75,7 @@ static bool bridge_send_bootloader_req(uint16_t seq, TickType_t now_ticks)
         .arg0 = BOOTLOADER_REQ_ARG0,
         .flags = RF_TEST_FLAG_NONE,
     };
+    nrf24_drv_restore_rftest_tx_config();
     const int sent = nrf24_drv_send((const uint8_t *)&packet, sizeof(packet));
 
     if (sent == (int)sizeof(packet)) {
@@ -90,6 +91,7 @@ static bool bridge_send_bootloader_req(uint16_t seq, TickType_t now_ticks)
 
 static void bridge_send_bootloader_req_burst(uint16_t *bootloader_seq, TickType_t now_ticks)
 {
+    nrf24_drv_restore_rftest_tx_config();
     nrf24_drv_log_compact_config("bootloader_req pre");
     for (int attempt = 1; attempt <= BOOTLOADER_REQ_ATTEMPTS; ++attempt) {
         const uint16_t seq = *bootloader_seq;
