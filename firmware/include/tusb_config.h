@@ -25,6 +25,10 @@ extern "C" {
 #define CFG_TUD_HID 0
 #endif
 
+#ifndef CFG_TUD_VENDOR
+#define CFG_TUD_VENDOR 1
+#endif
+
 #ifndef CFG_TUD_HID_EP_BUFSIZE
 #define CFG_TUD_HID_EP_BUFSIZE 16
 #endif
