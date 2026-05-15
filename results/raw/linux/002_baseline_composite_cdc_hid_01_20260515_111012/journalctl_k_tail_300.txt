@@ -1,0 +1,302 @@
+Journal file /var/log/journal/ff50ad21a15b4a37aa9896d0597d471d/system@000651ca5bf6cde3-421630d4c2ab05b7.journal~ is truncated, ignoring file.
+мая 14 21:00:35 numi-linux-otherpc kernel: audit: type=1400 audit(1778781635.625:249): apparmor="DENIED" operation="open" class="file" profile="snap.firmware-updater.firmware-notifier" name="/proc/sys/vm/max_map_count" pid=5540 comm="firmware-notifi" requested_mask="r" denied_mask="r" fsuid=1000 ouid=0
+мая 14 21:22:56 numi-linux-otherpc kernel: audit: type=1107 audit(1778782976.505:250): pid=1156 uid=101 auid=4294967295 ses=4294967295 subj=unconfined msg='apparmor="DENIED" operation="dbus_method_call"  bus="system" path="/" interface="org.freedesktop.DBus.Peer" member="Ping" mask="send" name="org.freedesktop.Avahi" pid=2548 label="snap.cups.cupsd"
+                                               exe="/usr/bin/dbus-daemon" sauid=101 hostname=? addr=? terminal=?'
+мая 15 00:00:01 numi-linux-otherpc kernel: audit: type=1400 audit(1778792401.416:251): apparmor="DENIED" operation="capable" class="cap" profile="/usr/sbin/cupsd" pid=34824 comm="cupsd" capability=12  capname="net_admin"
+мая 15 00:00:35 numi-linux-otherpc kernel: audit: type=1400 audit(1778792435.553:252): apparmor="DENIED" operation="open" class="file" profile="snap.firmware-updater.firmware-notifier" name="/proc/sys/vm/max_map_count" pid=34886 comm="firmware-notifi" requested_mask="r" denied_mask="r" fsuid=1000 ouid=0
+мая 15 00:13:05 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 8 using xhci_hcd
+мая 15 00:13:06 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=000a, bcdDevice= 1.00
+мая 15 00:13:06 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+мая 15 00:13:06 numi-linux-otherpc kernel: usb 1-4: Product: Pico
+мая 15 00:13:06 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+мая 15 00:13:06 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E6625C48939D6E22
+мая 15 00:13:06 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+мая 15 00:38:11 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 8
+мая 15 00:38:11 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 9 using xhci_hcd
+мая 15 00:38:11 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=0003, bcdDevice= 1.00
+мая 15 00:38:11 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+мая 15 00:38:11 numi-linux-otherpc kernel: usb 1-4: Product: RP2 Boot
+мая 15 00:38:11 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+мая 15 00:38:11 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E0C9125B0D9B
+мая 15 00:38:11 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+мая 15 00:40:53 numi-linux-otherpc kernel: usbcore: registered new interface driver usb-storage
+мая 15 00:40:53 numi-linux-otherpc kernel: usbcore: registered new interface driver uas
+мая 15 00:42:08 numi-linux-otherpc kernel: usb-storage 1-4:1.0: USB Mass Storage device detected
+мая 15 00:42:08 numi-linux-otherpc kernel: scsi host9: usb-storage 1-4:1.0
+мая 15 00:42:08 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+мая 15 00:42:09 numi-linux-otherpc kernel: scsi 9:0:0:0: Direct-Access     RPI      RP2              3    PQ: 0 ANSI: 2
+мая 15 00:42:09 numi-linux-otherpc kernel: sd 9:0:0:0: Attached scsi generic sg1 type 0
+мая 15 00:42:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] 262144 512-byte logical blocks: (134 MB/128 MiB)
+мая 15 00:42:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Write Protect is off
+мая 15 00:42:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Mode Sense: 03 00 00 00
+мая 15 00:42:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] No Caching mode page found
+мая 15 00:42:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Assuming drive cache: write through
+мая 15 00:42:09 numi-linux-otherpc kernel:  sdb: sdb1
+мая 15 00:42:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Attached SCSI removable disk
+мая 15 00:42:23 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 9
+мая 15 00:42:23 numi-linux-otherpc kernel: FAT-fs (sdb1): unable to read boot sector to mark fs as dirty
+мая 15 00:42:23 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 10 using xhci_hcd
+мая 15 00:42:23 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=000a, bcdDevice= 1.00
+мая 15 00:42:23 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+мая 15 00:42:23 numi-linux-otherpc kernel: usb 1-4: Product: Pico
+мая 15 00:42:23 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+мая 15 00:42:23 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E6625C48939D6E22
+мая 15 00:42:23 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+мая 15 00:42:43 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+мая 15 00:42:43 numi-linux-otherpc kernel: cdc_acm 1-4:1.0: ttyACM0: USB ACM device
+мая 15 00:42:43 numi-linux-otherpc kernel: usbcore: registered new interface driver cdc_acm
+мая 15 00:42:43 numi-linux-otherpc kernel: cdc_acm: USB Abstract Control Model driver for USB modems and ISDN adapters
+мая 15 00:49:47 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 10
+мая 15 00:49:47 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 11 using xhci_hcd
+мая 15 00:49:47 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=0003, bcdDevice= 1.00
+мая 15 00:49:47 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+мая 15 00:49:47 numi-linux-otherpc kernel: usb 1-4: Product: RP2 Boot
+мая 15 00:49:47 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+мая 15 00:49:47 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E0C9125B0D9B
+мая 15 00:49:47 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+мая 15 00:49:47 numi-linux-otherpc kernel: usb-storage 1-4:1.0: USB Mass Storage device detected
+мая 15 00:49:47 numi-linux-otherpc kernel: scsi host9: usb-storage 1-4:1.0
+мая 15 00:49:47 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+мая 15 00:49:48 numi-linux-otherpc kernel: scsi 9:0:0:0: Direct-Access     RPI      RP2              3    PQ: 0 ANSI: 2
+мая 15 00:49:48 numi-linux-otherpc kernel: sd 9:0:0:0: Attached scsi generic sg1 type 0
+мая 15 00:49:48 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] 262144 512-byte logical blocks: (134 MB/128 MiB)
+мая 15 00:49:48 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Write Protect is off
+мая 15 00:49:48 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Mode Sense: 03 00 00 00
+мая 15 00:49:48 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] No Caching mode page found
+мая 15 00:49:48 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Assuming drive cache: write through
+мая 15 00:49:48 numi-linux-otherpc kernel:  sdb: sdb1
+мая 15 00:49:48 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Attached SCSI removable disk
+мая 15 00:49:56 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 11
+мая 15 00:49:56 numi-linux-otherpc kernel: FAT-fs (sdb1): unable to read boot sector to mark fs as dirty
+мая 15 00:49:56 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 12 using xhci_hcd
+мая 15 00:49:57 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=000a, bcdDevice= 1.00
+мая 15 00:49:57 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+мая 15 00:49:57 numi-linux-otherpc kernel: usb 1-4: Product: Pico
+мая 15 00:49:57 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+мая 15 00:49:57 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E6625C48939D6E22
+мая 15 00:49:57 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+мая 15 00:49:57 numi-linux-otherpc kernel: cdc_acm 1-4:1.0: ttyACM0: USB ACM device
+мая 15 00:49:57 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+мая 15 00:51:04 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 12
+мая 15 00:51:04 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 13 using xhci_hcd
+мая 15 00:51:05 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=0003, bcdDevice= 1.00
+мая 15 00:51:05 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+мая 15 00:51:05 numi-linux-otherpc kernel: usb 1-4: Product: RP2 Boot
+мая 15 00:51:05 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+мая 15 00:51:05 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E0C9125B0D9B
+мая 15 00:51:05 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+мая 15 00:51:05 numi-linux-otherpc kernel: usb-storage 1-4:1.0: USB Mass Storage device detected
+мая 15 00:51:05 numi-linux-otherpc kernel: scsi host9: usb-storage 1-4:1.0
+мая 15 00:51:05 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+мая 15 00:51:06 numi-linux-otherpc kernel: scsi 9:0:0:0: Direct-Access     RPI      RP2              3    PQ: 0 ANSI: 2
+мая 15 00:51:06 numi-linux-otherpc kernel: sd 9:0:0:0: Attached scsi generic sg1 type 0
+мая 15 00:51:06 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] 262144 512-byte logical blocks: (134 MB/128 MiB)
+мая 15 00:51:06 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Write Protect is off
+мая 15 00:51:06 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Mode Sense: 03 00 00 00
+мая 15 00:51:06 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] No Caching mode page found
+мая 15 00:51:06 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Assuming drive cache: write through
+мая 15 00:51:06 numi-linux-otherpc kernel:  sdb: sdb1
+мая 15 00:51:06 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Attached SCSI removable disk
+мая 15 00:51:25 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 13
+мая 15 00:51:25 numi-linux-otherpc kernel: FAT-fs (sdb1): unable to read boot sector to mark fs as dirty
+мая 15 00:51:25 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 14 using xhci_hcd
+мая 15 00:51:26 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=000a, bcdDevice= 1.00
+мая 15 00:51:26 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+мая 15 00:51:26 numi-linux-otherpc kernel: usb 1-4: Product: Pico
+мая 15 00:51:26 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+мая 15 00:51:26 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E6625C48939D6E22
+мая 15 00:51:26 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+мая 15 00:51:26 numi-linux-otherpc kernel: cdc_acm 1-4:1.0: ttyACM0: USB ACM device
+мая 15 00:51:26 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+мая 15 00:52:18 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 14
+мая 15 00:52:19 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 15 using xhci_hcd
+мая 15 00:52:19 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=0003, bcdDevice= 1.00
+мая 15 00:52:19 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+мая 15 00:52:19 numi-linux-otherpc kernel: usb 1-4: Product: RP2 Boot
+мая 15 00:52:19 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+мая 15 00:52:19 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E0C9125B0D9B
+мая 15 00:52:19 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+мая 15 00:52:19 numi-linux-otherpc kernel: usb-storage 1-4:1.0: USB Mass Storage device detected
+мая 15 00:52:19 numi-linux-otherpc kernel: scsi host9: usb-storage 1-4:1.0
+мая 15 00:52:19 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+мая 15 00:52:20 numi-linux-otherpc kernel: scsi 9:0:0:0: Direct-Access     RPI      RP2              3    PQ: 0 ANSI: 2
+мая 15 00:52:20 numi-linux-otherpc kernel: sd 9:0:0:0: Attached scsi generic sg1 type 0
+мая 15 00:52:20 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] 262144 512-byte logical blocks: (134 MB/128 MiB)
+мая 15 00:52:20 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Write Protect is off
+мая 15 00:52:20 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Mode Sense: 03 00 00 00
+мая 15 00:52:20 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] No Caching mode page found
+мая 15 00:52:20 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Assuming drive cache: write through
+мая 15 00:52:20 numi-linux-otherpc kernel:  sdb: sdb1
+мая 15 00:52:20 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Attached SCSI removable disk
+мая 15 00:52:32 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 15
+мая 15 00:52:32 numi-linux-otherpc kernel: FAT-fs (sdb1): unable to read boot sector to mark fs as dirty
+мая 15 00:52:33 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 16 using xhci_hcd
+мая 15 00:52:33 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=000a, bcdDevice= 1.00
+мая 15 00:52:33 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+мая 15 00:52:33 numi-linux-otherpc kernel: usb 1-4: Product: Pico
+мая 15 00:52:33 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+мая 15 00:52:33 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E6625C48939D6E22
+мая 15 00:52:33 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+мая 15 00:52:33 numi-linux-otherpc kernel: cdc_acm 1-4:1.0: ttyACM0: USB ACM device
+мая 15 00:52:33 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+мая 15 01:00:42 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 16
+мая 15 01:00:42 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 17 using xhci_hcd
+мая 15 01:00:42 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=0003, bcdDevice= 1.00
+мая 15 01:00:42 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+мая 15 01:00:42 numi-linux-otherpc kernel: usb 1-4: Product: RP2 Boot
+мая 15 01:00:42 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+мая 15 01:00:42 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E0C9125B0D9B
+мая 15 01:00:42 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+мая 15 01:00:42 numi-linux-otherpc kernel: usb-storage 1-4:1.0: USB Mass Storage device detected
+мая 15 01:00:42 numi-linux-otherpc kernel: scsi host9: usb-storage 1-4:1.0
+мая 15 01:00:42 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+мая 15 01:00:43 numi-linux-otherpc kernel: scsi 9:0:0:0: Direct-Access     RPI      RP2              3    PQ: 0 ANSI: 2
+мая 15 01:00:43 numi-linux-otherpc kernel: sd 9:0:0:0: Attached scsi generic sg1 type 0
+мая 15 01:00:43 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] 262144 512-byte logical blocks: (134 MB/128 MiB)
+мая 15 01:00:43 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Write Protect is off
+мая 15 01:00:43 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Mode Sense: 03 00 00 00
+мая 15 01:00:43 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] No Caching mode page found
+мая 15 01:00:43 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Assuming drive cache: write through
+мая 15 01:00:43 numi-linux-otherpc kernel:  sdb: sdb1
+мая 15 01:00:43 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Attached SCSI removable disk
+мая 15 01:00:48 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 17
+мая 15 01:00:49 numi-linux-otherpc kernel: FAT-fs (sdb1): unable to read boot sector to mark fs as dirty
+мая 15 01:00:49 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 18 using xhci_hcd
+мая 15 01:00:49 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=000a, bcdDevice= 1.00
+мая 15 01:00:49 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+мая 15 01:00:49 numi-linux-otherpc kernel: usb 1-4: Product: Pico
+мая 15 01:00:49 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+мая 15 01:00:49 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E6625C48939D6E22
+мая 15 01:00:49 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+мая 15 01:00:49 numi-linux-otherpc kernel: cdc_acm 1-4:1.0: ttyACM0: USB ACM device
+мая 15 01:00:49 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+мая 15 01:15:14 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 18
+мая 15 01:15:14 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 19 using xhci_hcd
+мая 15 01:15:14 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=0003, bcdDevice= 1.00
+мая 15 01:15:14 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+мая 15 01:15:14 numi-linux-otherpc kernel: usb 1-4: Product: RP2 Boot
+мая 15 01:15:14 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+мая 15 01:15:14 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E0C9125B0D9B
+мая 15 01:15:14 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+мая 15 01:15:14 numi-linux-otherpc kernel: usb-storage 1-4:1.0: USB Mass Storage device detected
+мая 15 01:15:14 numi-linux-otherpc kernel: scsi host9: usb-storage 1-4:1.0
+мая 15 01:15:14 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+мая 15 01:15:16 numi-linux-otherpc kernel: scsi 9:0:0:0: Direct-Access     RPI      RP2              3    PQ: 0 ANSI: 2
+мая 15 01:15:16 numi-linux-otherpc kernel: sd 9:0:0:0: Attached scsi generic sg1 type 0
+мая 15 01:15:16 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] 262144 512-byte logical blocks: (134 MB/128 MiB)
+мая 15 01:15:16 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Write Protect is off
+мая 15 01:15:16 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Mode Sense: 03 00 00 00
+мая 15 01:15:16 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] No Caching mode page found
+мая 15 01:15:16 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Assuming drive cache: write through
+мая 15 01:15:16 numi-linux-otherpc kernel:  sdb: sdb1
+мая 15 01:15:16 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Attached SCSI removable disk
+мая 15 01:15:21 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 19
+мая 15 01:15:21 numi-linux-otherpc kernel: FAT-fs (sdb1): unable to read boot sector to mark fs as dirty
+мая 15 01:15:21 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 20 using xhci_hcd
+мая 15 01:15:21 numi-linux-otherpc kernel: usb 1-4: unable to get BOS descriptor or descriptor too short
+мая 15 01:15:21 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=000a, bcdDevice= 1.00
+мая 15 01:15:21 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+мая 15 01:15:21 numi-linux-otherpc kernel: usb 1-4: Product: Pico
+мая 15 01:15:21 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+мая 15 01:15:21 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E6625C48939D6E22
+мая 15 01:15:21 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+мая 15 01:15:21 numi-linux-otherpc kernel: usb 1-4: can't set config #1, error -32
+мая 15 01:15:21 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+мая 15 03:00:35 numi-linux-otherpc kernel: audit: type=1400 audit(1778803235.077:253): apparmor="DENIED" operation="open" class="file" profile="snap.firmware-updater.firmware-notifier" name="/proc/sys/vm/max_map_count" pid=42485 comm="firmware-notifi" requested_mask="r" denied_mask="r" fsuid=1000 ouid=0
+мая 15 06:00:35 numi-linux-otherpc kernel: audit: type=1400 audit(1778814035.084:254): apparmor="DENIED" operation="open" class="file" profile="snap.firmware-updater.firmware-notifier" name="/proc/sys/vm/max_map_count" pid=43200 comm="firmware-notifi" requested_mask="r" denied_mask="r" fsuid=1000 ouid=0
+мая 15 09:00:35 numi-linux-otherpc kernel: audit: type=1400 audit(1778824835.043:255): apparmor="DENIED" operation="open" class="file" profile="snap.firmware-updater.firmware-notifier" name="/proc/sys/vm/max_map_count" pid=44036 comm="firmware-notifi" requested_mask="r" denied_mask="r" fsuid=1000 ouid=0
+мая 15 10:50:10 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 20
+мая 15 10:50:10 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 21 using xhci_hcd
+мая 15 10:50:10 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=0003, bcdDevice= 1.00
+мая 15 10:50:10 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+мая 15 10:50:10 numi-linux-otherpc kernel: usb 1-4: Product: RP2 Boot
+мая 15 10:50:10 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+мая 15 10:50:10 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E0C9125B0D9B
+мая 15 10:50:10 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+мая 15 10:50:10 numi-linux-otherpc kernel: usb-storage 1-4:1.0: USB Mass Storage device detected
+мая 15 10:50:10 numi-linux-otherpc kernel: scsi host9: usb-storage 1-4:1.0
+мая 15 10:50:10 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+мая 15 10:50:11 numi-linux-otherpc kernel: scsi 9:0:0:0: Direct-Access     RPI      RP2              3    PQ: 0 ANSI: 2
+мая 15 10:50:11 numi-linux-otherpc kernel: sd 9:0:0:0: Attached scsi generic sg1 type 0
+мая 15 10:50:11 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] 262144 512-byte logical blocks: (134 MB/128 MiB)
+мая 15 10:50:11 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Write Protect is off
+мая 15 10:50:11 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Mode Sense: 03 00 00 00
+мая 15 10:50:11 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] No Caching mode page found
+мая 15 10:50:11 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Assuming drive cache: write through
+мая 15 10:50:11 numi-linux-otherpc kernel:  sdb: sdb1
+мая 15 10:50:11 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Attached SCSI removable disk
+мая 15 10:50:16 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 21
+мая 15 10:50:16 numi-linux-otherpc kernel: FAT-fs (sdb1): unable to read boot sector to mark fs as dirty
+мая 15 10:50:17 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 22 using xhci_hcd
+мая 15 10:50:17 numi-linux-otherpc kernel: usb 1-4: unable to get BOS descriptor or descriptor too short
+мая 15 10:50:17 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=000a, bcdDevice= 1.00
+мая 15 10:50:17 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+мая 15 10:50:17 numi-linux-otherpc kernel: usb 1-4: Product: Pico
+мая 15 10:50:17 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+мая 15 10:50:17 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E6625C48939D6E22
+мая 15 10:50:17 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+мая 15 10:50:17 numi-linux-otherpc kernel: cdc_acm 1-4:1.0: ttyACM0: USB ACM device
+мая 15 10:50:17 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+мая 15 10:52:05 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 22
+мая 15 10:52:06 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 23 using xhci_hcd
+мая 15 10:52:06 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=0003, bcdDevice= 1.00
+мая 15 10:52:06 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+мая 15 10:52:06 numi-linux-otherpc kernel: usb 1-4: Product: RP2 Boot
+мая 15 10:52:06 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+мая 15 10:52:06 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E0C9125B0D9B
+мая 15 10:52:06 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+мая 15 10:52:06 numi-linux-otherpc kernel: usb-storage 1-4:1.0: USB Mass Storage device detected
+мая 15 10:52:06 numi-linux-otherpc kernel: scsi host9: usb-storage 1-4:1.0
+мая 15 10:52:06 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+мая 15 10:52:07 numi-linux-otherpc kernel: scsi 9:0:0:0: Direct-Access     RPI      RP2              3    PQ: 0 ANSI: 2
+мая 15 10:52:07 numi-linux-otherpc kernel: sd 9:0:0:0: Attached scsi generic sg1 type 0
+мая 15 10:52:07 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] 262144 512-byte logical blocks: (134 MB/128 MiB)
+мая 15 10:52:07 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Write Protect is off
+мая 15 10:52:07 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Mode Sense: 03 00 00 00
+мая 15 10:52:07 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] No Caching mode page found
+мая 15 10:52:07 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Assuming drive cache: write through
+мая 15 10:52:07 numi-linux-otherpc kernel:  sdb: sdb1
+мая 15 10:52:07 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Attached SCSI removable disk
+мая 15 10:52:12 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 23
+мая 15 10:52:12 numi-linux-otherpc kernel: FAT-fs (sdb1): unable to read boot sector to mark fs as dirty
+мая 15 10:52:12 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 24 using xhci_hcd
+мая 15 10:52:14 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=4005, bcdDevice= 1.00
+мая 15 10:52:14 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+мая 15 10:52:14 numi-linux-otherpc kernel: usb 1-4: Product: usb_case_custom_demo HID baseli
+мая 15 10:52:14 numi-linux-otherpc kernel: usb 1-4: Manufacturer: RP2040 USB Research
+мая 15 10:52:14 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E6625C48939D6E22
+мая 15 10:52:14 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+мая 15 10:52:16 numi-linux-otherpc kernel: hid-generic 0003:2E8A:4005.0004: hiddev0,hidraw3: USB HID v1.11 Device [RP2040 USB Research usb_case_custom_demo HID baseli] on usb-0000:02:00.0-4/input0
+мая 15 10:52:16 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+мая 15 11:10:01 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 24
+мая 15 11:10:01 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 25 using xhci_hcd
+мая 15 11:10:02 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=0003, bcdDevice= 1.00
+мая 15 11:10:02 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+мая 15 11:10:02 numi-linux-otherpc kernel: usb 1-4: Product: RP2 Boot
+мая 15 11:10:02 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+мая 15 11:10:02 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E0C9125B0D9B
+мая 15 11:10:02 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+мая 15 11:10:02 numi-linux-otherpc kernel: usb-storage 1-4:1.0: USB Mass Storage device detected
+мая 15 11:10:02 numi-linux-otherpc kernel: scsi host9: usb-storage 1-4:1.0
+мая 15 11:10:02 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+мая 15 11:10:03 numi-linux-otherpc kernel: scsi 9:0:0:0: Direct-Access     RPI      RP2              3    PQ: 0 ANSI: 2
+мая 15 11:10:03 numi-linux-otherpc kernel: sd 9:0:0:0: Attached scsi generic sg1 type 0
+мая 15 11:10:03 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] 262144 512-byte logical blocks: (134 MB/128 MiB)
+мая 15 11:10:03 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Write Protect is off
+мая 15 11:10:03 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Mode Sense: 03 00 00 00
+мая 15 11:10:03 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] No Caching mode page found
+мая 15 11:10:03 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Assuming drive cache: write through
+мая 15 11:10:03 numi-linux-otherpc kernel:  sdb: sdb1
+мая 15 11:10:03 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Attached SCSI removable disk
+мая 15 11:10:08 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 25
+мая 15 11:10:08 numi-linux-otherpc kernel: FAT-fs (sdb1): unable to read boot sector to mark fs as dirty
+мая 15 11:10:08 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 26 using xhci_hcd
+мая 15 11:10:10 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=4005, bcdDevice= 1.00
+мая 15 11:10:10 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+мая 15 11:10:10 numi-linux-otherpc kernel: usb 1-4: Product: usb_case_custom_demo Composite 
+мая 15 11:10:10 numi-linux-otherpc kernel: usb 1-4: Manufacturer: RP2040 USB Research
+мая 15 11:10:10 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E6625C48939D6E22
+мая 15 11:10:10 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+мая 15 11:10:12 numi-linux-otherpc kernel: cdc_acm 1-4:1.0: ttyACM0: USB ACM device
+мая 15 11:10:12 numi-linux-otherpc kernel: hid-generic 0003:2E8A:4005.0005: hiddev0,hidraw3: USB HID v1.11 Device [RP2040 USB Research usb_case_custom_demo Composite ] on usb-0000:02:00.0-4/input2
+мая 15 11:10:12 numi-linux-otherpc kernel: usb 1-4: authorized to connect
