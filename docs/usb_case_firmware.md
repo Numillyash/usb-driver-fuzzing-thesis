@@ -23,8 +23,10 @@
 
 - `000` -> persona `cdc_acm`;
 - `001` -> persona `hid_generic_no_input` (инертный HID, без инжекции ввода).
+- `002` -> persona `composite_cdc_hid_inert` (композитный CDC+HID, HID инертный, без инжекции ввода).
 
 Для `001` публикуется inert HID-only interface (без инжекции ввода, без выполнения команд на хосте).
+Для `002` публикуется безопасный composite descriptor: один configuration, три интерфейса (CDC Comm, CDC Data, HID), без host actions.
 
 ## Границы безопасности
 
@@ -50,7 +52,8 @@
 
 - `USB_CASE_PERSONA_CDC_ACM`
 - `USB_CASE_PERSONA_HID_BASELINE`
-- `USB_CASE_PERSONA_ID` (вычисляется из `USB_CASE_ID`, сейчас `001` -> HID persona, иначе CDC persona)
+- `USB_CASE_PERSONA_COMPOSITE_CDC_HID`
+- `USB_CASE_PERSONA_ID` (вычисляется из `USB_CASE_ID`: `001` -> HID, `002` -> composite CDC+HID, иначе CDC)
 
 ## Runtime диагностический вывод (CDC baseline)
 
@@ -80,6 +83,7 @@ descriptor_active_transport=...
 - `usb_case_custom_demo`:
   - `000_baseline_cdc`: CDC доступен (через custom TinyUSB callbacks).
   - `001_baseline_hid_no_input`: CDC отсутствует, ожидается HID/hidraw enumeration.
+  - `002_baseline_composite_cdc_hid`: CDC доступен, дополнительно присутствует инертный HID интерфейс.
 
 ## CDC-командный интерфейс (удалённое управление)
 

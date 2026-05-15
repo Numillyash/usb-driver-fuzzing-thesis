@@ -7,9 +7,14 @@ static bool usb_case_is_hid_persona(void)
     return USB_CASE_PERSONA_ID == USB_CASE_PERSONA_HID_BASELINE;
 }
 
+static bool usb_case_is_composite_persona(void)
+{
+    return USB_CASE_PERSONA_ID == USB_CASE_PERSONA_COMPOSITE_CDC_HID;
+}
+
 bool usb_case_persona_has_cdc(void)
 {
-    return !usb_case_is_hid_persona();
+    return usb_case_is_composite_persona() || !usb_case_is_hid_persona();
 }
 
 usb_case_descriptor_profile_t usb_case_get_descriptor_profile(void)
@@ -17,7 +22,11 @@ usb_case_descriptor_profile_t usb_case_get_descriptor_profile(void)
     usb_case_descriptor_profile_t profile = {
         .persona_id = USB_CASE_PERSONA_CDC_ACM,
         .persona_name = "cdc_acm",
+#if defined(USB_CASE_ENABLE_TINYUSB_CUSTOM_DESCRIPTORS) && (USB_CASE_ENABLE_TINYUSB_CUSTOM_DESCRIPTORS == 1)
         .descriptors_switched = true,
+#else
+        .descriptors_switched = false,
+#endif
         .active_transport = "pico_stdio_usb_cdc",
     };
 
@@ -25,6 +34,10 @@ usb_case_descriptor_profile_t usb_case_get_descriptor_profile(void)
         profile.persona_id = USB_CASE_PERSONA_HID_BASELINE;
         profile.persona_name = "hid_generic_no_input";
         profile.active_transport = "tinyusb_hid_inert_no_cdc";
+    } else if (usb_case_is_composite_persona()) {
+        profile.persona_id = USB_CASE_PERSONA_COMPOSITE_CDC_HID;
+        profile.persona_name = "composite_cdc_hid_inert";
+        profile.active_transport = "tinyusb_cdc_plus_hid_inert";
     }
 
     return profile;
@@ -39,14 +52,14 @@ usb_case_descriptor_profile_t usb_case_get_descriptor_profile(void)
 enum {
     USB_CASE_ITF_NUM_CDC_COMM = 0,
     USB_CASE_ITF_NUM_CDC_DATA = 1,
-    USB_CASE_ITF_NUM_HID = 0,
+    USB_CASE_ITF_NUM_HID = 2,
 };
 
 enum {
     USB_CASE_ENDPOINT_CDC_NOTIF = 0x81,
     USB_CASE_ENDPOINT_CDC_OUT = 0x02,
     USB_CASE_ENDPOINT_CDC_IN = 0x82,
-    USB_CASE_ENDPOINT_HID_IN = 0x81,
+    USB_CASE_ENDPOINT_HID_IN = 0x83,
 };
 
 enum {
@@ -61,6 +74,7 @@ enum {
 enum {
     USB_CASE_CDC_TOTAL_LEN = TUD_CONFIG_DESC_LEN + TUD_CDC_DESC_LEN,
     USB_CASE_HID_TOTAL_LEN = TUD_CONFIG_DESC_LEN + TUD_HID_DESC_LEN,
+    USB_CASE_COMPOSITE_CDC_HID_TOTAL_LEN = TUD_CONFIG_DESC_LEN + TUD_CDC_DESC_LEN + TUD_HID_DESC_LEN,
 };
 
 static const tusb_desc_device_t usb_case_device_desc = {
@@ -108,6 +122,26 @@ static const uint8_t usb_case_cfg_desc_hid[] = {
         10),
 };
 
+static const uint8_t usb_case_cfg_desc_composite_cdc_hid[] = {
+    TUD_CONFIG_DESCRIPTOR(1, 3, 0, USB_CASE_COMPOSITE_CDC_HID_TOTAL_LEN, 0x00, 100),
+    TUD_CDC_DESCRIPTOR(
+        USB_CASE_ITF_NUM_CDC_COMM,
+        USB_CASE_STRIDX_CDC,
+        USB_CASE_ENDPOINT_CDC_NOTIF,
+        8,
+        USB_CASE_ENDPOINT_CDC_OUT,
+        USB_CASE_ENDPOINT_CDC_IN,
+        64),
+    TUD_HID_DESCRIPTOR(
+        USB_CASE_ITF_NUM_HID,
+        USB_CASE_STRIDX_HID,
+        HID_ITF_PROTOCOL_NONE,
+        sizeof(usb_case_hid_report_desc),
+        USB_CASE_ENDPOINT_HID_IN,
+        CFG_TUD_HID_EP_BUFSIZE,
+        10),
+};
+
 static const char *const usb_case_cdc_strings[] = {
     "",
     "RP2040 USB Research",
@@ -121,6 +155,15 @@ static const char *const usb_case_hid_strings[] = {
     "RP2040 USB Research",
     "usb_case_custom_demo HID baseline",
     "",
+    "USB Case HID (inert)",
+};
+
+static const char *const usb_case_composite_cdc_hid_strings[] = {
+    "",
+    "RP2040 USB Research",
+    "usb_case_custom_demo Composite CDC+HID baseline",
+    "",
+    "USB Case CDC",
     "USB Case HID (inert)",
 };
 
@@ -145,7 +188,13 @@ uint8_t const *tud_descriptor_device_cb(void)
 uint8_t const *tud_descriptor_configuration_cb(uint8_t index)
 {
     (void)index;
-    return usb_case_persona_has_cdc() ? usb_case_cfg_desc_cdc : usb_case_cfg_desc_hid;
+    if (usb_case_is_hid_persona()) {
+        return usb_case_cfg_desc_hid;
+    }
+    if (usb_case_is_composite_persona()) {
+        return usb_case_cfg_desc_composite_cdc_hid;
+    }
+    return usb_case_cfg_desc_cdc;
 }
 
 uint8_t const *tud_hid_descriptor_report_cb(uint8_t instance)
@@ -158,12 +207,19 @@ uint16_t const *tud_descriptor_string_cb(uint8_t index, uint16_t langid)
 {
     static uint16_t desc_str[32];
     const char *str = NULL;
-    const char *const *table = usb_case_persona_has_cdc() ? usb_case_cdc_strings : usb_case_hid_strings;
-    const uint8_t table_len = usb_case_persona_has_cdc() ? (uint8_t)(sizeof(usb_case_cdc_strings) / sizeof(usb_case_cdc_strings[0]))
-                                                         : (uint8_t)(sizeof(usb_case_hid_strings) / sizeof(usb_case_hid_strings[0]));
+    const char *const *table = usb_case_cdc_strings;
+    uint8_t table_len = (uint8_t)(sizeof(usb_case_cdc_strings) / sizeof(usb_case_cdc_strings[0]));
     size_t char_count = 0u;
 
     (void)langid;
+
+    if (usb_case_is_hid_persona()) {
+        table = usb_case_hid_strings;
+        table_len = (uint8_t)(sizeof(usb_case_hid_strings) / sizeof(usb_case_hid_strings[0]));
+    } else if (usb_case_is_composite_persona()) {
+        table = usb_case_composite_cdc_hid_strings;
+        table_len = (uint8_t)(sizeof(usb_case_composite_cdc_hid_strings) / sizeof(usb_case_composite_cdc_hid_strings[0]));
+    }
 
     if (index == USB_CASE_STRIDX_LANGID) {
         desc_str[1] = 0x0409;
