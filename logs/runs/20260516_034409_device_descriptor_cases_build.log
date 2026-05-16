@@ -1,0 +1,147 @@
+===== git status =====
+ M docs/remote_linux_workflow.md
+ M docs/usb_case_firmware.md
+ M firmware/src/usb_case_descriptor_layer.c
+?? CDC
+?? HID
+?? composite
+
+===== validate_usb_cases =====
+PASS: experiments/cases/000_baseline_cdc.json
+PASS: experiments/cases/001_baseline_hid_no_input.json
+PASS: experiments/cases/002_baseline_composite_cdc_hid.json
+PASS: experiments/cases/010_device_blength_too_short.json
+PASS: experiments/cases/011_device_blength_too_long.json
+PASS: experiments/cases/012_device_unknown_class.json
+PASS: experiments/cases/013_device_zero_vid_pid.json
+PASS: experiments/cases/020_config_wtotallength_too_small.json
+PASS: experiments/cases/021_config_wtotallength_too_large.json
+PASS: experiments/cases/022_config_bnuminterfaces_mismatch.json
+PASS: experiments/cases/030_interface_class_invalid.json
+PASS: experiments/cases/031_endpoint_wmaxpacketsize_zero.json
+PASS: experiments/cases/032_endpoint_direction_mismatch.json
+PASS: experiments/cases/040_string_invalid_length.json
+PASS: experiments/cases/041_string_missing_index.json
+
+Summary:
+  total cases: 15
+  passed cases: 15
+  failed cases: 0
+
+===== build-container =====
+PICO_SDK_PATH is /opt/pico-sdk
+Target board (PICO_BOARD) is 'waveshare_rp2040_zero'.
+Using board configuration from /opt/pico-sdk/src/boards/include/boards/waveshare_rp2040_zero.h
+Pico Platform (PICO_PLATFORM) is 'rp2040'.
+Build type is Release
+TinyUSB available at /opt/pico-sdk/lib/tinyusb/hw/bsp/rp2040; enabling build support for USB.
+BTstack available at /opt/pico-sdk/lib/btstack
+cyw43-driver available at /opt/pico-sdk/lib/cyw43-driver
+mbedtls available at /opt/pico-sdk/lib/mbedtls
+lwIP available at /opt/pico-sdk/lib/lwip
+Using picotool from /workspace/build/_deps/picotool/picotool
+-- Configuring done (0.2s)
+-- Generating done (0.1s)
+-- Build files have been written to: /workspace/build
+ninja: no work to do.
+
+Build complete: /root/usb-driver-fuzzing-thesis/build/portable_demo.uf2
+
+===== strings check =====
+011p 
+011p 
+011p 
+usb_case_demo: rf_init=%u
+descriptor_persona_id=%lu
+descriptor_persona_name=%s
+descriptor_switched=%u
+descriptor_active_transport=%s
+usb_case_demo: alive
+usb_case_demo: entering USB bootloader
+usb_case_demo: RF bootloader request received
+usb_case_custom_demo Composite CDC+HID baseline
+usb_case_custom_demo
+usb_case_main.c
+usb_case_descriptor_layer.h
+usb_case_descriptor_layer.c
+usb_case_descriptor_layer.h
+usb_case_print_rfdiag
+usb_case_descriptor_profile
+usb_case_persona_has_cdc
+usb_case_print_help
+/workspace/firmware/src/usb_case_main.c
+descriptors_switched
+usb_case_descriptor_profile_t
+usb_case_rf_state_t
+usb_case_print_info
+usb_case_get_descriptor_profile
+usb_case_handle_command
+usb_case_device_desc_unknown_class
+usb_case_get_serial_string
+USB_CASE_STRIDX_SERIAL
+usb_case_select_device_descriptor
+USB_CASE_STRIDX_CDC
+USB_CASE_ENDPOINT_CDC_OUT
+USB_CASE_COMPOSITE_CDC_HID_TOTAL_LEN
+tud_descriptor_device_cb
+usb_case_hid_strings
+USB_CASE_STRIDX_LANGID
+/workspace/firmware/src/usb_case_descriptor_layer.c
+USB_CASE_HID_TOTAL_LEN
+USB_CASE_ENDPOINT_HID_IN
+USB_CASE_STRIDX_HID
+USB_CASE_ENDPOINT_CDC_IN
+usb_case_is_composite_persona
+bDescriptorType
+usb_case_device_desc_zero_vid_pid
+usb_case_cfg_desc_cdc
+tud_hid_descriptor_report_cb
+usb_case_cfg_desc_composite_cdc_hid
+usb_case_cfg_desc_hid
+USB_CASE_ITF_NUM_HID
+USB_CASE_ENDPOINT_CDC_NOTIF
+usb_case_hid_report_desc
+usb_case_cdc_strings
+usb_case_device_desc
+USB_CASE_CDC_TOTAL_LEN
+USB_CASE_ITF_NUM_CDC_DATA
+usb_case_device_desc_blength_too_short
+usb_case_composite_cdc_hid_strings
+usb_case_is_hid_persona
+USB_CASE_ITF_NUM_CDC_COMM
+tud_descriptor_string_cb
+usb_case_device_desc_blength_too_long
+tud_descriptor_configuration_cb
+USB_CASE_STRIDX_PRODUCT
+USB_CASE_STRIDX_MANUFACTURER
+TUSB_REQ_GET_DESCRIPTOR
+TUSB_REQ_SET_DESCRIPTOR
+tud_descriptor_other_speed_configuration_cb
+process_get_descriptor
+tud_descriptor_bos_cb
+tud_descriptor_device_qualifier_cb
+tusb_hid_descriptor_hid_t
+hid_descriptor
+bNumDescriptors
+usb_case_main.c
+usb_case_print_rfdiag
+usb_case_descriptor_layer.c
+usb_case_device_desc
+usb_case_cfg_desc_composite_cdc_hid
+usb_case_hid_report_desc
+usb_case_composite_cdc_hid_strings
+usb_case_persona_has_cdc
+tud_descriptor_string_cb
+tud_descriptor_device_cb
+usb_case_get_descriptor_profile
+tud_descriptor_bos_cb
+tud_hid_descriptor_report_cb
+tud_descriptor_configuration_cb
+tud_descriptor_device_qualifier_cb
+tud_descriptor_other_speed_configuration_cb
+
+===== git diff stat =====
+ docs/remote_linux_workflow.md            | 12 +++++
+ docs/usb_case_firmware.md                |  9 ++++
+ firmware/src/usb_case_descriptor_layer.c | 85 +++++++++++++++++++++++++++++++-
+ 3 files changed, 105 insertions(+), 1 deletion(-)
