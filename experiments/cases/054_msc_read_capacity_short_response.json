@@ -1,0 +1,12 @@
+{
+  "case_id": "054",
+  "name": "msc_read_capacity_short_response",
+  "group": "msc",
+  "base_persona": "msc_inert_readonly",
+  "description": "Безопасная мутация MSC BOT для Linux: устройство остаётся inert/read-only, а команда READ CAPACITY обрабатывается как контролируемый укороченный/некорректный ответ на уровне class-команд.",
+  "mutation": "READ CAPACITY path is modeled as controlled malformed/short response equivalent (protocol-level reject) while keeping descriptors valid and media RAM-backed read-only.",
+  "expected_windows": "Сценарий ориентирован на Linux-only фазу; для Windows запуск в данном этапе не требуется.",
+  "expected_linux": "Ожидается ошибка протокола/инициализации носителя (EXPECTED_REJECT) без краша хоста.",
+  "risk_level": "safe",
+  "notes": "Запись на носитель запрещена, данные остаются детерминированными и RAM-backed, доступ к ресурсам хоста отсутствует."
+}

@@ -577,9 +577,6 @@ int32_t tud_msc_write10_cb(uint8_t lun, uint32_t lba, uint32_t offset, uint8_t *
 
 int32_t tud_msc_scsi_cb(uint8_t lun, uint8_t const scsi_cmd[16], void *buffer, uint16_t bufsize)
 {
-    (void)buffer;
-    (void)bufsize;
-
     switch (scsi_cmd[0]) {
     case SCSI_CMD_PREVENT_ALLOW_MEDIUM_REMOVAL:
         return 0;
@@ -593,7 +590,22 @@ int32_t tud_msc_scsi_cb(uint8_t lun, uint8_t const scsi_cmd[16], void *buffer, u
         ((uint8_t *)buffer)[2] = 0x80u;
         ((uint8_t *)buffer)[3] = 0x00u;
         return 4;
+#if (USB_CASE_ID == 54u)
+    case SCSI_CMD_READ_CAPACITY_10:
+        /*
+         * TinyUSB normally handles READ CAPACITY(10) via tud_msc_capacity_cb
+         * and does not expose a safe API for literal short transfer injection.
+         * For case 054 we model a short/malformed response as a controlled
+         * protocol-level reject in the class-command path.
+         */
+        (void)buffer;
+        (void)bufsize;
+        tud_msc_set_sense(lun, SCSI_SENSE_ILLEGAL_REQUEST, 0x24, 0x00);
+        return -1;
+#endif
     default:
+        (void)buffer;
+        (void)bufsize;
         tud_msc_set_sense(lun, SCSI_SENSE_ILLEGAL_REQUEST, 0x20, 0x00);
         return -1;
     }
