@@ -1,0 +1,5 @@
+result_name=041_string_missing_index_01
+timestamp=20260516_182738
+runtime_enum_status=normal
+host=numi-linux-otherpc
+kernel=6.17.0-19-generic
