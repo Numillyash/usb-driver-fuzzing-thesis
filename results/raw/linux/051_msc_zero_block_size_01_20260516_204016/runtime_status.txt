@@ -1,0 +1,5 @@
+result_name=051_msc_zero_block_size_01
+timestamp=20260516_204016
+runtime_enum_status=normal
+host=numi-linux-otherpc
+kernel=6.17.0-19-generic
