@@ -1,0 +1,5 @@
+result_name=057_msc_stall_on_read10_01
+timestamp=20260516_234808
+runtime_enum_status=normal
+host=numi-linux-otherpc
+kernel=6.17.0-19-generic
