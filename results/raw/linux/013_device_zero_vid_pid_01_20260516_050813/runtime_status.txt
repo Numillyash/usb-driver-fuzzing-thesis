@@ -1,0 +1,5 @@
+result_name=013_device_zero_vid_pid_01
+timestamp=20260516_050813
+runtime_enum_status=partial
+host=numi-linux-otherpc
+kernel=6.17.0-19-generic
