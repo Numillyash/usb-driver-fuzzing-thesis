@@ -285,6 +285,16 @@ static const uint8_t usb_case_cfg_desc_msc[] = {
         USB_CASE_ENDPOINT_MSC_IN,
         CFG_TUD_MSC_EP_BUFSIZE),
 };
+
+static const uint8_t usb_case_cfg_desc_msc_ep_packet_size_zero[] = {
+    TUD_CONFIG_DESCRIPTOR(1, 1, 0, USB_CASE_MSC_TOTAL_LEN, 0x80, 100),
+    TUD_MSC_DESCRIPTOR(
+        USB_CASE_ITF_NUM_MSC,
+        USB_CASE_STRIDX_MSC,
+        USB_CASE_ENDPOINT_MSC_OUT,
+        USB_CASE_ENDPOINT_MSC_IN,
+        0),
+};
 #endif
 
 #if defined(CFG_TUD_CDC) && (CFG_TUD_CDC == 1)
@@ -359,7 +369,11 @@ uint8_t const *tud_descriptor_configuration_cb(uint8_t index)
 #endif
 #if defined(CFG_TUD_MSC) && (CFG_TUD_MSC == 1)
     if (usb_case_is_msc_persona()) {
+#if (USB_CASE_ID == 58u)
+        return usb_case_cfg_desc_msc_ep_packet_size_zero;
+#else
         return usb_case_cfg_desc_msc;
+#endif
     }
 #endif
 #if defined(CFG_TUD_CDC) && (CFG_TUD_CDC == 1)

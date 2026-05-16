@@ -1,0 +1,12 @@
+{
+  "case_id": "058",
+  "name": "msc_endpoint_packet_size_zero",
+  "group": "msc",
+  "base_persona": "msc_inert_readonly",
+  "description": "Безопасная descriptor-level мутация MSC для Linux: у bulk endpoint в конфигурационном дескрипторе задаётся wMaxPacketSize=0 при сохранении inert/read-only RAM-backed модели устройства.",
+  "mutation": "MSC bulk endpoint descriptor uses wMaxPacketSize=0 (case-gated config descriptor variant for USB_CASE_ID=58).",
+  "expected_windows": "Сценарий ориентирован на Linux-only фазу; для Windows запуск в данном этапе не требуется.",
+  "expected_linux": "Ожидается ранний reject endpoint descriptor и отказ штатной инициализации MSC без краша хоста.",
+  "risk_level": "safe",
+  "notes": "Запись запрещена, доступ к ресурсам хоста отсутствует, мутация ограничена descriptor/enumeration уровнем в отдельном кейсе."
+}
