@@ -1,0 +1,5 @@
+result_name=040_string_invalid_length_01
+timestamp=20260516_181810
+runtime_enum_status=normal
+host=numi-linux-otherpc
+kernel=6.17.0-19-generic
