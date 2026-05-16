@@ -1,0 +1,404 @@
+=== wrapper runtime status ===
+38:Runtime enumeration policy: allow runtime enumeration failure
+98:Runtime USB enumeration status: partial
+99:[11] Skipping remote serial smoke-test (--no-serial-test)
+100:[12] Capturing Linux USB snapshot: 010_device_blength_too_short_01
+101:[1] Writing snapshot to /home/numi/vkr-usb/logs/010_device_blength_too_short_01_20260516_041508
+169:Fallback logs directory: /home/numi/vkr-usb/logs/010_device_blength_too_short_01_20260516_041509
+171:Remote snapshot directory prefix: ~/vkr-usb/logs/010_device_blength_too_short_01_<timestamp>
+
+=== visible usb ids in snapshot ===
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:4:мая 15 01:00:42 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:22:мая 15 01:00:49 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=000a, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:24:мая 15 01:00:49 numi-linux-otherpc kernel: usb 1-4: Product: Pico
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:25:мая 15 01:00:49 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:32:мая 15 01:15:14 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=0003, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:35:мая 15 01:15:14 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:54:мая 15 01:15:21 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=000a, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:56:мая 15 01:15:21 numi-linux-otherpc kernel: usb 1-4: Product: Pico
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:57:мая 15 01:15:21 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:67:мая 15 10:50:10 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=0003, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:70:мая 15 10:50:10 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:89:мая 15 10:50:17 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=000a, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:91:мая 15 10:50:17 numi-linux-otherpc kernel: usb 1-4: Product: Pico
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:92:мая 15 10:50:17 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:99:мая 15 10:52:06 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=0003, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:102:мая 15 10:52:06 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:120:мая 15 10:52:14 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=4005, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:122:мая 15 10:52:14 numi-linux-otherpc kernel: usb 1-4: Product: usb_case_custom_demo HID baseli
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:123:мая 15 10:52:14 numi-linux-otherpc kernel: usb 1-4: Manufacturer: RP2040 USB Research
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:126:мая 15 10:52:16 numi-linux-otherpc kernel: hid-generic 0003:2E8A:4005.0004: hiddev0,hidraw3: USB HID v1.11 Device [RP2040 USB Research usb_case_custom_demo HID baseli] on usb-0000:02:00.0-4/input0
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:130:мая 15 11:10:02 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=0003, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:133:мая 15 11:10:02 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:151:мая 15 11:10:10 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=4005, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:153:мая 15 11:10:10 numi-linux-otherpc kernel: usb 1-4: Product: usb_case_custom_demo Composite 
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:154:мая 15 11:10:10 numi-linux-otherpc kernel: usb 1-4: Manufacturer: RP2040 USB Research
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:158:мая 15 11:10:12 numi-linux-otherpc kernel: hid-generic 0003:2E8A:4005.0005: hiddev0,hidraw3: USB HID v1.11 Device [RP2040 USB Research usb_case_custom_demo Composite ] on usb-0000:02:00.0-4/input2
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:162:мая 15 11:11:59 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=0003, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:165:мая 15 11:11:59 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:183:мая 15 11:12:08 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=4005, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:185:мая 15 11:12:08 numi-linux-otherpc kernel: usb 1-4: Product: usb_case_custom_demo Composite 
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:186:мая 15 11:12:08 numi-linux-otherpc kernel: usb 1-4: Manufacturer: RP2040 USB Research
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:190:мая 15 11:12:10 numi-linux-otherpc kernel: hid-generic 0003:2E8A:4005.0006: hiddev0,hidraw3: USB HID v1.11 Device [RP2040 USB Research usb_case_custom_demo Composite ] on usb-0000:02:00.0-4/input2
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:195:мая 15 13:25:21 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=0003, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:198:мая 15 13:25:21 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:216:мая 15 13:25:29 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=4005, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:218:мая 15 13:25:30 numi-linux-otherpc kernel: usb 1-4: Product: usb_case_custom_demo Composite 
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:219:мая 15 13:25:30 numi-linux-otherpc kernel: usb 1-4: Manufacturer: RP2040 USB Research
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:223:мая 15 13:25:31 numi-linux-otherpc kernel: hid-generic 0003:2E8A:4005.0007: hiddev0,hidraw3: USB HID v1.11 Device [RP2040 USB Research usb_case_custom_demo Composite ] on usb-0000:02:00.0-4/input2
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:245:мая 16 03:50:46 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=0003, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:248:мая 16 03:50:46 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:266:мая 16 03:50:54 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=4005, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:268:мая 16 03:50:54 numi-linux-otherpc kernel: usb 1-4: Product: usb_case_custom_demo CDC baseli
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:269:мая 16 03:50:54 numi-linux-otherpc kernel: usb 1-4: Manufacturer: RP2040 USB Research
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:274:мая 16 04:14:52 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=0003, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:277:мая 16 04:14:52 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:295:мая 16 04:15:00 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=4005, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:297:мая 16 04:15:00 numi-linux-otherpc kernel: usb 1-4: Product: usb_case_custom_demo CDC baseli
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:298:мая 16 04:15:00 numi-linux-otherpc kernel: usb 1-4: Manufacturer: RP2040 USB Research
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:3:мая 15 11:12:08 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=4005, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:5:мая 15 11:12:08 numi-linux-otherpc kernel: usb 1-4: Product: usb_case_custom_demo Composite 
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:6:мая 15 11:12:08 numi-linux-otherpc kernel: usb 1-4: Manufacturer: RP2040 USB Research
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:10:мая 15 11:12:10 numi-linux-otherpc kernel: hid-generic 0003:2E8A:4005.0006: hiddev0,hidraw3: USB HID v1.11 Device [RP2040 USB Research usb_case_custom_demo Composite ] on usb-0000:02:00.0-4/input2
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:15:мая 15 13:25:21 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=0003, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:18:мая 15 13:25:21 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:36:мая 15 13:25:29 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=4005, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:38:мая 15 13:25:30 numi-linux-otherpc kernel: usb 1-4: Product: usb_case_custom_demo Composite 
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:39:мая 15 13:25:30 numi-linux-otherpc kernel: usb 1-4: Manufacturer: RP2040 USB Research
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:43:мая 15 13:25:31 numi-linux-otherpc kernel: hid-generic 0003:2E8A:4005.0007: hiddev0,hidraw3: USB HID v1.11 Device [RP2040 USB Research usb_case_custom_demo Composite ] on usb-0000:02:00.0-4/input2
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:65:мая 16 03:50:46 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=0003, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:68:мая 16 03:50:46 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:86:мая 16 03:50:54 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=4005, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:88:мая 16 03:50:54 numi-linux-otherpc kernel: usb 1-4: Product: usb_case_custom_demo CDC baseli
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:89:мая 16 03:50:54 numi-linux-otherpc kernel: usb 1-4: Manufacturer: RP2040 USB Research
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:94:мая 16 04:14:52 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=0003, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:97:мая 16 04:14:52 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:115:мая 16 04:15:00 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=4005, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:117:мая 16 04:15:00 numi-linux-otherpc kernel: usb 1-4: Product: usb_case_custom_demo CDC baseli
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:118:мая 16 04:15:00 numi-linux-otherpc kernel: usb 1-4: Manufacturer: RP2040 USB Research
+
+=== kernel usb errors ===
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0002.txt:5:Device Descriptor:
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0002.txt:7:  bDescriptorType         1
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0002.txt:19:  bNumConfigurations      1
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0002.txt:20:  Configuration Descriptor:
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0002.txt:22:    bDescriptorType         2
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0002.txt:25:    bConfigurationValue     1
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0002.txt:26:    iConfiguration          0 
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0002.txt:31:    Interface Descriptor:
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0002.txt:33:      bDescriptorType         4
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0002.txt:41:      Endpoint Descriptor:
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0002.txt:43:        bDescriptorType         5
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0002.txt:53:Device Descriptor:
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0002.txt:55:  bDescriptorType         1
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0002.txt:67:  bNumConfigurations      1
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0002.txt:68:  Configuration Descriptor:
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0002.txt:70:    bDescriptorType         2
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0002.txt:73:    bConfigurationValue     1
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0002.txt:74:    iConfiguration          0 
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0002.txt:79:    Interface Descriptor:
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0002.txt:81:      bDescriptorType         4
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0002.txt:89:      Endpoint Descriptor:
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0002.txt:91:        bDescriptorType         5
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e99.txt:4:Device Descriptor:
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e99.txt:6:  bDescriptorType         1
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e99.txt:18:  bNumConfigurations      1
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e99.txt:19:  Configuration Descriptor:
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e99.txt:21:    bDescriptorType         2
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e99.txt:24:    bConfigurationValue     1
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e99.txt:25:    iConfiguration          0 
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e99.txt:30:    Interface Descriptor:
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e99.txt:32:      bDescriptorType         4
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e99.txt:40:        HID Device Descriptor:
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e99.txt:42:          bDescriptorType        33
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e99.txt:45:          bNumDescriptors         1
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e99.txt:46:          bDescriptorType        34 Report
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e99.txt:47:          wDescriptorLength      55
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e99.txt:48:          Report Descriptors: 
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e99.txt:50:      Endpoint Descriptor:
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e99.txt:52:        bDescriptorType         5
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e99.txt:60:    Interface Descriptor:
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e99.txt:62:      bDescriptorType         4
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e99.txt:70:        HID Device Descriptor:
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e99.txt:72:          bDescriptorType        33
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e99.txt:75:          bNumDescriptors         1
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e99.txt:76:          bDescriptorType        34 Report
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e99.txt:77:          wDescriptorLength      52
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e99.txt:78:          Report Descriptors: 
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e99.txt:80:      Endpoint Descriptor:
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e99.txt:82:        bDescriptorType         5
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:2:мая 15 01:00:42 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:3:мая 15 01:00:42 numi-linux-otherpc kernel: usb 1-4: Product: RP2 Boot
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:4:мая 15 01:00:42 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:5:мая 15 01:00:42 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E0C9125B0D9B
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:6:мая 15 01:00:42 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:9:мая 15 01:00:42 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:19:мая 15 01:00:48 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 17
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:20:мая 15 01:00:49 numi-linux-otherpc kernel: FAT-fs (sdb1): unable to read boot sector to mark fs as dirty
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:21:мая 15 01:00:49 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 18 using xhci_hcd
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:22:мая 15 01:00:49 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=000a, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:23:мая 15 01:00:49 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:24:мая 15 01:00:49 numi-linux-otherpc kernel: usb 1-4: Product: Pico
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:25:мая 15 01:00:49 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:26:мая 15 01:00:49 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E6625C48939D6E22
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:27:мая 15 01:00:49 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:29:мая 15 01:00:49 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:30:мая 15 01:15:14 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 18
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:31:мая 15 01:15:14 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 19 using xhci_hcd
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:32:мая 15 01:15:14 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=0003, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:33:мая 15 01:15:14 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:34:мая 15 01:15:14 numi-linux-otherpc kernel: usb 1-4: Product: RP2 Boot
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:35:мая 15 01:15:14 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:36:мая 15 01:15:14 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E0C9125B0D9B
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:37:мая 15 01:15:14 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:40:мая 15 01:15:14 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:50:мая 15 01:15:21 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 19
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:51:мая 15 01:15:21 numi-linux-otherpc kernel: FAT-fs (sdb1): unable to read boot sector to mark fs as dirty
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:52:мая 15 01:15:21 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 20 using xhci_hcd
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:53:мая 15 01:15:21 numi-linux-otherpc kernel: usb 1-4: unable to get BOS descriptor or descriptor too short
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:54:мая 15 01:15:21 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=000a, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:55:мая 15 01:15:21 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:56:мая 15 01:15:21 numi-linux-otherpc kernel: usb 1-4: Product: Pico
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:57:мая 15 01:15:21 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:58:мая 15 01:15:21 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E6625C48939D6E22
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:59:мая 15 01:15:21 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:60:мая 15 01:15:21 numi-linux-otherpc kernel: usb 1-4: can't set config #1, error -32
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:61:мая 15 01:15:21 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:65:мая 15 10:50:10 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 20
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:66:мая 15 10:50:10 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 21 using xhci_hcd
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:67:мая 15 10:50:10 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=0003, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:68:мая 15 10:50:10 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:69:мая 15 10:50:10 numi-linux-otherpc kernel: usb 1-4: Product: RP2 Boot
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:70:мая 15 10:50:10 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:71:мая 15 10:50:10 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E0C9125B0D9B
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:72:мая 15 10:50:10 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:75:мая 15 10:50:10 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:85:мая 15 10:50:16 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 21
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:86:мая 15 10:50:16 numi-linux-otherpc kernel: FAT-fs (sdb1): unable to read boot sector to mark fs as dirty
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:87:мая 15 10:50:17 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 22 using xhci_hcd
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:88:мая 15 10:50:17 numi-linux-otherpc kernel: usb 1-4: unable to get BOS descriptor or descriptor too short
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:89:мая 15 10:50:17 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=000a, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:90:мая 15 10:50:17 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:91:мая 15 10:50:17 numi-linux-otherpc kernel: usb 1-4: Product: Pico
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:92:мая 15 10:50:17 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:93:мая 15 10:50:17 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E6625C48939D6E22
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:94:мая 15 10:50:17 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:96:мая 15 10:50:17 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:97:мая 15 10:52:05 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 22
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:98:мая 15 10:52:06 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 23 using xhci_hcd
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:99:мая 15 10:52:06 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=0003, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:100:мая 15 10:52:06 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:101:мая 15 10:52:06 numi-linux-otherpc kernel: usb 1-4: Product: RP2 Boot
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:102:мая 15 10:52:06 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:103:мая 15 10:52:06 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E0C9125B0D9B
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:104:мая 15 10:52:06 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:107:мая 15 10:52:06 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:117:мая 15 10:52:12 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 23
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:118:мая 15 10:52:12 numi-linux-otherpc kernel: FAT-fs (sdb1): unable to read boot sector to mark fs as dirty
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:119:мая 15 10:52:12 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 24 using xhci_hcd
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:120:мая 15 10:52:14 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=4005, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:121:мая 15 10:52:14 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:122:мая 15 10:52:14 numi-linux-otherpc kernel: usb 1-4: Product: usb_case_custom_demo HID baseli
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:123:мая 15 10:52:14 numi-linux-otherpc kernel: usb 1-4: Manufacturer: RP2040 USB Research
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:124:мая 15 10:52:14 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E6625C48939D6E22
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:125:мая 15 10:52:14 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:127:мая 15 10:52:16 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:128:мая 15 11:10:01 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 24
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:129:мая 15 11:10:01 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 25 using xhci_hcd
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:130:мая 15 11:10:02 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=0003, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:131:мая 15 11:10:02 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:132:мая 15 11:10:02 numi-linux-otherpc kernel: usb 1-4: Product: RP2 Boot
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:133:мая 15 11:10:02 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:134:мая 15 11:10:02 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E0C9125B0D9B
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:135:мая 15 11:10:02 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:138:мая 15 11:10:02 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:148:мая 15 11:10:08 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 25
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:149:мая 15 11:10:08 numi-linux-otherpc kernel: FAT-fs (sdb1): unable to read boot sector to mark fs as dirty
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:150:мая 15 11:10:08 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 26 using xhci_hcd
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:151:мая 15 11:10:10 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=4005, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:152:мая 15 11:10:10 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:153:мая 15 11:10:10 numi-linux-otherpc kernel: usb 1-4: Product: usb_case_custom_demo Composite 
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:154:мая 15 11:10:10 numi-linux-otherpc kernel: usb 1-4: Manufacturer: RP2040 USB Research
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:155:мая 15 11:10:10 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E6625C48939D6E22
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:156:мая 15 11:10:10 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:159:мая 15 11:10:12 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:160:мая 15 11:11:59 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 26
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:161:мая 15 11:11:59 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 27 using xhci_hcd
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:162:мая 15 11:11:59 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=0003, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:163:мая 15 11:11:59 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:164:мая 15 11:11:59 numi-linux-otherpc kernel: usb 1-4: Product: RP2 Boot
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:165:мая 15 11:11:59 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:166:мая 15 11:11:59 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E0C9125B0D9B
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:167:мая 15 11:11:59 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:170:мая 15 11:12:00 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:180:мая 15 11:12:06 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 27
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:181:мая 15 11:12:06 numi-linux-otherpc kernel: FAT-fs (sdb1): unable to read boot sector to mark fs as dirty
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:182:мая 15 11:12:06 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 28 using xhci_hcd
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:183:мая 15 11:12:08 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=4005, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:184:мая 15 11:12:08 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:185:мая 15 11:12:08 numi-linux-otherpc kernel: usb 1-4: Product: usb_case_custom_demo Composite 
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:186:мая 15 11:12:08 numi-linux-otherpc kernel: usb 1-4: Manufacturer: RP2040 USB Research
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:187:мая 15 11:12:08 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E6625C48939D6E22
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:188:мая 15 11:12:08 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:191:мая 15 11:12:10 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:193:мая 15 13:25:21 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 28
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:194:мая 15 13:25:21 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 29 using xhci_hcd
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:195:мая 15 13:25:21 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=0003, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:196:мая 15 13:25:21 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:197:мая 15 13:25:21 numi-linux-otherpc kernel: usb 1-4: Product: RP2 Boot
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:198:мая 15 13:25:21 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:199:мая 15 13:25:21 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E0C9125B0D9B
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:200:мая 15 13:25:21 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:203:мая 15 13:25:21 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:213:мая 15 13:25:27 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 29
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:214:мая 15 13:25:27 numi-linux-otherpc kernel: FAT-fs (sdb1): unable to read boot sector to mark fs as dirty
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:215:мая 15 13:25:28 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 30 using xhci_hcd
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:216:мая 15 13:25:29 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=4005, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:217:мая 15 13:25:30 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:218:мая 15 13:25:30 numi-linux-otherpc kernel: usb 1-4: Product: usb_case_custom_demo Composite 
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:219:мая 15 13:25:30 numi-linux-otherpc kernel: usb 1-4: Manufacturer: RP2040 USB Research
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:220:мая 15 13:25:30 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E6625C48939D6E22
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:221:мая 15 13:25:30 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:224:мая 15 13:25:31 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:232:мая 16 00:54:08 numi-linux-otherpc kernel: audit: type=1400 audit(1778882048.002:263): apparmor="STATUS" operation="profile_replace" profile="unconfined" name="snap.chromium.hook.configure" pid=52874 comm="apparmor_parser"
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:243:мая 16 03:50:45 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 30
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:244:мая 16 03:50:46 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 31 using xhci_hcd
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:245:мая 16 03:50:46 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=0003, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:246:мая 16 03:50:46 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:247:мая 16 03:50:46 numi-linux-otherpc kernel: usb 1-4: Product: RP2 Boot
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:248:мая 16 03:50:46 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:249:мая 16 03:50:46 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E0C9125B0D9B
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:250:мая 16 03:50:46 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:253:мая 16 03:50:46 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:263:мая 16 03:50:52 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 31
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:264:мая 16 03:50:52 numi-linux-otherpc kernel: FAT-fs (sdb1): unable to read boot sector to mark fs as dirty
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:265:мая 16 03:50:52 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 32 using xhci_hcd
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:266:мая 16 03:50:54 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=4005, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:267:мая 16 03:50:54 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:268:мая 16 03:50:54 numi-linux-otherpc kernel: usb 1-4: Product: usb_case_custom_demo CDC baseli
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:269:мая 16 03:50:54 numi-linux-otherpc kernel: usb 1-4: Manufacturer: RP2040 USB Research
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:270:мая 16 03:50:54 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E6625C48939D6E22
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:271:мая 16 03:50:54 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:272:мая 16 03:50:54 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 32
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:273:мая 16 04:14:52 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 33 using xhci_hcd
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:274:мая 16 04:14:52 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=0003, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:275:мая 16 04:14:52 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:276:мая 16 04:14:52 numi-linux-otherpc kernel: usb 1-4: Product: RP2 Boot
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:277:мая 16 04:14:52 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:278:мая 16 04:14:52 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E0C9125B0D9B
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:279:мая 16 04:14:52 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:282:мая 16 04:14:52 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:292:мая 16 04:14:58 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 33
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:293:мая 16 04:14:58 numi-linux-otherpc kernel: FAT-fs (sdb1): unable to read boot sector to mark fs as dirty
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:294:мая 16 04:14:58 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 34 using xhci_hcd
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:295:мая 16 04:15:00 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=4005, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:296:мая 16 04:15:00 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:297:мая 16 04:15:00 numi-linux-otherpc kernel: usb 1-4: Product: usb_case_custom_demo CDC baseli
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:298:мая 16 04:15:00 numi-linux-otherpc kernel: usb 1-4: Manufacturer: RP2040 USB Research
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:299:мая 16 04:15:00 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E6625C48939D6E22
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:300:мая 16 04:15:00 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/journalctl_k_tail_300.txt:301:мая 16 04:15:00 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 34
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0003.txt:5:Device Descriptor:
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0003.txt:7:  bDescriptorType         1
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0003.txt:19:  bNumConfigurations      1
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0003.txt:20:  Configuration Descriptor:
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0003.txt:22:    bDescriptorType         2
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0003.txt:25:    bConfigurationValue     1
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0003.txt:26:    iConfiguration          0 
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0003.txt:31:    Interface Descriptor:
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0003.txt:33:      bDescriptorType         4
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0003.txt:41:      Endpoint Descriptor:
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0003.txt:43:        bDescriptorType         5
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0003.txt:54:Device Descriptor:
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0003.txt:56:  bDescriptorType         1
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0003.txt:68:  bNumConfigurations      1
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0003.txt:69:  Configuration Descriptor:
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0003.txt:71:    bDescriptorType         2
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0003.txt:74:    bConfigurationValue     1
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0003.txt:75:    iConfiguration          0 
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0003.txt:80:    Interface Descriptor:
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0003.txt:82:      bDescriptorType         4
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0003.txt:90:      Endpoint Descriptor:
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_1d6b_0003.txt:92:        bDescriptorType         5
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e98.txt:4:Device Descriptor:
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e98.txt:6:  bDescriptorType         1
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e98.txt:18:  bNumConfigurations      1
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e98.txt:19:  Configuration Descriptor:
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e98.txt:21:    bDescriptorType         2
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e98.txt:24:    bConfigurationValue     1
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e98.txt:25:    iConfiguration          0 
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e98.txt:30:    Interface Descriptor:
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e98.txt:32:      bDescriptorType         4
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e98.txt:40:        HID Device Descriptor:
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e98.txt:42:          bDescriptorType        33
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e98.txt:45:          bNumDescriptors         1
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e98.txt:46:          bDescriptorType        34 Report
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e98.txt:47:          wDescriptorLength      46
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e98.txt:48:          Report Descriptors: 
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e98.txt:50:      Endpoint Descriptor:
+results/raw/linux/010_device_blength_too_short_01_20260516_041508/lsusb_v_0461_4e98.txt:52:        bDescriptorType         5
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:2:мая 15 11:12:06 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 28 using xhci_hcd
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:3:мая 15 11:12:08 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=4005, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:4:мая 15 11:12:08 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:5:мая 15 11:12:08 numi-linux-otherpc kernel: usb 1-4: Product: usb_case_custom_demo Composite 
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:6:мая 15 11:12:08 numi-linux-otherpc kernel: usb 1-4: Manufacturer: RP2040 USB Research
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:7:мая 15 11:12:08 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E6625C48939D6E22
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:8:мая 15 11:12:08 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:11:мая 15 11:12:10 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:13:мая 15 13:25:21 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 28
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:14:мая 15 13:25:21 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 29 using xhci_hcd
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:15:мая 15 13:25:21 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=0003, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:16:мая 15 13:25:21 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:17:мая 15 13:25:21 numi-linux-otherpc kernel: usb 1-4: Product: RP2 Boot
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:18:мая 15 13:25:21 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:19:мая 15 13:25:21 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E0C9125B0D9B
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:20:мая 15 13:25:21 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:23:мая 15 13:25:21 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:33:мая 15 13:25:27 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 29
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:34:мая 15 13:25:27 numi-linux-otherpc kernel: FAT-fs (sdb1): unable to read boot sector to mark fs as dirty
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:35:мая 15 13:25:28 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 30 using xhci_hcd
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:36:мая 15 13:25:29 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=4005, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:37:мая 15 13:25:30 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:38:мая 15 13:25:30 numi-linux-otherpc kernel: usb 1-4: Product: usb_case_custom_demo Composite 
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:39:мая 15 13:25:30 numi-linux-otherpc kernel: usb 1-4: Manufacturer: RP2040 USB Research
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:40:мая 15 13:25:30 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E6625C48939D6E22
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:41:мая 15 13:25:30 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:44:мая 15 13:25:31 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:52:мая 16 00:54:08 numi-linux-otherpc kernel: audit: type=1400 audit(1778882048.002:263): apparmor="STATUS" operation="profile_replace" profile="unconfined" name="snap.chromium.hook.configure" pid=52874 comm="apparmor_parser"
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:63:мая 16 03:50:45 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 30
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:64:мая 16 03:50:46 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 31 using xhci_hcd
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:65:мая 16 03:50:46 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=0003, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:66:мая 16 03:50:46 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:67:мая 16 03:50:46 numi-linux-otherpc kernel: usb 1-4: Product: RP2 Boot
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:68:мая 16 03:50:46 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:69:мая 16 03:50:46 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E0C9125B0D9B
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:70:мая 16 03:50:46 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:73:мая 16 03:50:46 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:83:мая 16 03:50:52 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 31
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:84:мая 16 03:50:52 numi-linux-otherpc kernel: FAT-fs (sdb1): unable to read boot sector to mark fs as dirty
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:85:мая 16 03:50:52 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 32 using xhci_hcd
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:86:мая 16 03:50:54 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=4005, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:87:мая 16 03:50:54 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:88:мая 16 03:50:54 numi-linux-otherpc kernel: usb 1-4: Product: usb_case_custom_demo CDC baseli
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:89:мая 16 03:50:54 numi-linux-otherpc kernel: usb 1-4: Manufacturer: RP2040 USB Research
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:90:мая 16 03:50:54 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E6625C48939D6E22
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:91:мая 16 03:50:54 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:92:мая 16 03:50:54 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 32
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:93:мая 16 04:14:52 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 33 using xhci_hcd
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:94:мая 16 04:14:52 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=0003, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:95:мая 16 04:14:52 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:96:мая 16 04:14:52 numi-linux-otherpc kernel: usb 1-4: Product: RP2 Boot
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:97:мая 16 04:14:52 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:98:мая 16 04:14:52 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E0C9125B0D9B
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:99:мая 16 04:14:52 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:102:мая 16 04:14:52 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:112:мая 16 04:14:58 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 33
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:113:мая 16 04:14:58 numi-linux-otherpc kernel: FAT-fs (sdb1): unable to read boot sector to mark fs as dirty
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:114:мая 16 04:14:58 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 34 using xhci_hcd
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:115:мая 16 04:15:00 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=4005, bcdDevice= 1.00
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:116:мая 16 04:15:00 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:117:мая 16 04:15:00 numi-linux-otherpc kernel: usb 1-4: Product: usb_case_custom_demo CDC baseli
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:118:мая 16 04:15:00 numi-linux-otherpc kernel: usb 1-4: Manufacturer: RP2040 USB Research
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:119:мая 16 04:15:00 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E6625C48939D6E22
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:120:мая 16 04:15:00 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+results/raw/linux/010_device_blength_too_short_01_20260516_041509/journalctl_k_tail.txt:121:мая 16 04:15:00 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 34

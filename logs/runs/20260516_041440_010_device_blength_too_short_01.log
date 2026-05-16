@@ -1,0 +1,171 @@
+===== timestamp =====
+2026-05-16T04:14:40+03:00
+
+===== cwd =====
+/root/usb-driver-fuzzing-thesis
+
+===== command =====
+./tools/run-remote-linux-case.sh --uf2 build/usb_case_custom_demo.uf2 --no-serial-test --allow-runtime-enum-failure experiments/cases/010_device_blength_too_short.json 010_device_blength_too_short_01 
+
+===== output =====
+[1] Generating USB case config from: experiments/cases/010_device_blength_too_short.json
+Generated /root/usb-driver-fuzzing-thesis/firmware/include/usb_case_config.generated.h from /root/usb-driver-fuzzing-thesis/experiments/cases/010_device_blength_too_short.json
+[2] Building RP2040 firmware
+PICO_SDK_PATH is /opt/pico-sdk
+Target board (PICO_BOARD) is 'waveshare_rp2040_zero'.
+Using board configuration from /opt/pico-sdk/src/boards/include/boards/waveshare_rp2040_zero.h
+Pico Platform (PICO_PLATFORM) is 'rp2040'.
+Build type is Release
+TinyUSB available at /opt/pico-sdk/lib/tinyusb/hw/bsp/rp2040; enabling build support for USB.
+BTstack available at /opt/pico-sdk/lib/btstack
+cyw43-driver available at /opt/pico-sdk/lib/cyw43-driver
+mbedtls available at /opt/pico-sdk/lib/mbedtls
+lwIP available at /opt/pico-sdk/lib/lwip
+Using picotool from /workspace/build/_deps/picotool/picotool
+-- Configuring done (0.2s)
+-- Generating done (0.1s)
+-- Build files have been written to: /workspace/build
+[1/6] Building C object CMakeFiles/usb_case_demo.dir/src/usb_case_descriptor_layer.c.o
+[2/6] Building C object CMakeFiles/usb_case_custom_demo.dir/src/usb_case_descriptor_layer.c.o
+[3/6] Building C object CMakeFiles/usb_case_demo.dir/src/usb_case_main.c.o
+[4/6] Building C object CMakeFiles/usb_case_custom_demo.dir/src/usb_case_main.c.o
+[5/6] Linking CXX executable usb_case_demo.elf
+[6/6] Linking CXX executable usb_case_custom_demo.elf
+
+Build complete: /root/usb-driver-fuzzing-thesis/build/portable_demo.uf2
+Selected UF2: build/usb_case_custom_demo.uf2
+Remote serial smoke-test: disabled
+Runtime enumeration policy: allow runtime enumeration failure
+Runtime wait: 8s
+[3] Copying UF2 to remote Linux host
+[4] Sending RF bootloader command through ESP32
+[1] Sending ESP32 RF bootloader command via Windows COM3...
+[2] Python script: \\wsl.localhost\ubuntu\root\usb-driver-fuzzing-thesis\firmware\esp32c3_bridge\esp32_send_bootloader_safe.py
+[initial]
+
+>>> help
+commands: help bootloader
+[0;32mI (1440175) bridge_main: HB bridge=esp32c3 rf=rx_ready valid_rx=0 garbage_rx=0 ack_tx_ok=0 ack_tx_fail=0 last_seq=0 status=0x0e[0m
+
+>>> bootloader
+[0;32mI (1443015) nrf24_drv: bootloader_req pre RF_CH=0x28 TX_ADDR=d2:f1:c0:5a:11 RX_ADDR_P0=d2:f1:c0:5a:11 STATUS=0x0e FIFO_STATUS=0x11[0m
+bootloader_req tx ok
+[0;32mI (1443015) bridge_main: bootloader_req tx ok seq=1 status=0x0e[0m
+[0;32mI (1443015) bridge_main: bootloader_req attempt=1 seq=1 tx ok status=0x0e[0m
+bootloader_req tx ok
+[0;32mI (1443045) bridge_main: bootloader_req tx ok seq=2 status=0x0e[0m
+[0;32mI (1443045) bridge_main: bootloader_req attempt=2 seq=2 tx ok status=0x0e[0m
+bootloader_req tx ok
+[0;32mI (1443075) bridge_main: bootloader_req tx ok seq=3 status=0x0e[0m
+[0;32mI (1443075) bridge_main: bootloader_req attempt=3 seq=3 tx ok status=0x0e[0m
+bootloader_req tx ok
+[0;32mI (1443105) bridge_main: bootloader_req tx ok seq=4 status=0x0e[0m
+[0;32mI (1443105) bridge_main: bootloader_req attempt=4 seq=4 tx ok status=0x0e[0m
+bootloader_req tx ok
+[0;32mI (1443135) bridge_main: bootloader_req tx ok seq=5 status=0x0e[0m
+[0;32mI (1443135) bridge_main: bootloader_req attempt=5 seq=5 tx ok status=0x0e[0m
+[0;32mI (1443135) nrf24_drv: bootloader_req post RF_CH=0x28 TX_ADDR=d2:f1:c0:5a:11 RX_ADDR_P0=d2:f1:c0:5a:11 STATUS=0x0e FIFO_STATUS=0x11[0m
+[0;32mI (1445175) bridge_main: HB bridge=esp32c3 rf=rx_ready valid_rx=0 garbage_rx=0 ack_tx_ok=0 ack_tx_fail=0 last_seq=0 status=0x0e[0m
+
+Done.
+[3] ESP32 command finished.
+[5] Waiting for RP2040 BOOTSEL enumeration
+[6] Preparing/authorizing RP2040 USB device on remote host
+Authorizing /sys/bus/usb/devices/1-4 vendor=2e8a product=0003
+[lsusb]
+Bus 001 Device 033: ID 2e8a:0003 Raspberry Pi RP2 Boot
+[tty]
+[block]
+sda                                                                                         
+├─sda1                                                                                      
+└─sda2      ext4     1.0                de4fc2d1-ba68-4609-bfdc-d1bfcc3bca06   26,1G    83% /
+sdb                                                                                         
+└─sdb1      vfat     FAT16 RPI-RP2                                            127,8M     0% /media/numi/RPI-RP2
+[7] Flashing RP2040 UF2 on remote host
+[1] Looking for mounted RPI-RP2...
+[4] Copying /home/numi/vkr-usb/incoming/usb_case_demo.uf2 to /media/numi/RPI-RP2...
+[5] Waiting for RP2040 reboot...
+Done.
+[8] Waiting for RP2040 runtime enumeration
+[9] Preparing/authorizing runtime CDC device
+[lsusb]
+[tty]
+[block]
+sda                                                                                         
+├─sda1                                                                                      
+└─sda2      ext4     1.0                de4fc2d1-ba68-4609-bfdc-d1bfcc3bca06   26,1G    83% /
+[10] Probing runtime enumeration status on remote host
+Runtime USB enumeration status: partial
+[11] Skipping remote serial smoke-test (--no-serial-test)
+[12] Capturing Linux USB snapshot: 010_device_blength_too_short_01
+[1] Writing snapshot to /home/numi/vkr-usb/logs/010_device_blength_too_short_01_20260516_041508
+===== uname -a =====
+Linux numi-linux-otherpc 6.17.0-19-generic #19~24.04.2-Ubuntu SMP PREEMPT_DYNAMIC Fri Mar  6 23:08:46 UTC 2 x86_64 x86_64 x86_64 GNU/Linux
+
+===== groups =====
+numi adm dialout cdrom sudo dip plugdev users lpadmin libvirt kvm
+
+===== lsusb =====
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 001 Device 006: ID 0461:4e99 Primax Electronics, Ltd Acer Elite USB Keyboard
+Bus 001 Device 007: ID 0461:4e98 Primax Electronics, Ltd Acer Elite USB Optical Mouse
+Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+
+===== lsblk -f =====
+NAME        FSTYPE   FSVER LABEL        UUID                                 FSAVAIL FSUSE% MOUNTPOINTS
+loop0       squashfs 4.0                                                           0   100% /snap/bare/5
+loop2       squashfs 4.0                                                           0   100% /snap/chromium/3390
+loop3       squashfs 4.0                                                           0   100% /snap/core/17292
+loop4       squashfs 4.0                                                           0   100% /snap/core18/2976
+loop5       squashfs 4.0                                                           0   100% /snap/core18/2999
+loop6       squashfs 4.0                                                           0   100% /snap/core22/2339
+loop7       squashfs 4.0                                                           0   100% /snap/core22/2411
+loop8       squashfs 4.0                                                           0   100% /snap/core24/1499
+loop9       squashfs 4.0                                                           0   100% /snap/core24/1587
+loop10      squashfs 4.0                                                           0   100% /snap/cups/1130
+loop11      squashfs 4.0                                                           0   100% /snap/cups/1146
+loop12      squashfs 4.0                                                           0   100% /snap/firefox/7355
+loop13      squashfs 4.0                                                           0   100% /snap/firefox/7967
+loop14      squashfs 4.0                                                           0   100% /snap/firmware-updater/216
+loop15      squashfs 4.0                                                           0   100% /snap/firmware-updater/226
+loop16      squashfs 4.0                                                           0   100% /snap/genact/62
+loop17      squashfs 4.0                                                           0   100% /snap/gnome-42-2204/247
+loop18      squashfs 4.0                                                           0   100% /snap/gnome-42-2204/226
+loop19      squashfs 4.0                                                           0   100% /snap/gnome-46-2404/125
+loop20      squashfs 4.0                                                           0   100% /snap/gnome-46-2404/153
+loop21      squashfs 4.0                                                           0   100% /snap/gtk-common-themes/1535
+loop22      squashfs 4.0                                                           0   100% /snap/mesa-2404/912
+loop23      squashfs 4.0                                                           0   100% /snap/mesa-2404/1165
+loop24      squashfs 4.0                                                           0   100% /snap/snap-store/1310
+loop25      squashfs 4.0                                                           0   100% /snap/snap-store/1367
+loop26      squashfs 4.0                                                           0   100% /snap/snapd/26382
+loop27      squashfs 4.0                                                           0   100% /snap/snapd/26865
+loop28      squashfs 4.0                                                           0   100% /snap/snapd-desktop-integration/343
+loop29      squashfs 4.0                                                           0   100% /snap/snapd-desktop-integration/361
+loop30      squashfs 4.0                                                           0   100% /snap/chromium/3423
+loop31      squashfs 4.0                                                           0   100% /snap/telegram-desktop/6968
+loop32      squashfs 4.0                                                           0   100% /snap/thunderbird/1040
+loop33      squashfs 4.0                                                           0   100% /snap/zerotier/192
+loop34      squashfs 4.0                                                           0   100% /snap/thunderbird/1029
+loop35      squashfs 4.0                                                           0   100% /snap/telegram-desktop/6994
+sda                                                                                         
+├─sda1                                                                                      
+└─sda2      ext4     1.0                de4fc2d1-ba68-4609-bfdc-d1bfcc3bca06   26,1G    83% /
+nvme0n1                                                                                     
+├─nvme0n1p1 ntfs           Восстановить 540478DB0478C192                                    
+├─nvme0n1p2 vfat     FAT32              9879-5BD2                                           
+├─nvme0n1p3                                                                                 
+└─nvme0n1p4 ntfs                        DCC07D76C07D57AA                                    
+
+===== tty devices =====
+[2] Capturing kernel log...
+journalctl kernel log saved
+[3] Capturing lsusb -v per visible USB ID...
+/home/numi/vkr-usb/logs/010_device_blength_too_short_01_20260516_041508
+[13] Capturing fallback runtime logs on remote host
+dmesg: чтение буфера ядра завершилось неудачно: Операция не позволена
+Fallback logs directory: /home/numi/vkr-usb/logs/010_device_blength_too_short_01_20260516_041509
+[14] Done.
+Remote snapshot directory prefix: ~/vkr-usb/logs/010_device_blength_too_short_01_<timestamp>

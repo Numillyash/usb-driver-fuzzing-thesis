@@ -66,3 +66,12 @@ firmware/esp32c3_bridge/sdkconfig
 
 # Generated USB experiment case config
 firmware/include/usb_case_config.generated.h
+
+# VKR curated execution logs
+/logs/*
+!/logs/runs/
+/logs/runs/*
+!/logs/runs/.gitkeep
+!/logs/runs/README.md
+!/logs/runs/*.log
+!/logs/runs/*.quick_analysis.txt
