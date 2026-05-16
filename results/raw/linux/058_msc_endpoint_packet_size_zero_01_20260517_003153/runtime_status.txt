@@ -1,0 +1,5 @@
+result_name=058_msc_endpoint_packet_size_zero_01
+timestamp=20260517_003153
+runtime_enum_status=normal
+host=numi-linux-otherpc
+kernel=6.17.0-19-generic

@@ -1,0 +1,154 @@
+мая 16 22:16:54 numi-linux-otherpc kernel: usb-storage 1-4:1.0: USB Mass Storage device detected
+мая 16 22:16:54 numi-linux-otherpc kernel: scsi host9: usb-storage 1-4:1.0
+мая 16 22:16:55 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] 16 512-byte logical blocks: (8.19 kB/8.00 KiB)
+мая 16 22:16:55 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Write Protect is off
+мая 16 22:16:55 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Mode Sense: 03 00 00 00
+мая 16 22:16:55 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] No Caching mode page found
+мая 16 22:16:55 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Assuming drive cache: write through
+мая 16 22:16:57 numi-linux-otherpc kernel:  sdb: unable to read partition table
+мая 16 22:16:57 numi-linux-otherpc kernel: sdb: partition table beyond EOD, enabling native capacity
+мая 16 22:16:59 numi-linux-otherpc kernel:  sdb: unable to read partition table
+мая 16 22:16:59 numi-linux-otherpc kernel: sdb: partition table beyond EOD, truncated
+мая 16 22:16:59 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Attached SCSI removable disk
+мая 16 22:39:34 numi-linux-otherpc kernel: usb-storage 1-4:1.0: USB Mass Storage device detected
+мая 16 22:39:34 numi-linux-otherpc kernel: scsi host9: usb-storage 1-4:1.0
+мая 16 22:39:35 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] 262144 512-byte logical blocks: (134 MB/128 MiB)
+мая 16 22:39:35 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Write Protect is off
+мая 16 22:39:35 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Mode Sense: 03 00 00 00
+мая 16 22:39:35 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] No Caching mode page found
+мая 16 22:39:35 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Assuming drive cache: write through
+мая 16 22:39:35 numi-linux-otherpc kernel:  sdb: sdb1
+мая 16 22:39:35 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Attached SCSI removable disk
+мая 16 22:39:40 numi-linux-otherpc kernel: FAT-fs (sdb1): unable to read boot sector to mark fs as dirty
+мая 16 22:39:50 numi-linux-otherpc kernel: usb-storage 1-4:1.0: USB Mass Storage device detected
+мая 16 22:39:50 numi-linux-otherpc kernel: scsi host9: usb-storage 1-4:1.0
+мая 16 22:39:51 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] 16 512-byte logical blocks: (8.19 kB/8.00 KiB)
+мая 16 22:39:51 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Write Protect is off
+мая 16 22:39:51 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Mode Sense: 03 00 00 00
+мая 16 22:39:51 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] No Caching mode page found
+мая 16 22:39:51 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Assuming drive cache: write through
+мая 16 22:39:53 numi-linux-otherpc kernel:  sdb: unable to read partition table
+мая 16 22:39:53 numi-linux-otherpc kernel: sdb: partition table beyond EOD, enabling native capacity
+мая 16 22:39:55 numi-linux-otherpc kernel:  sdb: unable to read partition table
+мая 16 22:39:55 numi-linux-otherpc kernel: sdb: partition table beyond EOD, truncated
+мая 16 22:39:55 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Attached SCSI removable disk
+мая 16 23:16:37 numi-linux-otherpc kernel: usb-storage 1-4:1.0: USB Mass Storage device detected
+мая 16 23:16:37 numi-linux-otherpc kernel: scsi host9: usb-storage 1-4:1.0
+мая 16 23:16:38 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] 262144 512-byte logical blocks: (134 MB/128 MiB)
+мая 16 23:16:38 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Write Protect is off
+мая 16 23:16:38 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Mode Sense: 03 00 00 00
+мая 16 23:16:38 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] No Caching mode page found
+мая 16 23:16:38 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Assuming drive cache: write through
+мая 16 23:16:38 numi-linux-otherpc kernel:  sdb: sdb1
+мая 16 23:16:38 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Attached SCSI removable disk
+мая 16 23:16:43 numi-linux-otherpc kernel: FAT-fs (sdb1): unable to read boot sector to mark fs as dirty
+мая 16 23:16:53 numi-linux-otherpc kernel: usb-storage 1-4:1.0: USB Mass Storage device detected
+мая 16 23:16:53 numi-linux-otherpc kernel: scsi host9: usb-storage 1-4:1.0
+мая 16 23:16:55 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Spinning up disk...
+мая 16 23:18:36 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] 16 512-byte logical blocks: (8.19 kB/8.00 KiB)
+мая 16 23:18:36 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Write Protect is off
+мая 16 23:18:36 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Mode Sense: 03 00 00 00
+мая 16 23:18:36 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] No Caching mode page found
+мая 16 23:18:36 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Assuming drive cache: write through
+мая 16 23:18:36 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Spinning up disk...
+мая 16 23:20:19 numi-linux-otherpc kernel:  sdb: unable to read partition table
+мая 16 23:20:19 numi-linux-otherpc kernel: sdb: partition table beyond EOD, enabling native capacity
+мая 16 23:20:20 numi-linux-otherpc kernel:  sdb: unable to read partition table
+мая 16 23:20:20 numi-linux-otherpc kernel: sdb: partition table beyond EOD, truncated
+мая 16 23:20:20 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Attached SCSI removable disk
+мая 16 23:47:51 numi-linux-otherpc kernel: usb-storage 1-4:1.0: USB Mass Storage device detected
+мая 16 23:47:51 numi-linux-otherpc kernel: scsi host9: usb-storage 1-4:1.0
+мая 16 23:47:52 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] 262144 512-byte logical blocks: (134 MB/128 MiB)
+мая 16 23:47:52 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Write Protect is off
+мая 16 23:47:52 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Mode Sense: 03 00 00 00
+мая 16 23:47:52 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] No Caching mode page found
+мая 16 23:47:52 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Assuming drive cache: write through
+мая 16 23:47:52 numi-linux-otherpc kernel:  sdb: sdb1
+мая 16 23:47:52 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Attached SCSI removable disk
+мая 16 23:47:57 numi-linux-otherpc kernel: FAT-fs (sdb1): unable to read boot sector to mark fs as dirty
+мая 16 23:48:07 numi-linux-otherpc kernel: usb-storage 1-4:1.0: USB Mass Storage device detected
+мая 16 23:48:07 numi-linux-otherpc kernel: scsi host9: usb-storage 1-4:1.0
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] 16 512-byte logical blocks: (8.19 kB/8.00 KiB)
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Write Protect is off
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Mode Sense: 03 00 00 00
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] No Caching mode page found
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Assuming drive cache: write through
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 FAILED Result: hostbyte=DID_OK driverbyte=DRIVER_OK cmd_age=0s
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Sense Key : Not Ready [current] 
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Add. Sense: Medium not present
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 16 23:48:08 numi-linux-otherpc kernel: I/O error, dev sdb, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+мая 16 23:48:08 numi-linux-otherpc kernel: Buffer I/O error on dev sdb, logical block 0, async page read
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 FAILED Result: hostbyte=DID_OK driverbyte=DRIVER_OK cmd_age=0s
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Sense Key : Not Ready [current] 
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Add. Sense: Medium not present
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 16 23:48:08 numi-linux-otherpc kernel: I/O error, dev sdb, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+мая 16 23:48:08 numi-linux-otherpc kernel: Buffer I/O error on dev sdb, logical block 0, async page read
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 FAILED Result: hostbyte=DID_OK driverbyte=DRIVER_OK cmd_age=0s
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Sense Key : Not Ready [current] 
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Add. Sense: Medium not present
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 16 23:48:08 numi-linux-otherpc kernel: I/O error, dev sdb, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+мая 16 23:48:08 numi-linux-otherpc kernel: Buffer I/O error on dev sdb, logical block 0, async page read
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 FAILED Result: hostbyte=DID_OK driverbyte=DRIVER_OK cmd_age=0s
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Sense Key : Not Ready [current] 
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Add. Sense: Medium not present
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 16 23:48:08 numi-linux-otherpc kernel: I/O error, dev sdb, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+мая 16 23:48:08 numi-linux-otherpc kernel: Buffer I/O error on dev sdb, logical block 0, async page read
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 FAILED Result: hostbyte=DID_OK driverbyte=DRIVER_OK cmd_age=0s
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Sense Key : Not Ready [current] 
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Add. Sense: Medium not present
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 16 23:48:09 numi-linux-otherpc kernel: I/O error, dev sdb, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+мая 16 23:48:09 numi-linux-otherpc kernel: Buffer I/O error on dev sdb, logical block 0, async page read
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 FAILED Result: hostbyte=DID_OK driverbyte=DRIVER_OK cmd_age=0s
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Sense Key : Not Ready [current] 
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Add. Sense: Medium not present
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 16 23:48:09 numi-linux-otherpc kernel: I/O error, dev sdb, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+мая 16 23:48:09 numi-linux-otherpc kernel: Buffer I/O error on dev sdb, logical block 0, async page read
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 FAILED Result: hostbyte=DID_OK driverbyte=DRIVER_OK cmd_age=0s
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Sense Key : Not Ready [current] 
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Add. Sense: Medium not present
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 16 23:48:09 numi-linux-otherpc kernel: I/O error, dev sdb, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+мая 16 23:48:09 numi-linux-otherpc kernel: Buffer I/O error on dev sdb, logical block 0, async page read
+мая 16 23:48:09 numi-linux-otherpc kernel: Dev sdb: unable to read RDB block 0
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 FAILED Result: hostbyte=DID_OK driverbyte=DRIVER_OK cmd_age=0s
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Sense Key : Not Ready [current] 
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Add. Sense: Medium not present
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 16 23:48:09 numi-linux-otherpc kernel: I/O error, dev sdb, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+мая 16 23:48:09 numi-linux-otherpc kernel: Buffer I/O error on dev sdb, logical block 0, async page read
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 FAILED Result: hostbyte=DID_OK driverbyte=DRIVER_OK cmd_age=0s
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Sense Key : Not Ready [current] 
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Add. Sense: Medium not present
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 16 23:48:09 numi-linux-otherpc kernel: I/O error, dev sdb, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+мая 16 23:48:09 numi-linux-otherpc kernel: Buffer I/O error on dev sdb, logical block 0, async page read
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 FAILED Result: hostbyte=DID_OK driverbyte=DRIVER_OK cmd_age=0s
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Sense Key : Not Ready [current] 
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Add. Sense: Medium not present
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 16 23:48:09 numi-linux-otherpc kernel: I/O error, dev sdb, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+мая 16 23:48:09 numi-linux-otherpc kernel: Buffer I/O error on dev sdb, logical block 0, async page read
+мая 16 23:48:09 numi-linux-otherpc kernel:  sdb: unable to read partition table
+мая 16 23:48:09 numi-linux-otherpc kernel: sdb: partition table beyond EOD, enabling native capacity
+мая 16 23:48:09 numi-linux-otherpc kernel: Dev sdb: unable to read RDB block 0
+мая 16 23:48:10 numi-linux-otherpc kernel:  sdb: unable to read partition table
+мая 16 23:48:10 numi-linux-otherpc kernel: sdb: partition table beyond EOD, truncated
+мая 16 23:48:10 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Attached SCSI removable disk
+мая 17 00:31:36 numi-linux-otherpc kernel: usb-storage 1-4:1.0: USB Mass Storage device detected
+мая 17 00:31:36 numi-linux-otherpc kernel: scsi host9: usb-storage 1-4:1.0
+мая 17 00:31:37 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] 262144 512-byte logical blocks: (134 MB/128 MiB)
+мая 17 00:31:37 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Write Protect is off
+мая 17 00:31:37 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Mode Sense: 03 00 00 00
+мая 17 00:31:37 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] No Caching mode page found
+мая 17 00:31:37 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Assuming drive cache: write through
+мая 17 00:31:37 numi-linux-otherpc kernel:  sdb: sdb1
+мая 17 00:31:37 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Attached SCSI removable disk
+мая 17 00:31:42 numi-linux-otherpc kernel: FAT-fs (sdb1): unable to read boot sector to mark fs as dirty
+мая 17 00:31:52 numi-linux-otherpc kernel: usb-storage 1-4:1.0: USB Mass Storage device detected
+мая 17 00:31:52 numi-linux-otherpc kernel: scsi host9: usb-storage 1-4:1.0
