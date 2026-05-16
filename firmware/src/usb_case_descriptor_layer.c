@@ -501,7 +501,11 @@ bool tud_msc_test_unit_ready_cb(uint8_t lun)
 void tud_msc_capacity_cb(uint8_t lun, uint32_t *block_count, uint16_t *block_size)
 {
     (void)lun;
+#if (USB_CASE_ID == 52u)
+    *block_count = 0u;
+#else
     *block_count = USB_CASE_MSC_BLOCK_COUNT;
+#endif
 #if (USB_CASE_ID == 51u)
     *block_size = 0u;
 #else
