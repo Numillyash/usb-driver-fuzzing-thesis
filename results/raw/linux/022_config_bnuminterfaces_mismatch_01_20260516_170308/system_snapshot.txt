@@ -1,0 +1,63 @@
+===== uname -a =====
+Linux numi-linux-otherpc 6.17.0-19-generic #19~24.04.2-Ubuntu SMP PREEMPT_DYNAMIC Fri Mar  6 23:08:46 UTC 2 x86_64 x86_64 x86_64 GNU/Linux
+
+===== groups =====
+numi adm dialout cdrom sudo dip plugdev users lpadmin libvirt kvm
+
+===== lsusb =====
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 001 Device 006: ID 0461:4e99 Primax Electronics, Ltd Acer Elite USB Keyboard
+Bus 001 Device 007: ID 0461:4e98 Primax Electronics, Ltd Acer Elite USB Optical Mouse
+Bus 001 Device 048: ID 2e8a:4005 RP2040 USB Research usb_case_custom_demo CDC baseli
+Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+
+===== lsblk -f =====
+NAME        FSTYPE   FSVER LABEL        UUID                                 FSAVAIL FSUSE% MOUNTPOINTS
+loop0       squashfs 4.0                                                           0   100% /snap/bare/5
+loop1       squashfs 4.0                                                           0   100% /snap/core24/1643
+loop2       squashfs 4.0                                                           0   100% /snap/chromium/3390
+loop3       squashfs 4.0                                                           0   100% /snap/core/17292
+loop4       squashfs 4.0                                                           0   100% /snap/core18/2976
+loop5       squashfs 4.0                                                           0   100% /snap/core18/2999
+loop6       squashfs 4.0                                                           0   100% /snap/core22/2339
+loop7       squashfs 4.0                                                           0   100% /snap/core22/2411
+loop8       squashfs 4.0                                                           0   100% /snap/cups/1183
+loop9       squashfs 4.0                                                           0   100% /snap/core24/1587
+loop10      squashfs 4.0                                                           0   100% /snap/thunderbird/1104
+loop11      squashfs 4.0                                                           0   100% /snap/cups/1146
+loop12      squashfs 4.0                                                           0   100% /snap/firefox/7355
+loop13      squashfs 4.0                                                           0   100% /snap/firefox/7967
+loop14      squashfs 4.0                                                           0   100% /snap/firmware-updater/216
+loop15      squashfs 4.0                                                           0   100% /snap/firmware-updater/226
+loop16      squashfs 4.0                                                           0   100% /snap/genact/62
+loop17      squashfs 4.0                                                           0   100% /snap/gnome-42-2204/247
+loop18      squashfs 4.0                                                           0   100% /snap/gnome-42-2204/226
+loop19      squashfs 4.0                                                           0   100% /snap/gnome-46-2404/125
+loop20      squashfs 4.0                                                           0   100% /snap/gnome-46-2404/153
+loop21      squashfs 4.0                                                           0   100% /snap/gtk-common-themes/1535
+loop22      squashfs 4.0                                                           0   100% /snap/mesa-2404/912
+loop23      squashfs 4.0                                                           0   100% /snap/mesa-2404/1165
+loop24      squashfs 4.0                                                           0   100% /snap/snap-store/1310
+loop25      squashfs 4.0                                                           0   100% /snap/snap-store/1367
+loop26      squashfs 4.0                                                           0   100% /snap/snapd/26382
+loop27      squashfs 4.0                                                           0   100% /snap/snapd/26865
+loop28      squashfs 4.0                                                           0   100% /snap/snapd-desktop-integration/343
+loop29      squashfs 4.0                                                           0   100% /snap/snapd-desktop-integration/361
+loop30      squashfs 4.0                                                           0   100% /snap/chromium/3423
+loop31      squashfs 4.0                                                           0   100% /snap/telegram-desktop/6968
+loop32      squashfs 4.0                                                           0   100% /snap/thunderbird/1040
+loop33      squashfs 4.0                                                           0   100% /snap/zerotier/192
+loop35      squashfs 4.0                                                           0   100% /snap/telegram-desktop/6994
+sda                                                                                         
+├─sda1                                                                                      
+└─sda2      ext4     1.0                de4fc2d1-ba68-4609-bfdc-d1bfcc3bca06   26,1G    83% /
+nvme0n1                                                                                     
+├─nvme0n1p1 ntfs           Восстановить 540478DB0478C192                                    
+├─nvme0n1p2 vfat     FAT32              9879-5BD2                                           
+├─nvme0n1p3                                                                                 
+└─nvme0n1p4 ntfs                        DCC07D76C07D57AA                                    
+
+===== tty devices =====
+crw-rw-rw- 1 root dialout 166, 0 мая 16 17:03 /dev/ttyACM0
