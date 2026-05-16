@@ -63,3 +63,21 @@
 - Блок `timing/state mutations`.
 
 Фокус сохраняется: только безопасные descriptor/enumeration robustness-эксперименты, без утверждений о баге драйвера/ядра без прямого трассировочного подтверждения.
+
+## 8. Дополнение: MSC-блок 050-059
+Завершён отдельный Linux-only блок MSC-кейсов `050-059`; подробности вынесены в [docs/results/linux_msc_summary.md](/root/usb-driver-fuzzing-thesis/docs/results/linux_msc_summary.md).
+
+Краткие счётчики по классификации для `050-059`:
+- `OK`: 1
+- `PARTIAL_ENUM`: 6
+- `KERNEL_WARNING`: 4
+- `EXPECTED_REJECT`: 0
+- `DRIVER_BIND_ERROR`: 0
+- `USERSPACE_FAILURE`: 0
+- `DRIVER_CRASH`: 0
+- `SYSTEM_CRASH`: 0
+
+Интерпретация на верхнем уровне:
+- во всех MSC-кейсах подтверждались признаки USB enumeration и bind к `usb-storage`;
+- часть кейсов демонстрировала деградацию уже на storage/SCSI/block-слое;
+- подтверждённых падений драйвера и системы не обнаружено.
