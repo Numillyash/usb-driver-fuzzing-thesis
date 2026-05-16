@@ -1,0 +1,5 @@
+result_name=031_endpoint_wmaxpacketsize_zero_01
+timestamp=20260516_175233
+runtime_enum_status=normal
+host=numi-linux-otherpc
+kernel=6.17.0-19-generic

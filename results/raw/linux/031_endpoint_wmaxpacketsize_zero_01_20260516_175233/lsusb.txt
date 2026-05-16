@@ -1,0 +1,7 @@
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 001 Device 006: ID 0461:4e99 Primax Electronics, Ltd Acer Elite USB Keyboard
+Bus 001 Device 007: ID 0461:4e98 Primax Electronics, Ltd Acer Elite USB Optical Mouse
+Bus 001 Device 054: ID 2e8a:4005 RP2040 USB Research usb_case_custom_demo CDC baseli
+Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
