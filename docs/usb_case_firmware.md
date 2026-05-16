@@ -28,6 +28,15 @@
 Для `001` публикуется inert HID-only interface (без инжекции ввода, без выполнения команд на хосте).
 Для `002` публикуется безопасный composite descriptor: один configuration, три интерфейса (CDC Comm, CDC Data, HID), без host actions.
 
+Дополнительно в `usb_case_custom_demo` реализован первый блок безопасных негативных кейсов device descriptor:
+
+- `010_device_blength_too_short`: `bLength` намеренно меньше стандартной длины device descriptor.
+- `011_device_blength_too_long`: `bLength` намеренно больше стандартной длины device descriptor.
+- `012_device_unknown_class`: `bDeviceClass` установлен в необычное/неизвестное значение.
+- `013_device_zero_vid_pid`: `idVendor=0x0000`, `idProduct=0x0000`.
+
+Эти кейсы ограничены уровнем descriptor/enumeration и не добавляют host actions. Для malformed descriptor сценариев enumeration может завершиться до появления CDC/tty.
+
 ## Границы безопасности
 
 `usb_case_demo` предназначен только для безопасных USB-экспериментов:

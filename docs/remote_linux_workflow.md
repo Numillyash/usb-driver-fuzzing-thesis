@@ -70,3 +70,15 @@
 Для HID-only/no-CDC кейсов устройство может не создавать `/dev/ttyACM0`. В таком сценарии обязательный serial smoke-test даёт ложное падение pipeline, хотя USB enumeration/descriptor эксперимент выполнен корректно. Опция `--no-serial-test` отключает только CDC-проверку, сохраняя прошивку и сбор артефактов USB.
 
 Для `usb_case_custom_demo` с persona `002_baseline_composite_cdc_hid` CDC присутствует, поэтому `--no-serial-test` обычно не требуется.
+
+Для негативных device descriptor кейсов `010`/`011`/`012`/`013` обычно следует использовать:
+
+```bash
+./tools/run-remote-linux-case.sh \
+  --uf2 build/usb_case_custom_demo.uf2 \
+  --no-serial-test \
+  experiments/cases/<case>.json \
+  <result-name>
+```
+
+Причина: при malformed descriptor кейсах устройство может не дойти до стадии, где создаётся `/dev/ttyACM0`, и это может быть ожидаемым экспериментальным результатом.

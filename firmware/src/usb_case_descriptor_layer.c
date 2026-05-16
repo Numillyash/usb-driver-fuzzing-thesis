@@ -94,6 +94,89 @@ static const tusb_desc_device_t usb_case_device_desc = {
     .bNumConfigurations = 1,
 };
 
+static const tusb_desc_device_t usb_case_device_desc_blength_too_short = {
+    .bLength = 8u,
+    .bDescriptorType = TUSB_DESC_DEVICE,
+    .bcdUSB = 0x0200,
+    .bDeviceClass = TUSB_CLASS_MISC,
+    .bDeviceSubClass = MISC_SUBCLASS_COMMON,
+    .bDeviceProtocol = MISC_PROTOCOL_IAD,
+    .bMaxPacketSize0 = CFG_TUD_ENDPOINT0_SIZE,
+    .idVendor = 0x2E8A,
+    .idProduct = 0x4005,
+    .bcdDevice = 0x0100,
+    .iManufacturer = USB_CASE_STRIDX_MANUFACTURER,
+    .iProduct = USB_CASE_STRIDX_PRODUCT,
+    .iSerialNumber = USB_CASE_STRIDX_SERIAL,
+    .bNumConfigurations = 1,
+};
+
+static const tusb_desc_device_t usb_case_device_desc_blength_too_long = {
+    .bLength = 64u,
+    .bDescriptorType = TUSB_DESC_DEVICE,
+    .bcdUSB = 0x0200,
+    .bDeviceClass = TUSB_CLASS_MISC,
+    .bDeviceSubClass = MISC_SUBCLASS_COMMON,
+    .bDeviceProtocol = MISC_PROTOCOL_IAD,
+    .bMaxPacketSize0 = CFG_TUD_ENDPOINT0_SIZE,
+    .idVendor = 0x2E8A,
+    .idProduct = 0x4005,
+    .bcdDevice = 0x0100,
+    .iManufacturer = USB_CASE_STRIDX_MANUFACTURER,
+    .iProduct = USB_CASE_STRIDX_PRODUCT,
+    .iSerialNumber = USB_CASE_STRIDX_SERIAL,
+    .bNumConfigurations = 1,
+};
+
+static const tusb_desc_device_t usb_case_device_desc_unknown_class = {
+    .bLength = sizeof(tusb_desc_device_t),
+    .bDescriptorType = TUSB_DESC_DEVICE,
+    .bcdUSB = 0x0200,
+    .bDeviceClass = 0xAAu,
+    .bDeviceSubClass = 0x00u,
+    .bDeviceProtocol = 0x00u,
+    .bMaxPacketSize0 = CFG_TUD_ENDPOINT0_SIZE,
+    .idVendor = 0x2E8A,
+    .idProduct = 0x4005,
+    .bcdDevice = 0x0100,
+    .iManufacturer = USB_CASE_STRIDX_MANUFACTURER,
+    .iProduct = USB_CASE_STRIDX_PRODUCT,
+    .iSerialNumber = USB_CASE_STRIDX_SERIAL,
+    .bNumConfigurations = 1,
+};
+
+static const tusb_desc_device_t usb_case_device_desc_zero_vid_pid = {
+    .bLength = sizeof(tusb_desc_device_t),
+    .bDescriptorType = TUSB_DESC_DEVICE,
+    .bcdUSB = 0x0200,
+    .bDeviceClass = TUSB_CLASS_MISC,
+    .bDeviceSubClass = MISC_SUBCLASS_COMMON,
+    .bDeviceProtocol = MISC_PROTOCOL_IAD,
+    .bMaxPacketSize0 = CFG_TUD_ENDPOINT0_SIZE,
+    .idVendor = 0x0000u,
+    .idProduct = 0x0000u,
+    .bcdDevice = 0x0100,
+    .iManufacturer = USB_CASE_STRIDX_MANUFACTURER,
+    .iProduct = USB_CASE_STRIDX_PRODUCT,
+    .iSerialNumber = USB_CASE_STRIDX_SERIAL,
+    .bNumConfigurations = 1,
+};
+
+static uint8_t const *usb_case_select_device_descriptor(void)
+{
+#if (USB_CASE_ID == 10u)
+    return (uint8_t const *)&usb_case_device_desc_blength_too_short;
+#elif (USB_CASE_ID == 11u)
+    return (uint8_t const *)&usb_case_device_desc_blength_too_long;
+#elif (USB_CASE_ID == 12u)
+    return (uint8_t const *)&usb_case_device_desc_unknown_class;
+#elif (USB_CASE_ID == 13u)
+    return (uint8_t const *)&usb_case_device_desc_zero_vid_pid;
+#else
+    return (uint8_t const *)&usb_case_device_desc;
+#endif
+}
+
 static const uint8_t usb_case_cfg_desc_cdc[] = {
     TUD_CONFIG_DESCRIPTOR(1, 2, 0, USB_CASE_CDC_TOTAL_LEN, 0x00, 100),
     TUD_CDC_DESCRIPTOR(
@@ -182,7 +265,7 @@ static const char *usb_case_get_serial_string(void)
 
 uint8_t const *tud_descriptor_device_cb(void)
 {
-    return (uint8_t const *)&usb_case_device_desc;
+    return usb_case_select_device_descriptor();
 }
 
 uint8_t const *tud_descriptor_configuration_cb(uint8_t index)
