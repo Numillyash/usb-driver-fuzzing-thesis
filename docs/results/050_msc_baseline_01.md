@@ -63,3 +63,9 @@
 3. `rg -n "2e8a:4006|Class=Mass Storage|Driver=usb-storage" results/raw/linux/050_msc_baseline_01_*/{lsusb.txt,system_snapshot.txt,lsusb_tree.txt}`
 4. `rg -n "usb-storage 1-4:1.0|scsi host9|Attached SCSI removable disk|unable to read partition table|partition table beyond EOD" results/raw/linux/050_msc_baseline_01_*/journalctl_k_tail*.txt`
 5. `rg -n "BUG:|Oops|kernel panic|Call Trace|segfault" results/raw/linux/050_msc_baseline_01_*/{journalctl_k_tail.txt,journalctl_k_tail_300.txt,dmesg_tail_300.txt,dmesg_full.txt}`
+
+## 9. Примечание по корректировке раннера
+- Изначально раннер классифицировал запуск как `partial`, так как эвристика `normal` была ориентирована на `ttyACM` (CDC).
+- По артефактам этого кейса устройство `2e8a:4006` успешно доходило до `Class=Mass Storage, Driver=usb-storage` и SCSI-attach (`usb-storage/scsi/sd` в kernel-логах).
+- `tools/run-remote-linux-case.sh` обновлён: для MSC-кейсов наличие RP2040-устройства и признаков bind к `usb-storage` теперь считается `normal`.
+- Сообщения о разметке носителя (`unable to read partition table`, `partition table beyond EOD`) трактуются как особенности media layout, а не падение драйвера/системы.

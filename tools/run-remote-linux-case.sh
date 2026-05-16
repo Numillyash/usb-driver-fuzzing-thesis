@@ -147,7 +147,28 @@ if [[ "$TTY_COUNT" -ge 1 ]]; then
     echo "normal"
     exit 0
 fi
-if lsusb | awk '{print tolower($6)}' | grep -qE '^[0-9a-f]{4}:[0-9a-f]{4}$'; then
+USB_ID_LIST="$(lsusb | awk '{print tolower($6)}' | grep -E '^[0-9a-f]{4}:[0-9a-f]{4}$' || true)"
+RP2040_VISIBLE=0
+if echo "$USB_ID_LIST" | grep -qE '^2e8a:[0-9a-f]{4}$'; then
+    RP2040_VISIBLE=1
+fi
+
+if [[ "$RP2040_VISIBLE" -eq 1 ]]; then
+    if lsusb -t 2>/dev/null | grep -qE 'Class=Mass Storage, Driver=usb-storage'; then
+        echo "normal"
+        exit 0
+    fi
+    if (journalctl -k -n 240 --no-pager 2>/dev/null || true) | grep -qE 'usb-storage .*USB Mass Storage device detected|scsi host[0-9]+: usb-storage|Attached SCSI removable disk'; then
+        echo "normal"
+        exit 0
+    fi
+    if (dmesg | tail -n 240 2>/dev/null || true) | grep -qE 'usb-storage .*USB Mass Storage device detected|scsi host[0-9]+: usb-storage|Attached SCSI removable disk'; then
+        echo "normal"
+        exit 0
+    fi
+fi
+
+if [[ -n "$USB_ID_LIST" ]]; then
     echo "partial"
 else
     echo "failed"
@@ -204,8 +225,15 @@ mkdir -p "$LOG_DIR"
 
 lsusb > "$LOG_DIR/lsusb.txt" 2>&1 || true
 lsusb -t > "$LOG_DIR/lsusb_tree.txt" 2>&1 || true
+lsblk -f > "$LOG_DIR/lsblk_f.txt" 2>&1 || true
 journalctl -k -n 120 --no-pager > "$LOG_DIR/journalctl_k_tail.txt" 2>&1 || true
+journalctl -k -n 300 --no-pager > "$LOG_DIR/journalctl_k_tail_300.txt" 2>&1 || true
 dmesg | tail -n 120 > "$LOG_DIR/dmesg_tail.txt" 2>&1 || true
+dmesg | tail -n 300 > "$LOG_DIR/dmesg_tail_300.txt" 2>&1 || true
+{
+    (journalctl -k -n 300 --no-pager 2>/dev/null || true)
+    (dmesg | tail -n 300 2>/dev/null || true)
+} | grep -Ei "usb-storage|scsi host|attached scsi removable disk|\\bsd[a-z][0-9]*\\b" > "$LOG_DIR/kernel_usb_storage_scsi_sd.txt" 2>&1 || true
 ls -l /dev/ttyACM* /dev/ttyUSB* > "$LOG_DIR/tty_devices.txt" 2>&1 || true
 find /sys/bus/usb/devices -maxdepth 2 -type f \
     \( -name idVendor -o -name idProduct -o -name manufacturer -o -name product -o -name serial \) \
