@@ -1,0 +1,5 @@
+result_name=053_msc_huge_capacity_01
+timestamp=20260516_214701
+runtime_enum_status=normal
+host=numi-linux-otherpc
+kernel=6.17.0-19-generic
