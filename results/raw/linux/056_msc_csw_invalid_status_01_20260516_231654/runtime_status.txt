@@ -1,0 +1,5 @@
+result_name=056_msc_csw_invalid_status_01
+timestamp=20260516_231654
+runtime_enum_status=normal
+host=numi-linux-otherpc
+kernel=6.17.0-19-generic
