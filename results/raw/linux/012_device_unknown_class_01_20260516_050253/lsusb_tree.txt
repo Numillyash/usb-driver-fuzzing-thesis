@@ -1,0 +1,9 @@
+/:  Bus 001.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/10p, 480M
+    |__ Port 004: Dev 040, If 0, Class=Communications, Driver=cdc_acm, 12M
+    |__ Port 004: Dev 040, If 1, Class=CDC Data, Driver=cdc_acm, 12M
+    |__ Port 005: Dev 006, If 0, Class=Human Interface Device, Driver=usbhid, 1.5M
+    |__ Port 005: Dev 006, If 1, Class=Human Interface Device, Driver=usbhid, 1.5M
+    |__ Port 006: Dev 007, If 0, Class=Human Interface Device, Driver=usbhid, 1.5M
+/:  Bus 002.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/4p, 10000M
+/:  Bus 003.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/4p, 480M
+/:  Bus 004.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/4p, 5000M

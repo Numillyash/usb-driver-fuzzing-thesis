@@ -1,0 +1,5 @@
+result_name=012_device_unknown_class_01
+timestamp=20260516_050253
+runtime_enum_status=normal
+host=numi-linux-otherpc
+kernel=6.17.0-19-generic
