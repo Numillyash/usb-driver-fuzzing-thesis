@@ -17,13 +17,18 @@
 ## CLI-параметры
 
 ```bash
-./tools/run-remote-linux-case.sh [--uf2 <path>] [--no-serial-test] <case-json> <result-name>
+./tools/run-remote-linux-case.sh [--uf2 <path>] [--no-serial-test] [--allow-runtime-enum-failure] [--runtime-wait-seconds <N>] <case-json> <result-name>
 ```
 
 - `--uf2 <path>`: путь к локальному UF2 для прошивки.
   - По умолчанию: `build/usb_case_demo.uf2`.
 - `--no-serial-test`: отключает удалённый запуск `~/vkr-usb/scripts/test_usb_case_serial_linux.py`.
   - По умолчанию serial smoke-test включён.
+- `--allow-runtime-enum-failure`: разрешает негативный исход runtime-enumeration после прошивки.
+  - В этом режиме отсутствие `/dev/ttyACM*` не считается ошибкой.
+  - Serial smoke-test автоматически пропускается, если runtime-enumeration не `normal`.
+  - Скрипт всё равно сохраняет Linux USB логи (`lsusb`, `lsusb -t`, `journalctl -k`, `dmesg`, `/dev/tty*`, `/sys/bus/usb/devices`).
+- `--runtime-wait-seconds <N>`: ожидание runtime-enumeration после прошивки (целое число, по умолчанию `8`).
 
 Скрипт печатает выбранный UF2 и состояние serial smoke-test перед копированием на удалённый хост.
 
@@ -77,8 +82,23 @@
 ./tools/run-remote-linux-case.sh \
   --uf2 build/usb_case_custom_demo.uf2 \
   --no-serial-test \
+  --allow-runtime-enum-failure \
+  --runtime-wait-seconds 10 \
   experiments/cases/<case>.json \
   <result-name>
 ```
 
 Причина: при malformed descriptor кейсах устройство может не дойти до стадии, где создаётся `/dev/ttyACM0`, и это может быть ожидаемым экспериментальным результатом.
+
+Для кейсов:
+- `010_device_desc_blength_short.json`
+- `011_device_desc_bnumconfig_zero.json`
+- `012_device_desc_maxpkt_zero.json`
+- `013_device_desc_ep0_mismatch.json`
+
+нормальным наблюдением может быть один из статусов runtime USB enumeration:
+- `normal`: устройство перечислилось штатно (обычно есть `/dev/ttyACM*`).
+- `partial`: USB-активность видна в `lsusb`, но штатный CDC runtime не сформирован.
+- `failed`: runtime-устройство не перечислилось в рабочем виде.
+
+Важный момент для интерпретации результатов: отсутствие `ttyACM` и/или ошибка конфигурации в kernel log для malformed descriptor кейсов может быть ожидаемым outcome эксперимента, а не ошибкой пайплайна.
