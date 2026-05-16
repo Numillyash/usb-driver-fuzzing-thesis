@@ -1,0 +1,12 @@
+{
+  "case_id": "059",
+  "name": "msc_bot_residue_mismatch",
+  "group": "msc",
+  "base_persona": "msc_inert_readonly",
+  "description": "Безопасная class-level мутация MSC BOT для Linux: детерминированный short-data ответ на READ(10) как контролируемый эквивалент рассогласования residue при сохранении inert/read-only RAM-backed модели устройства.",
+  "mutation": "Controlled short-data completion on READ(10) (case-gated for USB_CASE_ID=59) as closest TinyUSB-safe equivalent of BOT residue mismatch.",
+  "expected_windows": "Сценарий ориентирован на Linux-only фазу; для Windows запуск в данном этапе не требуется.",
+  "expected_linux": "Ожидается bind usb-storage с последующими I/O предупреждениями/ошибками протокольного уровня без краша хоста.",
+  "risk_level": "safe",
+  "notes": "Запись запрещена (write10 reject), доступ к ресурсам хоста отсутствует; мутация ограничена case-gated callback-путём MSC."
+}

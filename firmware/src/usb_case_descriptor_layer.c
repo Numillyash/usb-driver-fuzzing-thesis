@@ -552,6 +552,7 @@ int32_t tud_msc_read10_cb(uint8_t lun, uint32_t lba, uint32_t offset, void *buff
 {
     uint32_t media_offset = 0u;
     uint64_t media_offset_64 = 0u;
+    uint32_t bytes_to_copy = 0u;
 
     (void)lun;
     usb_case_msc_init_media();
@@ -597,8 +598,20 @@ int32_t tud_msc_read10_cb(uint8_t lun, uint32_t lba, uint32_t offset, void *buff
         bufsize = USB_CASE_MSC_MEDIA_SIZE - media_offset;
     }
 
-    memcpy(buffer, &usb_case_msc_media[media_offset], bufsize);
-    return (int32_t)bufsize;
+    bytes_to_copy = bufsize;
+#if (USB_CASE_ID == 59u)
+    /*
+     * TinyUSB callback API does not provide direct safe control over literal
+     * CSW residue bytes. For case 059, emulate BOT residue mismatch behavior
+     * via deterministic short-data completion on READ(10).
+     */
+    if (bytes_to_copy > 0u) {
+        bytes_to_copy--;
+    }
+#endif
+
+    memcpy(buffer, &usb_case_msc_media[media_offset], bytes_to_copy);
+    return (int32_t)bytes_to_copy;
 }
 
 int32_t tud_msc_write10_cb(uint8_t lun, uint32_t lba, uint32_t offset, uint8_t *buffer, uint32_t bufsize)
