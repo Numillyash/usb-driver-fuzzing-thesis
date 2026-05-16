@@ -1,0 +1,12 @@
+{
+  "case_id": "056",
+  "name": "msc_csw_invalid_status",
+  "group": "msc",
+  "base_persona": "msc_inert_readonly",
+  "description": "Безопасная мутация MSC BOT для Linux: устройство остаётся inert/read-only, а путь статуса команды моделирует некорректный CSW status через контролируемый fail-ответ (ближайший эквивалент при ограничениях TinyUSB API).",
+  "mutation": "CSW invalid status is modeled as controlled non-good command status equivalent (command failure path) while keeping descriptors valid and media RAM-backed read-only.",
+  "expected_windows": "Сценарий ориентирован на Linux-only фазу; для Windows запуск в данном этапе не требуется.",
+  "expected_linux": "Ожидается BOT recovery/retry или отказ bind/инициализации носителя (PARTIAL_ENUM/KERNEL_WARNING) без краша хоста.",
+  "risk_level": "safe",
+  "notes": "Запись на носитель запрещена, данные остаются детерминированными и RAM-backed, доступ к ресурсам хоста отсутствует; literal CSW status byte напрямую не инжектируется через публичный callback API TinyUSB, применяется безопасный эквивалент через controlled command failure."
+}

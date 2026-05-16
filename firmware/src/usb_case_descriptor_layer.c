@@ -496,6 +496,15 @@ bool tud_msc_test_unit_ready_cb(uint8_t lun)
 {
     (void)lun;
     usb_case_msc_init_media();
+#if (USB_CASE_ID == 56u)
+    /*
+     * TinyUSB MSC callbacks do not expose a public API to emit a literal
+     * invalid CSW status byte value. For case 056, model this safely as the
+     * closest equivalent: a controlled non-good command status path.
+     */
+    tud_msc_set_sense(lun, SCSI_SENSE_NOT_READY, 0x04, 0x01);
+    return false;
+#endif
     return true;
 }
 
