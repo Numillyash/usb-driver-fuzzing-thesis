@@ -502,7 +502,11 @@ void tud_msc_capacity_cb(uint8_t lun, uint32_t *block_count, uint16_t *block_siz
 {
     (void)lun;
     *block_count = USB_CASE_MSC_BLOCK_COUNT;
+#if (USB_CASE_ID == 51u)
+    *block_size = 0u;
+#else
     *block_size = USB_CASE_MSC_BLOCK_SIZE;
+#endif
 }
 
 bool tud_msc_start_stop_cb(uint8_t lun, uint8_t power_condition, bool start, bool load_eject)

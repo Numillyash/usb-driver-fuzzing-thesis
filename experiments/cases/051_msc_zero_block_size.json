@@ -1,0 +1,12 @@
+{
+  "case_id": "051",
+  "name": "msc_zero_block_size",
+  "group": "msc",
+  "base_persona": "msc_inert_readonly",
+  "description": "Безопасная мутация MSC BOT для Linux: устройство остаётся inert/read-only, а в ответе capacity возвращается нулевой логический размер блока.",
+  "mutation": "MSC capacity reports block_size=0 while keeping descriptors valid and media RAM-backed read-only.",
+  "expected_windows": "Сценарий ориентирован на Linux-only фазу; для Windows запуск в данном этапе не требуется.",
+  "expected_linux": "Ожидается bind usb-storage с последующим отказом инициализации логического диска или partial enum из-за некорректного block_size=0.",
+  "risk_level": "safe",
+  "notes": "Запись на носитель запрещена, данные остаются детерминированными и RAM-backed, доступ к ресурсам хоста отсутствует."
+}
