@@ -542,6 +542,21 @@ int32_t tud_msc_read10_cb(uint8_t lun, uint32_t lba, uint32_t offset, void *buff
     (void)lun;
     usb_case_msc_init_media();
 
+#if (USB_CASE_ID == 57u)
+    /*
+     * TinyUSB MSC callback API does not provide a public primitive to force
+     * a literal bulk endpoint STALL directly from READ(10) callback context.
+     * For case 057, model "STALL/failure on READ(10)" as the closest safe
+     * equivalent: deterministic command failure on READ(10) with sense data.
+     */
+    (void)lba;
+    (void)offset;
+    (void)buffer;
+    (void)bufsize;
+    tud_msc_set_sense(lun, SCSI_SENSE_MEDIUM_ERROR, 0x11, 0x00);
+    return -1;
+#endif
+
     if (offset >= USB_CASE_MSC_BLOCK_SIZE) {
         tud_msc_set_sense(lun, SCSI_SENSE_ILLEGAL_REQUEST, 0x21, 0x00);
         return -1;
