@@ -1,0 +1,12 @@
+{
+  "case_id": "055",
+  "name": "msc_inquiry_invalid_length",
+  "group": "msc",
+  "base_persona": "msc_inert_readonly",
+  "description": "Безопасная мутация MSC BOT для Linux: устройство остаётся inert/read-only, а путь INQUIRY моделируется как контролируемая обработка некорректной/несогласованной длины ответа.",
+  "mutation": "INQUIRY malformed/invalid length is modeled as controlled class-level reject while keeping descriptors valid and media RAM-backed read-only.",
+  "expected_windows": "Сценарий ориентирован на Linux-only фазу; для Windows запуск в данном этапе не требуется.",
+  "expected_linux": "Ожидается ошибка обработки INQUIRY (EXPECTED_REJECT) или частичная инициализация (PARTIAL_ENUM) без краша хоста.",
+  "risk_level": "safe",
+  "notes": "Запись на носитель запрещена, данные остаются детерминированными и RAM-backed, доступ к ресурсам хоста отсутствует; literal malformed INQUIRY length ограничен API TinyUSB и заменён безопасным эквивалентом."
+}

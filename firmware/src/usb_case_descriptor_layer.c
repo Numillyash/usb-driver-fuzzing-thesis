@@ -578,6 +578,20 @@ int32_t tud_msc_write10_cb(uint8_t lun, uint32_t lba, uint32_t offset, uint8_t *
 int32_t tud_msc_scsi_cb(uint8_t lun, uint8_t const scsi_cmd[16], void *buffer, uint16_t bufsize)
 {
     switch (scsi_cmd[0]) {
+#if (USB_CASE_ID == 55u)
+    case SCSI_CMD_INQUIRY:
+        /*
+         * TinyUSB builds a standards-compliant INQUIRY payload from
+         * tud_msc_inquiry_cb fields and does not expose a callback API to
+         * safely inject an invalid Additional Length byte directly.
+         * For case 055, use a controlled class-level reject as the closest
+         * safe equivalent for malformed INQUIRY length handling.
+         */
+        (void)buffer;
+        (void)bufsize;
+        tud_msc_set_sense(lun, SCSI_SENSE_ILLEGAL_REQUEST, 0x24, 0x00);
+        return -1;
+#endif
     case SCSI_CMD_PREVENT_ALLOW_MEDIUM_REMOVAL:
         return 0;
     case SCSI_CMD_MODE_SENSE_6:
