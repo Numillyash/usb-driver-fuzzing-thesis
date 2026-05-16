@@ -466,6 +466,7 @@ enum {
     USB_CASE_MSC_BLOCK_SIZE = 512u,
     USB_CASE_MSC_BLOCK_COUNT = 16u,
     USB_CASE_MSC_MEDIA_SIZE = USB_CASE_MSC_BLOCK_SIZE * USB_CASE_MSC_BLOCK_COUNT,
+    USB_CASE_MSC_HUGE_BLOCK_COUNT = 0xF0000000u,
 };
 
 static uint8_t usb_case_msc_media[USB_CASE_MSC_MEDIA_SIZE];
@@ -503,6 +504,8 @@ void tud_msc_capacity_cb(uint8_t lun, uint32_t *block_count, uint16_t *block_siz
     (void)lun;
 #if (USB_CASE_ID == 52u)
     *block_count = 0u;
+#elif (USB_CASE_ID == 53u)
+    *block_count = USB_CASE_MSC_HUGE_BLOCK_COUNT;
 #else
     *block_count = USB_CASE_MSC_BLOCK_COUNT;
 #endif
@@ -525,12 +528,30 @@ bool tud_msc_start_stop_cb(uint8_t lun, uint8_t power_condition, bool start, boo
 int32_t tud_msc_read10_cb(uint8_t lun, uint32_t lba, uint32_t offset, void *buffer, uint32_t bufsize)
 {
     uint32_t media_offset = 0u;
+    uint64_t media_offset_64 = 0u;
 
     (void)lun;
     usb_case_msc_init_media();
 
-    media_offset = (lba * USB_CASE_MSC_BLOCK_SIZE) + offset;
+    if (offset >= USB_CASE_MSC_BLOCK_SIZE) {
+        tud_msc_set_sense(lun, SCSI_SENSE_ILLEGAL_REQUEST, 0x21, 0x00);
+        return -1;
+    }
+
+    if (lba >= USB_CASE_MSC_BLOCK_COUNT) {
+        tud_msc_set_sense(lun, SCSI_SENSE_ILLEGAL_REQUEST, 0x21, 0x00);
+        return -1;
+    }
+
+    media_offset_64 = ((uint64_t)lba * (uint64_t)USB_CASE_MSC_BLOCK_SIZE) + (uint64_t)offset;
+    if (media_offset_64 > UINT32_MAX) {
+        tud_msc_set_sense(lun, SCSI_SENSE_ILLEGAL_REQUEST, 0x21, 0x00);
+        return -1;
+    }
+
+    media_offset = (uint32_t)media_offset_64;
     if (media_offset >= USB_CASE_MSC_MEDIA_SIZE) {
+        tud_msc_set_sense(lun, SCSI_SENSE_ILLEGAL_REQUEST, 0x21, 0x00);
         return -1;
     }
 

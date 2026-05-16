@@ -168,3 +168,4 @@
 - Транспорт: TinyUSB MSC с RAM-backed носителем малого размера и политикой read-only (запись отклоняется).
 - `051_msc_zero_block_size`: реализован безопасный case-gated runtime-вариант для `USB_CASE_ID=51`, где в `tud_msc_capacity_cb` возвращается `block_size=0`; baseline `050` оставлен без изменений.
 - `052_msc_zero_capacity`: реализован безопасный case-gated runtime-вариант для `USB_CASE_ID=52`, где в `tud_msc_capacity_cb` возвращается `block_count=0` (нулевая usable capacity) при сохранении inert/read-only модели; baseline `050/051` оставлены без изменений.
+- `053_msc_huge_capacity`: реализован безопасный case-gated runtime-вариант для `USB_CASE_ID=53`, где в `tud_msc_capacity_cb` возвращается нереалистично большой `block_count` (huge capacity) без увеличения фактического RAM-backed носителя; `read10` дополнен строгой проверкой границ и безопасным отклонением out-of-range запросов.

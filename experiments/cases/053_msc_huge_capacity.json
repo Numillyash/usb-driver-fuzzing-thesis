@@ -1,0 +1,12 @@
+{
+  "case_id": "053",
+  "name": "msc_huge_capacity",
+  "group": "msc",
+  "base_persona": "msc_inert_readonly",
+  "description": "Безопасная мутация MSC BOT для Linux: устройство остаётся inert/read-only, а в capacity сообщает нереалистично большую ёмкость (очень большой last LBA).",
+  "mutation": "MSC capacity reports unrealistically huge block_count while keeping descriptors valid and media RAM-backed read-only.",
+  "expected_windows": "Сценарий ориентирован на Linux-only фазу; для Windows запуск в данном этапе не требуется.",
+  "expected_linux": "Ожидается bind usb-storage с возможными предупреждениями ядра, ошибками инициализации носителя или partial enum без краша системы.",
+  "risk_level": "safe",
+  "notes": "Запись на носитель запрещена, фактический объём RAM-носителя не увеличивается, out-of-range чтения безопасно отклоняются, доступ к ресурсам хоста отсутствует."
+}
