@@ -1,0 +1,301 @@
+Journal file /var/log/journal/ff50ad21a15b4a37aa9896d0597d471d/system@000651ca5bf6cde3-421630d4c2ab05b7.journal~ is truncated, ignoring file.
+мая 16 22:39:35 numi-linux-otherpc kernel:  sdb: sdb1
+мая 16 22:39:35 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Attached SCSI removable disk
+мая 16 22:39:40 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 77
+мая 16 22:39:40 numi-linux-otherpc kernel: FAT-fs (sdb1): unable to read boot sector to mark fs as dirty
+мая 16 22:39:41 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 78 using xhci_hcd
+мая 16 22:39:42 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=4006, bcdDevice= 1.00
+мая 16 22:39:42 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+мая 16 22:39:42 numi-linux-otherpc kernel: usb 1-4: Product: usb_case_msc_demo MSC baseline
+мая 16 22:39:42 numi-linux-otherpc kernel: usb 1-4: Manufacturer: RP2040 USB Research
+мая 16 22:39:42 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E6625C48939D6E22
+мая 16 22:39:42 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+мая 16 22:39:50 numi-linux-otherpc kernel: usb-storage 1-4:1.0: USB Mass Storage device detected
+мая 16 22:39:50 numi-linux-otherpc kernel: scsi host9: usb-storage 1-4:1.0
+мая 16 22:39:50 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+мая 16 22:39:51 numi-linux-otherpc kernel: scsi 9:0:0:0: Direct-Access     RP2040   MSC READONLY RAM 0001 PQ: 0 ANSI: 2
+мая 16 22:39:51 numi-linux-otherpc kernel: sd 9:0:0:0: Attached scsi generic sg1 type 0
+мая 16 22:39:51 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] 16 512-byte logical blocks: (8.19 kB/8.00 KiB)
+мая 16 22:39:51 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Write Protect is off
+мая 16 22:39:51 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Mode Sense: 03 00 00 00
+мая 16 22:39:51 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] No Caching mode page found
+мая 16 22:39:51 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Assuming drive cache: write through
+мая 16 22:39:53 numi-linux-otherpc kernel:  sdb: unable to read partition table
+мая 16 22:39:53 numi-linux-otherpc kernel: sdb: partition table beyond EOD, enabling native capacity
+мая 16 22:39:55 numi-linux-otherpc kernel:  sdb: unable to read partition table
+мая 16 22:39:55 numi-linux-otherpc kernel: sdb: partition table beyond EOD, truncated
+мая 16 22:39:55 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Attached SCSI removable disk
+мая 16 23:16:37 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 78
+мая 16 23:16:37 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 79 using xhci_hcd
+мая 16 23:16:37 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=0003, bcdDevice= 1.00
+мая 16 23:16:37 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+мая 16 23:16:37 numi-linux-otherpc kernel: usb 1-4: Product: RP2 Boot
+мая 16 23:16:37 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+мая 16 23:16:37 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E0C9125B0D9B
+мая 16 23:16:37 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+мая 16 23:16:37 numi-linux-otherpc kernel: usb-storage 1-4:1.0: USB Mass Storage device detected
+мая 16 23:16:37 numi-linux-otherpc kernel: scsi host9: usb-storage 1-4:1.0
+мая 16 23:16:37 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+мая 16 23:16:38 numi-linux-otherpc kernel: scsi 9:0:0:0: Direct-Access     RPI      RP2              3    PQ: 0 ANSI: 2
+мая 16 23:16:38 numi-linux-otherpc kernel: sd 9:0:0:0: Attached scsi generic sg1 type 0
+мая 16 23:16:38 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] 262144 512-byte logical blocks: (134 MB/128 MiB)
+мая 16 23:16:38 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Write Protect is off
+мая 16 23:16:38 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Mode Sense: 03 00 00 00
+мая 16 23:16:38 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] No Caching mode page found
+мая 16 23:16:38 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Assuming drive cache: write through
+мая 16 23:16:38 numi-linux-otherpc kernel:  sdb: sdb1
+мая 16 23:16:38 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Attached SCSI removable disk
+мая 16 23:16:43 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 79
+мая 16 23:16:43 numi-linux-otherpc kernel: FAT-fs (sdb1): unable to read boot sector to mark fs as dirty
+мая 16 23:16:44 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 80 using xhci_hcd
+мая 16 23:16:46 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=4006, bcdDevice= 1.00
+мая 16 23:16:46 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+мая 16 23:16:46 numi-linux-otherpc kernel: usb 1-4: Product: usb_case_msc_demo MSC baseline
+мая 16 23:16:46 numi-linux-otherpc kernel: usb 1-4: Manufacturer: RP2040 USB Research
+мая 16 23:16:46 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E6625C48939D6E22
+мая 16 23:16:46 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+мая 16 23:16:53 numi-linux-otherpc kernel: usb-storage 1-4:1.0: USB Mass Storage device detected
+мая 16 23:16:53 numi-linux-otherpc kernel: scsi host9: usb-storage 1-4:1.0
+мая 16 23:16:53 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+мая 16 23:16:54 numi-linux-otherpc kernel: scsi 9:0:0:0: Direct-Access     RP2040   MSC READONLY RAM 0001 PQ: 0 ANSI: 2
+мая 16 23:16:54 numi-linux-otherpc kernel: sd 9:0:0:0: Attached scsi generic sg1 type 0
+мая 16 23:16:55 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Spinning up disk...
+мая 16 23:18:35 numi-linux-otherpc kernel: ...................................................................................not responding...
+мая 16 23:18:36 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] 16 512-byte logical blocks: (8.19 kB/8.00 KiB)
+мая 16 23:18:36 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Write Protect is off
+мая 16 23:18:36 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Mode Sense: 03 00 00 00
+мая 16 23:18:36 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] No Caching mode page found
+мая 16 23:18:36 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Assuming drive cache: write through
+мая 16 23:18:36 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Spinning up disk...
+мая 16 23:20:17 numi-linux-otherpc kernel: ...................................................................................not responding...
+мая 16 23:20:19 numi-linux-otherpc kernel:  sdb: unable to read partition table
+мая 16 23:20:19 numi-linux-otherpc kernel: sdb: partition table beyond EOD, enabling native capacity
+мая 16 23:20:20 numi-linux-otherpc kernel:  sdb: unable to read partition table
+мая 16 23:20:20 numi-linux-otherpc kernel: sdb: partition table beyond EOD, truncated
+мая 16 23:20:20 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Attached SCSI removable disk
+мая 16 23:47:50 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 80
+мая 16 23:47:50 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 81 using xhci_hcd
+мая 16 23:47:51 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=0003, bcdDevice= 1.00
+мая 16 23:47:51 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+мая 16 23:47:51 numi-linux-otherpc kernel: usb 1-4: Product: RP2 Boot
+мая 16 23:47:51 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+мая 16 23:47:51 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E0C9125B0D9B
+мая 16 23:47:51 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+мая 16 23:47:51 numi-linux-otherpc kernel: usb-storage 1-4:1.0: USB Mass Storage device detected
+мая 16 23:47:51 numi-linux-otherpc kernel: scsi host9: usb-storage 1-4:1.0
+мая 16 23:47:51 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+мая 16 23:47:52 numi-linux-otherpc kernel: scsi 9:0:0:0: Direct-Access     RPI      RP2              3    PQ: 0 ANSI: 2
+мая 16 23:47:52 numi-linux-otherpc kernel: sd 9:0:0:0: Attached scsi generic sg1 type 0
+мая 16 23:47:52 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] 262144 512-byte logical blocks: (134 MB/128 MiB)
+мая 16 23:47:52 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Write Protect is off
+мая 16 23:47:52 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Mode Sense: 03 00 00 00
+мая 16 23:47:52 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] No Caching mode page found
+мая 16 23:47:52 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Assuming drive cache: write through
+мая 16 23:47:52 numi-linux-otherpc kernel:  sdb: sdb1
+мая 16 23:47:52 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Attached SCSI removable disk
+мая 16 23:47:57 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 81
+мая 16 23:47:57 numi-linux-otherpc kernel: FAT-fs (sdb1): unable to read boot sector to mark fs as dirty
+мая 16 23:47:57 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 82 using xhci_hcd
+мая 16 23:47:59 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=4006, bcdDevice= 1.00
+мая 16 23:47:59 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+мая 16 23:47:59 numi-linux-otherpc kernel: usb 1-4: Product: usb_case_msc_demo MSC baseline
+мая 16 23:47:59 numi-linux-otherpc kernel: usb 1-4: Manufacturer: RP2040 USB Research
+мая 16 23:47:59 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E6625C48939D6E22
+мая 16 23:47:59 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+мая 16 23:48:07 numi-linux-otherpc kernel: usb-storage 1-4:1.0: USB Mass Storage device detected
+мая 16 23:48:07 numi-linux-otherpc kernel: scsi host9: usb-storage 1-4:1.0
+мая 16 23:48:07 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+мая 16 23:48:08 numi-linux-otherpc kernel: scsi 9:0:0:0: Direct-Access     RP2040   MSC READONLY RAM 0001 PQ: 0 ANSI: 2
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: Attached scsi generic sg1 type 0
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] 16 512-byte logical blocks: (8.19 kB/8.00 KiB)
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Write Protect is off
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Mode Sense: 03 00 00 00
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] No Caching mode page found
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Assuming drive cache: write through
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 FAILED Result: hostbyte=DID_OK driverbyte=DRIVER_OK cmd_age=0s
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Sense Key : Not Ready [current] 
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Add. Sense: Medium not present
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 16 23:48:08 numi-linux-otherpc kernel: I/O error, dev sdb, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+мая 16 23:48:08 numi-linux-otherpc kernel: Buffer I/O error on dev sdb, logical block 0, async page read
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 FAILED Result: hostbyte=DID_OK driverbyte=DRIVER_OK cmd_age=0s
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Sense Key : Not Ready [current] 
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Add. Sense: Medium not present
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 16 23:48:08 numi-linux-otherpc kernel: I/O error, dev sdb, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+мая 16 23:48:08 numi-linux-otherpc kernel: Buffer I/O error on dev sdb, logical block 0, async page read
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 FAILED Result: hostbyte=DID_OK driverbyte=DRIVER_OK cmd_age=0s
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Sense Key : Not Ready [current] 
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Add. Sense: Medium not present
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 16 23:48:08 numi-linux-otherpc kernel: I/O error, dev sdb, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+мая 16 23:48:08 numi-linux-otherpc kernel: Buffer I/O error on dev sdb, logical block 0, async page read
+мая 16 23:48:08 numi-linux-otherpc kernel: ldm_validate_partition_table(): Disk read failed.
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 FAILED Result: hostbyte=DID_OK driverbyte=DRIVER_OK cmd_age=0s
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Sense Key : Not Ready [current] 
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Add. Sense: Medium not present
+мая 16 23:48:08 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 16 23:48:08 numi-linux-otherpc kernel: I/O error, dev sdb, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+мая 16 23:48:08 numi-linux-otherpc kernel: Buffer I/O error on dev sdb, logical block 0, async page read
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 FAILED Result: hostbyte=DID_OK driverbyte=DRIVER_OK cmd_age=0s
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Sense Key : Not Ready [current] 
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Add. Sense: Medium not present
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 16 23:48:09 numi-linux-otherpc kernel: I/O error, dev sdb, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+мая 16 23:48:09 numi-linux-otherpc kernel: Buffer I/O error on dev sdb, logical block 0, async page read
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 FAILED Result: hostbyte=DID_OK driverbyte=DRIVER_OK cmd_age=0s
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Sense Key : Not Ready [current] 
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Add. Sense: Medium not present
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 16 23:48:09 numi-linux-otherpc kernel: I/O error, dev sdb, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+мая 16 23:48:09 numi-linux-otherpc kernel: Buffer I/O error on dev sdb, logical block 0, async page read
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 FAILED Result: hostbyte=DID_OK driverbyte=DRIVER_OK cmd_age=0s
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Sense Key : Not Ready [current] 
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Add. Sense: Medium not present
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 16 23:48:09 numi-linux-otherpc kernel: I/O error, dev sdb, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+мая 16 23:48:09 numi-linux-otherpc kernel: Buffer I/O error on dev sdb, logical block 0, async page read
+мая 16 23:48:09 numi-linux-otherpc kernel: Dev sdb: unable to read RDB block 0
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 FAILED Result: hostbyte=DID_OK driverbyte=DRIVER_OK cmd_age=0s
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Sense Key : Not Ready [current] 
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Add. Sense: Medium not present
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 16 23:48:09 numi-linux-otherpc kernel: I/O error, dev sdb, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+мая 16 23:48:09 numi-linux-otherpc kernel: Buffer I/O error on dev sdb, logical block 0, async page read
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 FAILED Result: hostbyte=DID_OK driverbyte=DRIVER_OK cmd_age=0s
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Sense Key : Not Ready [current] 
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Add. Sense: Medium not present
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 16 23:48:09 numi-linux-otherpc kernel: I/O error, dev sdb, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+мая 16 23:48:09 numi-linux-otherpc kernel: Buffer I/O error on dev sdb, logical block 0, async page read
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 FAILED Result: hostbyte=DID_OK driverbyte=DRIVER_OK cmd_age=0s
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Sense Key : Not Ready [current] 
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 Add. Sense: Medium not present
+мая 16 23:48:09 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 16 23:48:09 numi-linux-otherpc kernel: I/O error, dev sdb, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+мая 16 23:48:09 numi-linux-otherpc kernel: Buffer I/O error on dev sdb, logical block 0, async page read
+мая 16 23:48:09 numi-linux-otherpc kernel:  sdb: unable to read partition table
+мая 16 23:48:09 numi-linux-otherpc kernel: sdb: partition table beyond EOD, enabling native capacity
+мая 16 23:48:09 numi-linux-otherpc kernel: ldm_validate_partition_table(): Disk read failed.
+мая 16 23:48:09 numi-linux-otherpc kernel: Dev sdb: unable to read RDB block 0
+мая 16 23:48:10 numi-linux-otherpc kernel:  sdb: unable to read partition table
+мая 16 23:48:10 numi-linux-otherpc kernel: sdb: partition table beyond EOD, truncated
+мая 16 23:48:10 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Attached SCSI removable disk
+мая 17 00:00:02 numi-linux-otherpc kernel: audit: type=1400 audit(1778965202.142:360): apparmor="DENIED" operation="capable" class="cap" profile="/usr/sbin/cupsd" pid=85684 comm="cupsd" capability=12  capname="net_admin"
+мая 17 00:00:35 numi-linux-otherpc kernel: audit: type=1400 audit(1778965235.055:361): apparmor="DENIED" operation="open" class="file" profile="snap.firmware-updater.firmware-notifier" name="/proc/sys/vm/max_map_count" pid=85704 comm="firmware-notifi" requested_mask="r" denied_mask="r" fsuid=1000 ouid=0
+мая 17 00:31:36 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 82
+мая 17 00:31:36 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 83 using xhci_hcd
+мая 17 00:31:36 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=0003, bcdDevice= 1.00
+мая 17 00:31:36 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+мая 17 00:31:36 numi-linux-otherpc kernel: usb 1-4: Product: RP2 Boot
+мая 17 00:31:36 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+мая 17 00:31:36 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E0C9125B0D9B
+мая 17 00:31:36 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+мая 17 00:31:36 numi-linux-otherpc kernel: usb-storage 1-4:1.0: USB Mass Storage device detected
+мая 17 00:31:36 numi-linux-otherpc kernel: scsi host9: usb-storage 1-4:1.0
+мая 17 00:31:36 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+мая 17 00:31:37 numi-linux-otherpc kernel: scsi 9:0:0:0: Direct-Access     RPI      RP2              3    PQ: 0 ANSI: 2
+мая 17 00:31:37 numi-linux-otherpc kernel: sd 9:0:0:0: Attached scsi generic sg1 type 0
+мая 17 00:31:37 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] 262144 512-byte logical blocks: (134 MB/128 MiB)
+мая 17 00:31:37 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Write Protect is off
+мая 17 00:31:37 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Mode Sense: 03 00 00 00
+мая 17 00:31:37 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] No Caching mode page found
+мая 17 00:31:37 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Assuming drive cache: write through
+мая 17 00:31:37 numi-linux-otherpc kernel:  sdb: sdb1
+мая 17 00:31:37 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Attached SCSI removable disk
+мая 17 00:31:42 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 83
+мая 17 00:31:42 numi-linux-otherpc kernel: FAT-fs (sdb1): unable to read boot sector to mark fs as dirty
+мая 17 00:31:43 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 84 using xhci_hcd
+мая 17 00:31:44 numi-linux-otherpc kernel: usb 1-4: config 1 interface 0 altsetting 0 endpoint 0x1 has invalid wMaxPacketSize 0
+мая 17 00:31:44 numi-linux-otherpc kernel: usb 1-4: config 1 interface 0 altsetting 0 endpoint 0x81 has invalid wMaxPacketSize 0
+мая 17 00:31:44 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=4006, bcdDevice= 1.00
+мая 17 00:31:44 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+мая 17 00:31:44 numi-linux-otherpc kernel: usb 1-4: Product: usb_case_msc_demo MSC baseline
+мая 17 00:31:44 numi-linux-otherpc kernel: usb 1-4: Manufacturer: RP2040 USB Research
+мая 17 00:31:44 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E6625C48939D6E22
+мая 17 00:31:44 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+мая 17 00:31:52 numi-linux-otherpc kernel: ------------[ cut here ]------------
+мая 17 00:31:52 numi-linux-otherpc kernel: UBSAN: shift-out-of-bounds in /build/linux-hwe-6.17-vYFGLt/linux-hwe-6.17-6.17.0/include/linux/log2.h:67:13
+мая 17 00:31:52 numi-linux-otherpc kernel: shift exponent 4294967295 is too large for 64-bit type 'long unsigned int'
+мая 17 00:31:52 numi-linux-otherpc kernel: CPU: 9 UID: 0 PID: 86398 Comm: bash Not tainted 6.17.0-19-generic #19~24.04.2-Ubuntu PREEMPT(voluntary) 
+мая 17 00:31:52 numi-linux-otherpc kernel: Hardware name: To Be Filled By O.E.M. To Be Filled By O.E.M./B450M Pro4, BIOS P4.30 07/14/2020
+мая 17 00:31:52 numi-linux-otherpc kernel: Call Trace:
+мая 17 00:31:52 numi-linux-otherpc kernel:  <TASK>
+мая 17 00:31:52 numi-linux-otherpc kernel:  dump_stack_lvl+0x76/0xa0
+мая 17 00:31:52 numi-linux-otherpc kernel:  dump_stack+0x10/0x20
+мая 17 00:31:52 numi-linux-otherpc kernel:  __ubsan_handle_shift_out_of_bounds+0x1e3/0x390
+мая 17 00:31:52 numi-linux-otherpc kernel:  xhci_endpoint_init.cold+0x1e/0x2e
+мая 17 00:31:52 numi-linux-otherpc kernel:  xhci_add_endpoint.part.0+0x11e/0x340
+мая 17 00:31:52 numi-linux-otherpc kernel:  xhci_add_endpoint+0x40/0x80
+мая 17 00:31:52 numi-linux-otherpc kernel:  usb_hcd_alloc_bandwidth+0x177/0x420
+мая 17 00:31:52 numi-linux-otherpc kernel:  usb_set_configuration+0x296/0xb10
+мая 17 00:31:52 numi-linux-otherpc kernel:  ? srso_return_thunk+0x5/0x5f
+мая 17 00:31:52 numi-linux-otherpc kernel:  usb_authorize_device+0xa1/0xe0
+мая 17 00:31:52 numi-linux-otherpc kernel:  authorized_store+0x91/0xb0
+мая 17 00:31:52 numi-linux-otherpc kernel:  dev_attr_store+0x17/0x40
+мая 17 00:31:52 numi-linux-otherpc kernel:  sysfs_kf_write+0x72/0x90
+мая 17 00:31:52 numi-linux-otherpc kernel:  kernfs_fop_write_iter+0x161/0x1f0
+мая 17 00:31:52 numi-linux-otherpc kernel:  vfs_write+0x29e/0x480
+мая 17 00:31:52 numi-linux-otherpc kernel:  ksys_write+0x71/0xf0
+мая 17 00:31:52 numi-linux-otherpc kernel:  __x64_sys_write+0x19/0x30
+мая 17 00:31:52 numi-linux-otherpc kernel:  x64_sys_call+0x79/0x2680
+мая 17 00:31:52 numi-linux-otherpc kernel:  do_syscall_64+0x80/0xa40
+мая 17 00:31:52 numi-linux-otherpc kernel:  ? srso_return_thunk+0x5/0x5f
+мая 17 00:31:52 numi-linux-otherpc kernel:  ? filp_flush+0x91/0xb0
+мая 17 00:31:52 numi-linux-otherpc kernel:  ? srso_return_thunk+0x5/0x5f
+мая 17 00:31:52 numi-linux-otherpc kernel:  ? __x64_sys_close+0x3e/0x90
+мая 17 00:31:52 numi-linux-otherpc kernel:  ? srso_return_thunk+0x5/0x5f
+мая 17 00:31:52 numi-linux-otherpc kernel:  ? arch_exit_to_user_mode_prepare.isra.0+0xd/0xe0
+мая 17 00:31:52 numi-linux-otherpc kernel:  ? srso_return_thunk+0x5/0x5f
+мая 17 00:31:52 numi-linux-otherpc kernel:  ? do_syscall_64+0xb6/0xa40
+мая 17 00:31:52 numi-linux-otherpc kernel:  ? exc_page_fault+0x90/0x1b0
+мая 17 00:31:52 numi-linux-otherpc kernel:  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+мая 17 00:31:52 numi-linux-otherpc kernel: RIP: 0033:0x7d8391f1c5a4
+мая 17 00:31:52 numi-linux-otherpc kernel: Code: c7 00 16 00 00 00 b8 ff ff ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 f3 0f 1e fa 80 3d a5 ea 0e 00 00 74 13 b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 54 c3 0f 1f 00 55 48 89 e5 48 83 ec 20 48 89
+мая 17 00:31:52 numi-linux-otherpc kernel: RSP: 002b:00007ffd3e672448 EFLAGS: 00000202 ORIG_RAX: 0000000000000001
+мая 17 00:31:52 numi-linux-otherpc kernel: RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007d8391f1c5a4
+мая 17 00:31:52 numi-linux-otherpc kernel: RDX: 0000000000000002 RSI: 0000596abf994720 RDI: 0000000000000001
+мая 17 00:31:52 numi-linux-otherpc kernel: RBP: 00007ffd3e672470 R08: 0000000000000073 R09: 0000000000000000
+мая 17 00:31:52 numi-linux-otherpc kernel: R10: 00000000ffffffff R11: 0000000000000202 R12: 0000000000000002
+мая 17 00:31:52 numi-linux-otherpc kernel: R13: 0000596abf994720 R14: 00007d83920045c0 R15: 00007d8392001ee0
+мая 17 00:31:52 numi-linux-otherpc kernel:  </TASK>
+мая 17 00:31:52 numi-linux-otherpc kernel: ---[ end trace ]---
+мая 17 00:31:52 numi-linux-otherpc kernel: usb-storage 1-4:1.0: USB Mass Storage device detected
+мая 17 00:31:52 numi-linux-otherpc kernel: scsi host9: usb-storage 1-4:1.0
+мая 17 00:31:52 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+мая 17 00:31:53 numi-linux-otherpc kernel: usb 1-4: reset full-speed USB device number 84 using xhci_hcd
+мая 17 00:31:54 numi-linux-otherpc kernel: usb 1-4: reset full-speed USB device number 84 using xhci_hcd
+мая 17 00:31:54 numi-linux-otherpc kernel: usb 1-4: reset full-speed USB device number 84 using xhci_hcd
+мая 17 00:31:55 numi-linux-otherpc kernel: usb 1-4: reset full-speed USB device number 84 using xhci_hcd
+мая 17 01:24:59 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 84
+мая 17 01:24:59 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 85 using xhci_hcd
+мая 17 01:24:59 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=0003, bcdDevice= 1.00
+мая 17 01:24:59 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+мая 17 01:24:59 numi-linux-otherpc kernel: usb 1-4: Product: RP2 Boot
+мая 17 01:24:59 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+мая 17 01:24:59 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E0C9125B0D9B
+мая 17 01:24:59 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+мая 17 01:24:59 numi-linux-otherpc kernel: usb-storage 1-4:1.0: USB Mass Storage device detected
+мая 17 01:24:59 numi-linux-otherpc kernel: scsi host9: usb-storage 1-4:1.0
+мая 17 01:24:59 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+мая 17 01:25:00 numi-linux-otherpc kernel: scsi 9:0:0:0: Direct-Access     RPI      RP2              3    PQ: 0 ANSI: 2
+мая 17 01:25:00 numi-linux-otherpc kernel: sd 9:0:0:0: Attached scsi generic sg1 type 0
+мая 17 01:25:00 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] 262144 512-byte logical blocks: (134 MB/128 MiB)
+мая 17 01:25:00 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Write Protect is off
+мая 17 01:25:00 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Mode Sense: 03 00 00 00
+мая 17 01:25:00 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] No Caching mode page found
+мая 17 01:25:00 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Assuming drive cache: write through
+мая 17 01:25:01 numi-linux-otherpc kernel:  sdb: sdb1
+мая 17 01:25:01 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Attached SCSI removable disk
+мая 17 01:25:06 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 85
+мая 17 01:25:06 numi-linux-otherpc kernel: FAT-fs (sdb1): unable to read boot sector to mark fs as dirty
+мая 17 01:25:06 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 86 using xhci_hcd
+мая 17 01:25:08 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=4006, bcdDevice= 1.00
+мая 17 01:25:08 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+мая 17 01:25:08 numi-linux-otherpc kernel: usb 1-4: Product: usb_case_msc_demo MSC baseline
+мая 17 01:25:08 numi-linux-otherpc kernel: usb 1-4: Manufacturer: RP2040 USB Research
+мая 17 01:25:08 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E6625C48939D6E22
+мая 17 01:25:08 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+мая 17 01:25:16 numi-linux-otherpc kernel: usb-storage 1-4:1.0: USB Mass Storage device detected
+мая 17 01:25:16 numi-linux-otherpc kernel: scsi host9: usb-storage 1-4:1.0
+мая 17 01:25:16 numi-linux-otherpc kernel: usb 1-4: authorized to connect

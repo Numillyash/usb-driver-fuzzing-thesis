@@ -1,0 +1,1 @@
+dmesg is restricted for this user; use journalctl_k_tail_300.txt or run with sudo

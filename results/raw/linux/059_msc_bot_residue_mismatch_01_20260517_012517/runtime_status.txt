@@ -1,0 +1,5 @@
+result_name=059_msc_bot_residue_mismatch_01
+timestamp=20260517_012517
+runtime_enum_status=normal
+host=numi-linux-otherpc
+kernel=6.17.0-19-generic
