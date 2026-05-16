@@ -1,0 +1,5 @@
+result_name=010_device_blength_too_short_01
+timestamp=20260516_041509
+runtime_enum_status=partial
+host=numi-linux-otherpc
+kernel=6.17.0-19-generic
