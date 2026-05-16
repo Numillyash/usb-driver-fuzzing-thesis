@@ -1,0 +1,12 @@
+{
+  "case_id": "050",
+  "name": "msc_baseline",
+  "group": "msc",
+  "base_persona": "msc_inert_readonly",
+  "description": "Безопасный базовый сценарий MSC BOT: контролируемое RAM-backed устройство только для чтения без аномалий.",
+  "mutation": "none / baseline read-only RAM-backed MSC",
+  "expected_windows": "Сценарий ориентирован на Linux-only фазу; для Windows запуск в данном этапе не требуется.",
+  "expected_linux": "Ожидается успешное перечисление MSC-устройства и штатная инициализация без предупреждений ядра.",
+  "risk_level": "safe",
+  "notes": "Запись на носитель запрещена, данные детерминированы, отсутствует доступ к ресурсам хоста."
+}
