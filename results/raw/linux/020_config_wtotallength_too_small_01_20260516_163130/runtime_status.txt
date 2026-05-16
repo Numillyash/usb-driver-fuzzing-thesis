@@ -1,0 +1,5 @@
+result_name=020_config_wtotallength_too_small_01
+timestamp=20260516_163130
+runtime_enum_status=normal
+host=numi-linux-otherpc
+kernel=6.17.0-19-generic
