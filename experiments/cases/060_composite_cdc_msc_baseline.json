@@ -1,0 +1,12 @@
+{
+  "case_id": "060",
+  "name": "composite_cdc_msc_baseline",
+  "group": "composite",
+  "base_persona": "composite_cdc_msc",
+  "description": "Безопасный baseline composite-устройства: CDC ACM для диагностического канала и инертный read-only RAM-backed MSC.",
+  "mutation": "none / baseline composite CDC ACM + read-only RAM-backed MSC",
+  "expected_windows": "Сценарий ориентирован на Linux-only фазу; для Windows запуск в данном этапе не требуется.",
+  "expected_linux": "Ожидается успешное перечисление composite CDC+MSC, bind CDC ACM и usb-storage без предупреждений ядра.",
+  "risk_level": "safe",
+  "notes": "MSC остаётся только для чтения и не имеет доступа к дискам хоста; CDC используется исключительно как инертный диагностический транспорт."
+}

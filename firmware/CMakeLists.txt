@@ -127,3 +127,35 @@ pico_enable_stdio_usb(usb_case_msc_demo 0)
 pico_enable_stdio_uart(usb_case_msc_demo 0)
 
 pico_add_extra_outputs(usb_case_msc_demo)
+
+add_executable(usb_case_composite_msc_demo
+    src/usb_case_main.c
+    src/nrf24_radio.c
+    src/usb_case_descriptor_layer.c
+)
+
+target_include_directories(usb_case_composite_msc_demo PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}/include
+)
+
+target_link_libraries(usb_case_composite_msc_demo
+    pico_stdlib
+    hardware_gpio
+    hardware_spi
+    tinyusb_device
+    tinyusb_board
+)
+
+target_compile_definitions(usb_case_composite_msc_demo PRIVATE
+    CFG_TUD_CDC=1
+    CFG_TUD_HID=0
+    CFG_TUD_MSC=1
+    CFG_TUD_MSC_EP_BUFSIZE=64
+    USB_CASE_ENABLE_TINYUSB_CUSTOM_DESCRIPTORS=1
+    USB_CASE_MANUAL_TINYUSB_INIT=1
+)
+
+pico_enable_stdio_usb(usb_case_composite_msc_demo 0)
+pico_enable_stdio_uart(usb_case_composite_msc_demo 0)
+
+pico_add_extra_outputs(usb_case_composite_msc_demo)
