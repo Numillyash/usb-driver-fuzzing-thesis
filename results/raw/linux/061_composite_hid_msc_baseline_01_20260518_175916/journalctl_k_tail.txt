@@ -1,0 +1,121 @@
+Journal file /var/log/journal/ff50ad21a15b4a37aa9896d0597d471d/system@000651ca5bf6cde3-421630d4c2ab05b7.journal~ is truncated, ignoring file.
+мая 17 01:26:48 numi-linux-otherpc kernel: I/O error, dev sdb, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+мая 17 01:26:48 numi-linux-otherpc kernel: Buffer I/O error on dev sdb, logical block 0, async page read
+мая 17 01:26:48 numi-linux-otherpc kernel: usb 1-4: reset full-speed USB device number 86 using xhci_hcd
+мая 17 01:26:49 numi-linux-otherpc kernel: usb 1-4: reset full-speed USB device number 86 using xhci_hcd
+мая 17 01:26:50 numi-linux-otherpc kernel: usb 1-4: reset full-speed USB device number 86 using xhci_hcd
+мая 17 01:26:50 numi-linux-otherpc kernel: usb 1-4: reset full-speed USB device number 86 using xhci_hcd
+мая 17 01:26:51 numi-linux-otherpc kernel: usb 1-4: reset full-speed USB device number 86 using xhci_hcd
+мая 17 01:26:51 numi-linux-otherpc kernel: usb 1-4: reset full-speed USB device number 86 using xhci_hcd
+мая 17 01:26:52 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Unaligned partial completion (resid=4033, sector_sz=512)
+мая 17 01:26:52 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 17 01:26:52 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 FAILED Result: hostbyte=DID_ERROR driverbyte=DRIVER_OK cmd_age=3s
+мая 17 01:26:52 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 17 01:26:52 numi-linux-otherpc kernel: I/O error, dev sdb, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+мая 17 01:26:52 numi-linux-otherpc kernel: Buffer I/O error on dev sdb, logical block 0, async page read
+мая 17 03:00:35 numi-linux-otherpc kernel: audit: type=1400 audit(1778976035.133:362): apparmor="DENIED" operation="open" class="file" profile="snap.firmware-updater.firmware-notifier" name="/proc/sys/vm/max_map_count" pid=88250 comm="firmware-notifi" requested_mask="r" denied_mask="r" fsuid=1000 ouid=0
+мая 17 04:47:13 numi-linux-otherpc kernel: perf: interrupt took too long (2513 > 2500), lowering kernel.perf_event_max_sample_rate to 79000
+мая 17 06:00:35 numi-linux-otherpc kernel: audit: type=1400 audit(1778986835.557:363): apparmor="DENIED" operation="open" class="file" profile="snap.firmware-updater.firmware-notifier" name="/proc/sys/vm/max_map_count" pid=89631 comm="firmware-notifi" requested_mask="r" denied_mask="r" fsuid=1000 ouid=0
+мая 17 09:00:35 numi-linux-otherpc kernel: audit: type=1400 audit(1778997635.081:364): apparmor="DENIED" operation="open" class="file" profile="snap.firmware-updater.firmware-notifier" name="/proc/sys/vm/max_map_count" pid=90585 comm="firmware-notifi" requested_mask="r" denied_mask="r" fsuid=1000 ouid=0
+мая 17 12:00:35 numi-linux-otherpc kernel: audit: type=1400 audit(1779008435.065:365): apparmor="DENIED" operation="open" class="file" profile="snap.firmware-updater.firmware-notifier" name="/proc/sys/vm/max_map_count" pid=91361 comm="firmware-notifi" requested_mask="r" denied_mask="r" fsuid=1000 ouid=0
+мая 17 15:00:35 numi-linux-otherpc kernel: audit: type=1400 audit(1779019235.080:366): apparmor="DENIED" operation="open" class="file" profile="snap.firmware-updater.firmware-notifier" name="/proc/sys/vm/max_map_count" pid=92057 comm="firmware-notifi" requested_mask="r" denied_mask="r" fsuid=1000 ouid=0
+мая 17 18:00:35 numi-linux-otherpc kernel: audit: type=1400 audit(1779030035.109:367): apparmor="DENIED" operation="open" class="file" profile="snap.firmware-updater.firmware-notifier" name="/proc/sys/vm/max_map_count" pid=92766 comm="firmware-notifi" requested_mask="r" denied_mask="r" fsuid=1000 ouid=0
+мая 17 21:00:35 numi-linux-otherpc kernel: audit: type=1400 audit(1779040835.062:368): apparmor="DENIED" operation="open" class="file" profile="snap.firmware-updater.firmware-notifier" name="/proc/sys/vm/max_map_count" pid=93517 comm="firmware-notifi" requested_mask="r" denied_mask="r" fsuid=1000 ouid=0
+мая 18 00:00:01 numi-linux-otherpc kernel: audit: type=1400 audit(1779051601.460:369): apparmor="DENIED" operation="capable" class="cap" profile="/usr/sbin/cupsd" pid=94350 comm="cupsd" capability=12  capname="net_admin"
+мая 18 00:00:35 numi-linux-otherpc kernel: audit: type=1400 audit(1779051635.083:370): apparmor="DENIED" operation="open" class="file" profile="snap.firmware-updater.firmware-notifier" name="/proc/sys/vm/max_map_count" pid=94361 comm="firmware-notifi" requested_mask="r" denied_mask="r" fsuid=1000 ouid=0
+мая 18 02:29:06 numi-linux-otherpc kernel: loop34: detected capacity change from 0 to 505096
+мая 18 02:29:07 numi-linux-otherpc kernel: audit: type=1400 audit(1779060547.138:371): apparmor="STATUS" operation="profile_replace" info="same as current profile, skipping" profile="unconfined" name="/snap/snapd/26865/usr/lib/snapd/snap-confine" pid=95321 comm="apparmor_parser"
+мая 18 02:29:07 numi-linux-otherpc kernel: audit: type=1400 audit(1779060547.280:372): apparmor="STATUS" operation="profile_replace" profile="unconfined" name="snap.firefox.hook.install" pid=95328 comm="apparmor_parser"
+мая 18 02:29:07 numi-linux-otherpc kernel: audit: type=1400 audit(1779060547.294:373): apparmor="STATUS" operation="profile_replace" profile="unconfined" name="snap.firefox.hook.disconnect-plug-host-hunspell" pid=95327 comm="apparmor_parser"
+мая 18 02:29:07 numi-linux-otherpc kernel: audit: type=1400 audit(1779060547.325:374): apparmor="STATUS" operation="profile_replace" profile="unconfined" name="snap.firefox.hook.configure" pid=95326 comm="apparmor_parser"
+мая 18 02:29:07 numi-linux-otherpc kernel: audit: type=1400 audit(1779060547.339:375): apparmor="STATUS" operation="profile_replace" profile="unconfined" name="snap.firefox.hook.post-refresh" pid=95329 comm="apparmor_parser"
+мая 18 02:29:07 numi-linux-otherpc kernel: audit: type=1400 audit(1779060547.536:376): apparmor="STATUS" operation="profile_replace" profile="unconfined" name="snap-update-ns.firefox" pid=95323 comm="apparmor_parser"
+мая 18 02:29:07 numi-linux-otherpc kernel: audit: type=1400 audit(1779060547.870:377): apparmor="STATUS" operation="profile_replace" profile="unconfined" name="snap.firefox.firefox" pid=95324 comm="apparmor_parser"
+мая 18 02:29:07 numi-linux-otherpc kernel: audit: type=1400 audit(1779060547.945:378): apparmor="STATUS" operation="profile_replace" profile="unconfined" name="snap.firefox.geckodriver" pid=95325 comm="apparmor_parser"
+мая 18 02:29:08 numi-linux-otherpc kernel: audit: type=1400 audit(1779060548.572:379): apparmor="STATUS" operation="profile_replace" info="same as current profile, skipping" profile="unconfined" name="/snap/snapd/26865/usr/lib/snapd/snap-confine" pid=95332 comm="apparmor_parser"
+мая 18 02:29:08 numi-linux-otherpc kernel: audit: type=1400 audit(1779060548.735:380): apparmor="STATUS" operation="profile_replace" profile="unconfined" name="snap.firefox.hook.install" pid=95339 comm="apparmor_parser"
+мая 18 03:00:35 numi-linux-otherpc kernel: kauditd_printk_skb: 12 callbacks suppressed
+мая 18 03:00:35 numi-linux-otherpc kernel: audit: type=1400 audit(1779062435.073:393): apparmor="DENIED" operation="open" class="file" profile="snap.firmware-updater.firmware-notifier" name="/proc/sys/vm/max_map_count" pid=95729 comm="firmware-notifi" requested_mask="r" denied_mask="r" fsuid=1000 ouid=0
+мая 18 06:00:35 numi-linux-otherpc kernel: audit: type=1400 audit(1779073235.059:394): apparmor="DENIED" operation="open" class="file" profile="snap.firmware-updater.firmware-notifier" name="/proc/sys/vm/max_map_count" pid=96450 comm="firmware-notifi" requested_mask="r" denied_mask="r" fsuid=1000 ouid=0
+мая 18 07:40:58 numi-linux-otherpc kernel: perf: interrupt took too long (3151 > 3141), lowering kernel.perf_event_max_sample_rate to 63000
+мая 18 09:00:35 numi-linux-otherpc kernel: audit: type=1400 audit(1779084035.053:395): apparmor="DENIED" operation="open" class="file" profile="snap.firmware-updater.firmware-notifier" name="/proc/sys/vm/max_map_count" pid=97341 comm="firmware-notifi" requested_mask="r" denied_mask="r" fsuid=1000 ouid=0
+мая 18 12:00:35 numi-linux-otherpc kernel: audit: type=1400 audit(1779094835.064:396): apparmor="DENIED" operation="open" class="file" profile="snap.firmware-updater.firmware-notifier" name="/proc/sys/vm/max_map_count" pid=98070 comm="firmware-notifi" requested_mask="r" denied_mask="r" fsuid=1000 ouid=0
+мая 18 15:00:35 numi-linux-otherpc kernel: audit: type=1400 audit(1779105635.032:397): apparmor="DENIED" operation="open" class="file" profile="snap.firmware-updater.firmware-notifier" name="/proc/sys/vm/max_map_count" pid=99412 comm="firmware-notifi" requested_mask="r" denied_mask="r" fsuid=1000 ouid=0
+мая 18 16:59:05 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 86
+мая 18 16:59:05 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 87 using xhci_hcd
+мая 18 16:59:06 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=0003, bcdDevice= 1.00
+мая 18 16:59:06 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+мая 18 16:59:06 numi-linux-otherpc kernel: usb 1-4: Product: RP2 Boot
+мая 18 16:59:06 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+мая 18 16:59:06 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E0C9125B0D9B
+мая 18 16:59:06 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+мая 18 16:59:06 numi-linux-otherpc kernel: usb-storage 1-4:1.0: USB Mass Storage device detected
+мая 18 16:59:06 numi-linux-otherpc kernel: scsi host9: usb-storage 1-4:1.0
+мая 18 16:59:06 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+мая 18 16:59:07 numi-linux-otherpc kernel: scsi 9:0:0:0: Direct-Access     RPI      RP2              3    PQ: 0 ANSI: 2
+мая 18 16:59:07 numi-linux-otherpc kernel: sd 9:0:0:0: Attached scsi generic sg1 type 0
+мая 18 16:59:07 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] 262144 512-byte logical blocks: (134 MB/128 MiB)
+мая 18 16:59:07 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Write Protect is off
+мая 18 16:59:07 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Mode Sense: 03 00 00 00
+мая 18 16:59:07 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] No Caching mode page found
+мая 18 16:59:07 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Assuming drive cache: write through
+мая 18 16:59:07 numi-linux-otherpc kernel:  sdb: sdb1
+мая 18 16:59:07 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Attached SCSI removable disk
+мая 18 16:59:12 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 87
+мая 18 16:59:12 numi-linux-otherpc kernel: FAT-fs (sdb1): unable to read boot sector to mark fs as dirty
+мая 18 16:59:12 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 88 using xhci_hcd
+мая 18 16:59:14 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=4005, bcdDevice= 1.00
+мая 18 16:59:14 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+мая 18 16:59:14 numi-linux-otherpc kernel: usb 1-4: Product: usb_case_composite_msc_demo CDC
+мая 18 16:59:14 numi-linux-otherpc kernel: usb 1-4: Manufacturer: RP2040 USB Research
+мая 18 16:59:14 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E6625C48939D6E22
+мая 18 16:59:14 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+мая 18 16:59:22 numi-linux-otherpc kernel: cdc_acm 1-4:1.0: ttyACM0: USB ACM device
+мая 18 16:59:22 numi-linux-otherpc kernel: usb-storage 1-4:1.2: USB Mass Storage device detected
+мая 18 16:59:22 numi-linux-otherpc kernel: scsi host9: usb-storage 1-4:1.2
+мая 18 16:59:22 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+мая 18 16:59:23 numi-linux-otherpc kernel: scsi 9:0:0:0: Direct-Access     RP2040   MSC READONLY RAM 0001 PQ: 0 ANSI: 2
+мая 18 16:59:23 numi-linux-otherpc kernel: sd 9:0:0:0: Attached scsi generic sg1 type 0
+мая 18 16:59:23 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] 16 512-byte logical blocks: (8.19 kB/8.00 KiB)
+мая 18 16:59:23 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Write Protect is off
+мая 18 16:59:23 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Mode Sense: 03 00 00 00
+мая 18 16:59:23 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] No Caching mode page found
+мая 18 16:59:23 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Assuming drive cache: write through
+мая 18 16:59:25 numi-linux-otherpc kernel:  sdb: unable to read partition table
+мая 18 16:59:25 numi-linux-otherpc kernel: sdb: partition table beyond EOD, enabling native capacity
+мая 18 16:59:27 numi-linux-otherpc kernel:  sdb: unable to read partition table
+мая 18 16:59:27 numi-linux-otherpc kernel: sdb: partition table beyond EOD, truncated
+мая 18 16:59:27 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Attached SCSI removable disk
+мая 18 17:58:59 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 88
+мая 18 17:58:59 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 89 using xhci_hcd
+мая 18 17:58:59 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=0003, bcdDevice= 1.00
+мая 18 17:58:59 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+мая 18 17:58:59 numi-linux-otherpc kernel: usb 1-4: Product: RP2 Boot
+мая 18 17:58:59 numi-linux-otherpc kernel: usb 1-4: Manufacturer: Raspberry Pi
+мая 18 17:58:59 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E0C9125B0D9B
+мая 18 17:58:59 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+мая 18 17:58:59 numi-linux-otherpc kernel: usb-storage 1-4:1.0: USB Mass Storage device detected
+мая 18 17:58:59 numi-linux-otherpc kernel: scsi host9: usb-storage 1-4:1.0
+мая 18 17:58:59 numi-linux-otherpc kernel: usb 1-4: authorized to connect
+мая 18 17:59:00 numi-linux-otherpc kernel: scsi 9:0:0:0: Direct-Access     RPI      RP2              3    PQ: 0 ANSI: 2
+мая 18 17:59:00 numi-linux-otherpc kernel: sd 9:0:0:0: Attached scsi generic sg1 type 0
+мая 18 17:59:00 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] 262144 512-byte logical blocks: (134 MB/128 MiB)
+мая 18 17:59:00 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Write Protect is off
+мая 18 17:59:00 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Mode Sense: 03 00 00 00
+мая 18 17:59:00 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] No Caching mode page found
+мая 18 17:59:00 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Assuming drive cache: write through
+мая 18 17:59:00 numi-linux-otherpc kernel:  sdb: sdb1
+мая 18 17:59:00 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Attached SCSI removable disk
+мая 18 17:59:05 numi-linux-otherpc kernel: usb 1-4: USB disconnect, device number 89
+мая 18 17:59:06 numi-linux-otherpc kernel: FAT-fs (sdb1): unable to read boot sector to mark fs as dirty
+мая 18 17:59:06 numi-linux-otherpc kernel: usb 1-4: new full-speed USB device number 90 using xhci_hcd
+мая 18 17:59:08 numi-linux-otherpc kernel: usb 1-4: New USB device found, idVendor=2e8a, idProduct=4005, bcdDevice= 1.00
+мая 18 17:59:08 numi-linux-otherpc kernel: usb 1-4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+мая 18 17:59:08 numi-linux-otherpc kernel: usb 1-4: Product: usb_case_composite_hid_msc_demo
+мая 18 17:59:08 numi-linux-otherpc kernel: usb 1-4: Manufacturer: RP2040 USB Research
+мая 18 17:59:08 numi-linux-otherpc kernel: usb 1-4: SerialNumber: E6625C48939D6E22
+мая 18 17:59:08 numi-linux-otherpc kernel: usb 1-4: Device is not authorized for usage
+мая 18 17:59:16 numi-linux-otherpc kernel: hid-generic 0003:2E8A:4005.0008: hiddev0,hidraw3: USB HID v1.11 Device [RP2040 USB Research usb_case_composite_hid_msc_demo] on usb-0000:02:00.0-4/input0
+мая 18 17:59:16 numi-linux-otherpc kernel: usb-storage 1-4:1.1: USB Mass Storage device detected
+мая 18 17:59:16 numi-linux-otherpc kernel: scsi host9: usb-storage 1-4:1.1
+мая 18 17:59:16 numi-linux-otherpc kernel: usb 1-4: authorized to connect
