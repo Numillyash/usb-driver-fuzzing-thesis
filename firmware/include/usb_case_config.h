@@ -41,7 +41,7 @@
  * - 001 -> baseline HID persona (inert, no keyboard/mouse input behavior)
  * - 002 -> composite CDC+HID persona (inert HID, no keyboard/mouse input behavior)
  * - 050/051/052/053/054/055/056/057/058/059 -> MSC read-only RAM-backed persona
- * - 060 -> composite CDC+MSC persona (CDC diagnostic + read-only RAM-backed MSC)
+ * - 060/062 -> composite CDC+MSC persona (CDC diagnostic + read-only RAM-backed MSC)
  * - 061 -> composite HID+MSC persona (inert HID + read-only RAM-backed MSC)
  * Other IDs fall back to CDC/ACM for safe behavior.
  */
@@ -49,7 +49,7 @@
 #define USB_CASE_PERSONA_ID USB_CASE_PERSONA_HID_BASELINE
 #elif (USB_CASE_ID == 2u)
 #define USB_CASE_PERSONA_ID USB_CASE_PERSONA_COMPOSITE_CDC_HID
-#elif (USB_CASE_ID == 60u)
+#elif (USB_CASE_ID == 60u) || (USB_CASE_ID == 62u)
 #define USB_CASE_PERSONA_ID USB_CASE_PERSONA_COMPOSITE_CDC_MSC
 #elif (USB_CASE_ID == 61u)
 #define USB_CASE_PERSONA_ID USB_CASE_PERSONA_COMPOSITE_HID_MSC
