@@ -410,6 +410,24 @@ static uint8_t usb_case_cfg_desc_composite_cdc_msc_bnuminterfaces_too_many[] = {
         CFG_TUD_MSC_EP_BUFSIZE),
 };
 
+static uint8_t usb_case_cfg_desc_composite_cdc_msc_bnuminterfaces_too_few[] = {
+    TUD_CONFIG_DESCRIPTOR(1, 3, 0, USB_CASE_COMPOSITE_CDC_MSC_TOTAL_LEN, 0x80, 100),
+    TUD_CDC_DESCRIPTOR(
+        USB_CASE_ITF_NUM_CDC_COMM,
+        USB_CASE_STRIDX_CDC,
+        USB_CASE_ENDPOINT_CDC_NOTIF,
+        8,
+        USB_CASE_ENDPOINT_CDC_OUT,
+        USB_CASE_ENDPOINT_CDC_IN,
+        64),
+    TUD_MSC_DESCRIPTOR(
+        USB_CASE_ITF_NUM_MSC_COMPOSITE,
+        USB_CASE_STRIDX_MSC_COMPOSITE,
+        USB_CASE_ENDPOINT_MSC_COMPOSITE_OUT,
+        USB_CASE_ENDPOINT_MSC_COMPOSITE_IN,
+        CFG_TUD_MSC_EP_BUFSIZE),
+};
+
 static uint8_t const *usb_case_cfg_desc_composite_cdc_msc_iad_mismatch_get(void)
 {
     /*
@@ -450,6 +468,28 @@ static uint8_t const *usb_case_cfg_desc_composite_cdc_msc_bnuminterfaces_too_man
     }
 
     return usb_case_cfg_desc_composite_cdc_msc_bnuminterfaces_too_many;
+}
+
+static uint8_t const *usb_case_cfg_desc_composite_cdc_msc_bnuminterfaces_too_few_get(void)
+{
+    /*
+     * Case 066: keep CDC+MSC baseline behavior, but advertise bNumInterfaces
+     * smaller than the actual interface descriptor count in this configuration.
+     * Descriptor layout: [config:9 bytes], bNumInterfaces is byte 4.
+     */
+    enum {
+        USB_CASE_CFG_BNUMINTERFACES_OFFSET = 4,
+        USB_CASE_CFG_BNUMINTERFACES_TOO_FEW = 2,
+    };
+    static bool patched = false;
+
+    if (!patched) {
+        usb_case_cfg_desc_composite_cdc_msc_bnuminterfaces_too_few[USB_CASE_CFG_BNUMINTERFACES_OFFSET] =
+            USB_CASE_CFG_BNUMINTERFACES_TOO_FEW;
+        patched = true;
+    }
+
+    return usb_case_cfg_desc_composite_cdc_msc_bnuminterfaces_too_few;
 }
 #endif
 
@@ -599,6 +639,8 @@ uint8_t const *tud_descriptor_configuration_cb(uint8_t index)
         return usb_case_cfg_desc_composite_cdc_msc_iad_mismatch_get();
 #elif (USB_CASE_ID == 65u)
         return usb_case_cfg_desc_composite_cdc_msc_bnuminterfaces_too_many_get();
+#elif (USB_CASE_ID == 66u)
+        return usb_case_cfg_desc_composite_cdc_msc_bnuminterfaces_too_few_get();
 #else
         return usb_case_cfg_desc_composite_cdc_msc;
 #endif

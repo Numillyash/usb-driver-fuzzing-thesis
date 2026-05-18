@@ -60,4 +60,5 @@
 - `063_composite_duplicate_endpoint_address`: реализован как безопасный descriptor-mutation кейс на базе persona `composite_cdc_msc`; в configuration descriptor намеренно дублируется `bEndpointAddress` (MSC IN endpoint использует адрес CDC IN endpoint).
 - `064_composite_iad_mismatch`: реализован как безопасный descriptor-mutation кейс на базе persona `composite_cdc_msc`; в CDC IAD намеренно задан неконсистентный `bFirstInterface`, не совпадающий с фактической раскладкой CDC-интерфейсов в configuration descriptor.
 - `065_composite_bnuminterfaces_too_many`: реализован как безопасный descriptor-mutation кейс на базе persona `composite_cdc_msc`; в configuration descriptor поле `bNumInterfaces` намеренно завышено относительно фактического числа interface descriptor.
+- `066_composite_bnuminterfaces_too_few`: реализован как безопасный descriptor-mutation кейс на базе persona `composite_cdc_msc`; в configuration descriptor поле `bNumInterfaces` намеренно занижено относительно фактического числа interface descriptor.
 - Документы результатов для `docs/results/060_*` создаются только после аппаратного прогона.

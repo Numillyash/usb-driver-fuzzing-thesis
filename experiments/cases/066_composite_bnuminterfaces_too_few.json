@@ -1,0 +1,12 @@
+{
+  "case_id": "066",
+  "name": "composite_bnuminterfaces_too_few",
+  "group": "composite",
+  "base_persona": "composite_cdc_msc",
+  "description": "Безопасный Linux-only descriptor mutation для composite CDC+MSC: в configuration descriptor поле bNumInterfaces занижено относительно фактического числа interface descriptor.",
+  "mutation": "configuration descriptor: bNumInterfaces intentionally set smaller than actual interface descriptor count",
+  "expected_windows": "Сценарий ориентирован на Linux-only фазу; для Windows запуск в данном этапе не требуется.",
+  "expected_linux": "Ожидается реакция стека Linux на заниженный bNumInterfaces при перечислении composite CDC+MSC; сбор диагностических логов без небезопасного поведения устройства.",
+  "risk_level": "safe",
+  "notes": "CDC остаётся диагностическим/inert, MSC остаётся read-only RAM-backed; отсутствуют host command execution, доступ к дискам хоста и destructive write-операции."
+}
