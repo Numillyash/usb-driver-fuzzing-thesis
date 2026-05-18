@@ -1,0 +1,5 @@
+result_name=063_composite_duplicate_endpoint_address_01
+timestamp=20260518_202959
+runtime_enum_status=normal
+host=numi-linux-otherpc
+kernel=6.17.0-19-generic
