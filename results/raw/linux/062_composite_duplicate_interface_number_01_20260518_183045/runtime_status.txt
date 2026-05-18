@@ -1,0 +1,5 @@
+result_name=062_composite_duplicate_interface_number_01
+timestamp=20260518_183045
+runtime_enum_status=normal
+host=numi-linux-otherpc
+kernel=6.17.0-19-generic

@@ -1,0 +1,135 @@
+мая 17 01:26:15 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Unaligned partial completion (resid=4033, sector_sz=512)
+мая 17 01:26:15 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 17 01:26:15 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 FAILED Result: hostbyte=DID_ERROR driverbyte=DRIVER_OK cmd_age=3s
+мая 17 01:26:15 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 17 01:26:15 numi-linux-otherpc kernel: I/O error, dev sdb, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+мая 17 01:26:15 numi-linux-otherpc kernel: Buffer I/O error on dev sdb, logical block 0, async page read
+мая 17 01:26:18 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Unaligned partial completion (resid=4033, sector_sz=512)
+мая 17 01:26:18 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 17 01:26:18 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 FAILED Result: hostbyte=DID_ERROR driverbyte=DRIVER_OK cmd_age=3s
+мая 17 01:26:18 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 17 01:26:18 numi-linux-otherpc kernel: I/O error, dev sdb, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+мая 17 01:26:18 numi-linux-otherpc kernel: Buffer I/O error on dev sdb, logical block 0, async page read
+мая 17 01:26:22 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Unaligned partial completion (resid=4033, sector_sz=512)
+мая 17 01:26:22 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 17 01:26:22 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 FAILED Result: hostbyte=DID_ERROR driverbyte=DRIVER_OK cmd_age=3s
+мая 17 01:26:22 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 17 01:26:22 numi-linux-otherpc kernel: I/O error, dev sdb, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+мая 17 01:26:22 numi-linux-otherpc kernel: Buffer I/O error on dev sdb, logical block 0, async page read
+мая 17 01:26:22 numi-linux-otherpc kernel: Dev sdb: unable to read RDB block 0
+мая 17 01:26:25 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Unaligned partial completion (resid=4033, sector_sz=512)
+мая 17 01:26:25 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 17 01:26:25 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 FAILED Result: hostbyte=DID_ERROR driverbyte=DRIVER_OK cmd_age=3s
+мая 17 01:26:25 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 17 01:26:25 numi-linux-otherpc kernel: I/O error, dev sdb, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+мая 17 01:26:25 numi-linux-otherpc kernel: Buffer I/O error on dev sdb, logical block 0, async page read
+мая 17 01:26:28 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Unaligned partial completion (resid=4033, sector_sz=512)
+мая 17 01:26:28 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 17 01:26:28 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 FAILED Result: hostbyte=DID_ERROR driverbyte=DRIVER_OK cmd_age=3s
+мая 17 01:26:28 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 17 01:26:28 numi-linux-otherpc kernel: I/O error, dev sdb, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+мая 17 01:26:28 numi-linux-otherpc kernel: Buffer I/O error on dev sdb, logical block 0, async page read
+мая 17 01:26:31 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Unaligned partial completion (resid=4033, sector_sz=512)
+мая 17 01:26:31 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 17 01:26:31 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 FAILED Result: hostbyte=DID_ERROR driverbyte=DRIVER_OK cmd_age=3s
+мая 17 01:26:31 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 17 01:26:31 numi-linux-otherpc kernel: I/O error, dev sdb, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+мая 17 01:26:31 numi-linux-otherpc kernel: Buffer I/O error on dev sdb, logical block 0, async page read
+мая 17 01:26:35 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Unaligned partial completion (resid=4033, sector_sz=512)
+мая 17 01:26:35 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 17 01:26:35 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 FAILED Result: hostbyte=DID_ERROR driverbyte=DRIVER_OK cmd_age=3s
+мая 17 01:26:35 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 17 01:26:35 numi-linux-otherpc kernel: I/O error, dev sdb, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+мая 17 01:26:35 numi-linux-otherpc kernel: Buffer I/O error on dev sdb, logical block 0, async page read
+мая 17 01:26:35 numi-linux-otherpc kernel:  sdb: unable to read partition table
+мая 17 01:26:35 numi-linux-otherpc kernel: sdb: partition table beyond EOD, truncated
+мая 17 01:26:35 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Attached SCSI removable disk
+мая 17 01:26:35 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Unaligned partial completion (resid=4033, sector_sz=512)
+мая 17 01:26:35 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 17 01:26:35 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 FAILED Result: hostbyte=DID_ERROR driverbyte=DRIVER_OK cmd_age=0s
+мая 17 01:26:35 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 17 01:26:35 numi-linux-otherpc kernel: I/O error, dev sdb, sector 0 op 0x0:(READ) flags 0x80700 phys_seg 1 prio class 2
+мая 17 01:26:39 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Unaligned partial completion (resid=4033, sector_sz=512)
+мая 17 01:26:39 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 17 01:26:39 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 FAILED Result: hostbyte=DID_ERROR driverbyte=DRIVER_OK cmd_age=3s
+мая 17 01:26:39 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 17 01:26:39 numi-linux-otherpc kernel: I/O error, dev sdb, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+мая 17 01:26:39 numi-linux-otherpc kernel: Buffer I/O error on dev sdb, logical block 0, async page read
+мая 17 01:26:42 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Unaligned partial completion (resid=4033, sector_sz=512)
+мая 17 01:26:42 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 17 01:26:42 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 FAILED Result: hostbyte=DID_ERROR driverbyte=DRIVER_OK cmd_age=3s
+мая 17 01:26:42 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 17 01:26:42 numi-linux-otherpc kernel: I/O error, dev sdb, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+мая 17 01:26:42 numi-linux-otherpc kernel: Buffer I/O error on dev sdb, logical block 0, async page read
+мая 17 01:26:45 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Unaligned partial completion (resid=4033, sector_sz=512)
+мая 17 01:26:45 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 17 01:26:45 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 FAILED Result: hostbyte=DID_ERROR driverbyte=DRIVER_OK cmd_age=3s
+мая 17 01:26:45 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 17 01:26:45 numi-linux-otherpc kernel: I/O error, dev sdb, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+мая 17 01:26:45 numi-linux-otherpc kernel: Buffer I/O error on dev sdb, logical block 0, async page read
+мая 17 01:26:48 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Unaligned partial completion (resid=4033, sector_sz=512)
+мая 17 01:26:48 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 17 01:26:48 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 FAILED Result: hostbyte=DID_ERROR driverbyte=DRIVER_OK cmd_age=3s
+мая 17 01:26:48 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 17 01:26:48 numi-linux-otherpc kernel: I/O error, dev sdb, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+мая 17 01:26:48 numi-linux-otherpc kernel: Buffer I/O error on dev sdb, logical block 0, async page read
+мая 17 01:26:52 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Unaligned partial completion (resid=4033, sector_sz=512)
+мая 17 01:26:52 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 17 01:26:52 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 FAILED Result: hostbyte=DID_ERROR driverbyte=DRIVER_OK cmd_age=3s
+мая 17 01:26:52 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] tag#0 CDB: Read(10) 28 00 00 00 00 00 00 00 08 00
+мая 17 01:26:52 numi-linux-otherpc kernel: I/O error, dev sdb, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+мая 17 01:26:52 numi-linux-otherpc kernel: Buffer I/O error on dev sdb, logical block 0, async page read
+мая 18 16:59:06 numi-linux-otherpc kernel: usb-storage 1-4:1.0: USB Mass Storage device detected
+мая 18 16:59:06 numi-linux-otherpc kernel: scsi host9: usb-storage 1-4:1.0
+мая 18 16:59:07 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] 262144 512-byte logical blocks: (134 MB/128 MiB)
+мая 18 16:59:07 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Write Protect is off
+мая 18 16:59:07 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Mode Sense: 03 00 00 00
+мая 18 16:59:07 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] No Caching mode page found
+мая 18 16:59:07 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Assuming drive cache: write through
+мая 18 16:59:07 numi-linux-otherpc kernel:  sdb: sdb1
+мая 18 16:59:07 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Attached SCSI removable disk
+мая 18 16:59:12 numi-linux-otherpc kernel: FAT-fs (sdb1): unable to read boot sector to mark fs as dirty
+мая 18 16:59:22 numi-linux-otherpc kernel: usb-storage 1-4:1.2: USB Mass Storage device detected
+мая 18 16:59:22 numi-linux-otherpc kernel: scsi host9: usb-storage 1-4:1.2
+мая 18 16:59:23 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] 16 512-byte logical blocks: (8.19 kB/8.00 KiB)
+мая 18 16:59:23 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Write Protect is off
+мая 18 16:59:23 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Mode Sense: 03 00 00 00
+мая 18 16:59:23 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] No Caching mode page found
+мая 18 16:59:23 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Assuming drive cache: write through
+мая 18 16:59:25 numi-linux-otherpc kernel:  sdb: unable to read partition table
+мая 18 16:59:25 numi-linux-otherpc kernel: sdb: partition table beyond EOD, enabling native capacity
+мая 18 16:59:27 numi-linux-otherpc kernel:  sdb: unable to read partition table
+мая 18 16:59:27 numi-linux-otherpc kernel: sdb: partition table beyond EOD, truncated
+мая 18 16:59:27 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Attached SCSI removable disk
+мая 18 17:58:59 numi-linux-otherpc kernel: usb-storage 1-4:1.0: USB Mass Storage device detected
+мая 18 17:58:59 numi-linux-otherpc kernel: scsi host9: usb-storage 1-4:1.0
+мая 18 17:59:00 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] 262144 512-byte logical blocks: (134 MB/128 MiB)
+мая 18 17:59:00 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Write Protect is off
+мая 18 17:59:00 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Mode Sense: 03 00 00 00
+мая 18 17:59:00 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] No Caching mode page found
+мая 18 17:59:00 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Assuming drive cache: write through
+мая 18 17:59:00 numi-linux-otherpc kernel:  sdb: sdb1
+мая 18 17:59:00 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Attached SCSI removable disk
+мая 18 17:59:06 numi-linux-otherpc kernel: FAT-fs (sdb1): unable to read boot sector to mark fs as dirty
+мая 18 17:59:16 numi-linux-otherpc kernel: usb-storage 1-4:1.1: USB Mass Storage device detected
+мая 18 17:59:16 numi-linux-otherpc kernel: scsi host9: usb-storage 1-4:1.1
+мая 18 17:59:17 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] 16 512-byte logical blocks: (8.19 kB/8.00 KiB)
+мая 18 17:59:17 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Write Protect is off
+мая 18 17:59:17 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Mode Sense: 03 00 00 00
+мая 18 17:59:17 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] No Caching mode page found
+мая 18 17:59:17 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Assuming drive cache: write through
+мая 18 17:59:19 numi-linux-otherpc kernel:  sdb: unable to read partition table
+мая 18 17:59:19 numi-linux-otherpc kernel: sdb: partition table beyond EOD, enabling native capacity
+мая 18 17:59:20 numi-linux-otherpc kernel:  sdb: unable to read partition table
+мая 18 17:59:20 numi-linux-otherpc kernel: sdb: partition table beyond EOD, truncated
+мая 18 17:59:20 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Attached SCSI removable disk
+мая 18 18:30:28 numi-linux-otherpc kernel: usb-storage 1-4:1.0: USB Mass Storage device detected
+мая 18 18:30:28 numi-linux-otherpc kernel: scsi host9: usb-storage 1-4:1.0
+мая 18 18:30:29 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] 262144 512-byte logical blocks: (134 MB/128 MiB)
+мая 18 18:30:29 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Write Protect is off
+мая 18 18:30:29 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Mode Sense: 03 00 00 00
+мая 18 18:30:29 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] No Caching mode page found
+мая 18 18:30:29 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Assuming drive cache: write through
+мая 18 18:30:29 numi-linux-otherpc kernel:  sdb: sdb1
+мая 18 18:30:29 numi-linux-otherpc kernel: sd 9:0:0:0: [sdb] Attached SCSI removable disk
+мая 18 18:30:34 numi-linux-otherpc kernel: FAT-fs (sdb1): unable to read boot sector to mark fs as dirty
