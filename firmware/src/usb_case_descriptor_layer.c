@@ -373,6 +373,44 @@ static const uint8_t usb_case_cfg_desc_composite_cdc_msc_dup_ep_addr[] = {
         USB_CASE_ENDPOINT_CDC_IN,
         CFG_TUD_MSC_EP_BUFSIZE),
 };
+
+static uint8_t usb_case_cfg_desc_composite_cdc_msc_iad_mismatch[] = {
+    TUD_CONFIG_DESCRIPTOR(1, 3, 0, USB_CASE_COMPOSITE_CDC_MSC_TOTAL_LEN, 0x80, 100),
+    TUD_CDC_DESCRIPTOR(
+        USB_CASE_ITF_NUM_CDC_COMM,
+        USB_CASE_STRIDX_CDC,
+        USB_CASE_ENDPOINT_CDC_NOTIF,
+        8,
+        USB_CASE_ENDPOINT_CDC_OUT,
+        USB_CASE_ENDPOINT_CDC_IN,
+        64),
+    TUD_MSC_DESCRIPTOR(
+        USB_CASE_ITF_NUM_MSC_COMPOSITE,
+        USB_CASE_STRIDX_MSC_COMPOSITE,
+        USB_CASE_ENDPOINT_MSC_COMPOSITE_OUT,
+        USB_CASE_ENDPOINT_MSC_COMPOSITE_IN,
+        CFG_TUD_MSC_EP_BUFSIZE),
+};
+
+static uint8_t const *usb_case_cfg_desc_composite_cdc_msc_iad_mismatch_get(void)
+{
+    /*
+     * Case 064: keep CDC+MSC baseline behavior, but make CDC IAD inconsistent
+     * by setting bFirstInterface to CDC data interface instead of CDC control.
+     * Descriptor layout: [config:9 bytes][IAD starts at offset 9].
+     */
+    enum {
+        USB_CASE_CDC_IAD_BFIRSTINTERFACE_OFFSET = 11,
+    };
+    static bool patched = false;
+
+    if (!patched) {
+        usb_case_cfg_desc_composite_cdc_msc_iad_mismatch[USB_CASE_CDC_IAD_BFIRSTINTERFACE_OFFSET] = USB_CASE_ITF_NUM_CDC_DATA;
+        patched = true;
+    }
+
+    return usb_case_cfg_desc_composite_cdc_msc_iad_mismatch;
+}
 #endif
 
 #if defined(CFG_TUD_HID) && (CFG_TUD_HID == 1) && defined(CFG_TUD_MSC) && (CFG_TUD_MSC == 1)
@@ -517,6 +555,8 @@ uint8_t const *tud_descriptor_configuration_cb(uint8_t index)
         return usb_case_cfg_desc_composite_cdc_msc_dup_itf_num;
 #elif (USB_CASE_ID == 63u)
         return usb_case_cfg_desc_composite_cdc_msc_dup_ep_addr;
+#elif (USB_CASE_ID == 64u)
+        return usb_case_cfg_desc_composite_cdc_msc_iad_mismatch_get();
 #else
         return usb_case_cfg_desc_composite_cdc_msc;
 #endif

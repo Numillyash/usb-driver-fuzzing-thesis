@@ -58,4 +58,5 @@
 - HID-интерфейс инертный generic (без keyboard/mouse/user-control отчётов), MSC остаётся read-only RAM-backed.
 - `062_composite_duplicate_interface_number`: реализован как безопасный descriptor-mutation кейс на базе persona `composite_cdc_msc`; в configuration descriptor намеренно дублируется `bInterfaceNumber` (MSC использует уже занятый номер CDC-интерфейса).
 - `063_composite_duplicate_endpoint_address`: реализован как безопасный descriptor-mutation кейс на базе persona `composite_cdc_msc`; в configuration descriptor намеренно дублируется `bEndpointAddress` (MSC IN endpoint использует адрес CDC IN endpoint).
+- `064_composite_iad_mismatch`: реализован как безопасный descriptor-mutation кейс на базе persona `composite_cdc_msc`; в CDC IAD намеренно задан неконсистентный `bFirstInterface`, не совпадающий с фактической раскладкой CDC-интерфейсов в configuration descriptor.
 - Документы результатов для `docs/results/060_*` создаются только после аппаратного прогона.
