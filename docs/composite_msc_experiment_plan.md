@@ -57,4 +57,5 @@
 - `061_composite_hid_msc_baseline`: реализован как безопасный baseline с persona `composite_hid_msc`.
 - HID-интерфейс инертный generic (без keyboard/mouse/user-control отчётов), MSC остаётся read-only RAM-backed.
 - `062_composite_duplicate_interface_number`: реализован как безопасный descriptor-mutation кейс на базе persona `composite_cdc_msc`; в configuration descriptor намеренно дублируется `bInterfaceNumber` (MSC использует уже занятый номер CDC-интерфейса).
+- `063_composite_duplicate_endpoint_address`: реализован как безопасный descriptor-mutation кейс на базе persona `composite_cdc_msc`; в configuration descriptor намеренно дублируется `bEndpointAddress` (MSC IN endpoint использует адрес CDC IN endpoint).
 - Документы результатов для `docs/results/060_*` создаются только после аппаратного прогона.

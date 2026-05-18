@@ -351,6 +351,28 @@ static const uint8_t usb_case_cfg_desc_composite_cdc_msc_dup_itf_num[] = {
         USB_CASE_ENDPOINT_MSC_COMPOSITE_IN,
         CFG_TUD_MSC_EP_BUFSIZE),
 };
+
+static const uint8_t usb_case_cfg_desc_composite_cdc_msc_dup_ep_addr[] = {
+    TUD_CONFIG_DESCRIPTOR(1, 3, 0, USB_CASE_COMPOSITE_CDC_MSC_TOTAL_LEN, 0x80, 100),
+    TUD_CDC_DESCRIPTOR(
+        USB_CASE_ITF_NUM_CDC_COMM,
+        USB_CASE_STRIDX_CDC,
+        USB_CASE_ENDPOINT_CDC_NOTIF,
+        8,
+        USB_CASE_ENDPOINT_CDC_OUT,
+        USB_CASE_ENDPOINT_CDC_IN,
+        64),
+    /*
+     * Case 063: intentionally reuse a CDC endpoint address for MSC IN endpoint
+     * to model duplicate bEndpointAddress inside one configuration descriptor.
+     */
+    TUD_MSC_DESCRIPTOR(
+        USB_CASE_ITF_NUM_MSC_COMPOSITE,
+        USB_CASE_STRIDX_MSC_COMPOSITE,
+        USB_CASE_ENDPOINT_MSC_COMPOSITE_OUT,
+        USB_CASE_ENDPOINT_CDC_IN,
+        CFG_TUD_MSC_EP_BUFSIZE),
+};
 #endif
 
 #if defined(CFG_TUD_HID) && (CFG_TUD_HID == 1) && defined(CFG_TUD_MSC) && (CFG_TUD_MSC == 1)
@@ -493,6 +515,8 @@ uint8_t const *tud_descriptor_configuration_cb(uint8_t index)
     if (usb_case_is_composite_cdc_msc_persona()) {
 #if (USB_CASE_ID == 62u)
         return usb_case_cfg_desc_composite_cdc_msc_dup_itf_num;
+#elif (USB_CASE_ID == 63u)
+        return usb_case_cfg_desc_composite_cdc_msc_dup_ep_addr;
 #else
         return usb_case_cfg_desc_composite_cdc_msc;
 #endif

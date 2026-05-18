@@ -1,0 +1,12 @@
+{
+  "case_id": "063",
+  "name": "composite_duplicate_endpoint_address",
+  "group": "composite",
+  "base_persona": "composite_cdc_msc",
+  "description": "Безопасный Linux-only descriptor mutation для composite CDC+MSC: дублирование адреса endpoint в одном configuration descriptor.",
+  "mutation": "configuration descriptor: duplicate bEndpointAddress (MSC IN endpoint reuses existing CDC IN endpoint address)",
+  "expected_windows": "Сценарий ориентирован на Linux-only фазу; для Windows запуск в данном этапе не требуется.",
+  "expected_linux": "Ожидается реакция стека Linux на конфликт bEndpointAddress при перечислении composite CDC+MSC; сбор диагностических логов без небезопасного поведения устройства.",
+  "risk_level": "safe",
+  "notes": "CDC остаётся диагностическим/inert, MSC остаётся read-only RAM-backed; отсутствуют host command execution, доступ к дискам хоста и destructive write-операции."
+}
