@@ -1,0 +1,5 @@
+result_name=065_composite_bnuminterfaces_too_many_01
+timestamp=20260518_205730
+runtime_enum_status=normal
+host=numi-linux-otherpc
+kernel=6.17.0-19-generic
