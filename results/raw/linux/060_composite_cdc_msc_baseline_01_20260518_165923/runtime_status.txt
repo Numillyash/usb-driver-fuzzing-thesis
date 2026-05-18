@@ -1,0 +1,5 @@
+result_name=060_composite_cdc_msc_baseline_01
+timestamp=20260518_165923
+runtime_enum_status=normal
+host=numi-linux-otherpc
+kernel=6.17.0-19-generic
