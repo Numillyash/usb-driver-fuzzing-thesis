@@ -54,4 +54,6 @@
 - `060_composite_cdc_msc_baseline`: реализуется как безопасный baseline с persona `composite_cdc_msc`.
 - CDC используется только как диагностический/inert transport.
 - MSC реализуется как read-only RAM-backed логический носитель с контролируемым отказом записи.
+- `061_composite_hid_msc_baseline`: реализован как безопасный baseline с persona `composite_hid_msc`.
+- HID-интерфейс инертный generic (без keyboard/mouse/user-control отчётов), MSC остаётся read-only RAM-backed.
 - Документы результатов для `docs/results/060_*` создаются только после аппаратного прогона.

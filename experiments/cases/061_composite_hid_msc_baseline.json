@@ -1,0 +1,12 @@
+{
+  "case_id": "061",
+  "name": "composite_hid_msc_baseline",
+  "group": "composite",
+  "base_persona": "composite_hid_msc",
+  "description": "Безопасный baseline composite-устройства: инертный generic HID без пользовательского ввода и read-only RAM-backed MSC.",
+  "mutation": "none / baseline inert HID + read-only RAM-backed MSC",
+  "expected_windows": "Сценарий ориентирован на Linux-only фазу; для Windows запуск в данном этапе не требуется.",
+  "expected_linux": "Ожидается успешное перечисление composite HID+MSC, bind generic HID и usb-storage без предупреждений ядра.",
+  "risk_level": "safe",
+  "notes": "HID не отправляет keyboard/mouse/user-control отчёты; MSC только для чтения, без доступа к дискам хоста и без destructive write-поведения."
+}

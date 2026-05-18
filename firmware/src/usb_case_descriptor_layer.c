@@ -22,9 +22,16 @@ static bool usb_case_is_composite_cdc_msc_persona(void)
     return USB_CASE_PERSONA_ID == USB_CASE_PERSONA_COMPOSITE_CDC_MSC;
 }
 
+static bool usb_case_is_composite_hid_msc_persona(void)
+{
+    return USB_CASE_PERSONA_ID == USB_CASE_PERSONA_COMPOSITE_HID_MSC;
+}
+
 bool usb_case_persona_has_cdc(void)
 {
-    return !usb_case_is_hid_persona() && !usb_case_is_msc_persona();
+    return !usb_case_is_hid_persona() &&
+           !usb_case_is_msc_persona() &&
+           !usb_case_is_composite_hid_msc_persona();
 }
 
 usb_case_descriptor_profile_t usb_case_get_descriptor_profile(void)
@@ -56,6 +63,10 @@ usb_case_descriptor_profile_t usb_case_get_descriptor_profile(void)
         profile.persona_id = USB_CASE_PERSONA_COMPOSITE_CDC_MSC;
         profile.persona_name = "composite_cdc_msc";
         profile.active_transport = "tinyusb_cdc_msc_readonly_ram";
+    } else if (usb_case_is_composite_hid_msc_persona()) {
+        profile.persona_id = USB_CASE_PERSONA_COMPOSITE_HID_MSC;
+        profile.persona_name = "composite_hid_msc";
+        profile.active_transport = "tinyusb_hid_msc_readonly_ram";
     }
 
     return profile;
@@ -72,6 +83,8 @@ enum {
     USB_CASE_ITF_NUM_CDC_DATA = 1,
     USB_CASE_ITF_NUM_HID = 2,
     USB_CASE_ITF_NUM_MSC_COMPOSITE = 2,
+    USB_CASE_ITF_NUM_HID_MSC_HID = 0,
+    USB_CASE_ITF_NUM_HID_MSC_MSC = 1,
     USB_CASE_ITF_NUM_MSC = 0,
 };
 
@@ -82,6 +95,9 @@ enum {
     USB_CASE_ENDPOINT_HID_IN = 0x83,
     USB_CASE_ENDPOINT_MSC_COMPOSITE_OUT = 0x03,
     USB_CASE_ENDPOINT_MSC_COMPOSITE_IN = 0x83,
+    USB_CASE_ENDPOINT_HID_MSC_HID_IN = 0x81,
+    USB_CASE_ENDPOINT_HID_MSC_MSC_OUT = 0x02,
+    USB_CASE_ENDPOINT_HID_MSC_MSC_IN = 0x82,
     USB_CASE_ENDPOINT_MSC_OUT = 0x01,
     USB_CASE_ENDPOINT_MSC_IN = 0x81,
 };
@@ -94,6 +110,7 @@ enum {
     USB_CASE_STRIDX_CDC = 4,
     USB_CASE_STRIDX_HID = 5,
     USB_CASE_STRIDX_MSC_COMPOSITE = 6,
+    USB_CASE_STRIDX_MSC_HID_COMPOSITE = 6,
     USB_CASE_STRIDX_MSC = 4,
 };
 
@@ -109,6 +126,9 @@ enum {
 #endif
 #if defined(CFG_TUD_CDC) && (CFG_TUD_CDC == 1) && defined(CFG_TUD_MSC) && (CFG_TUD_MSC == 1)
     USB_CASE_COMPOSITE_CDC_MSC_TOTAL_LEN = TUD_CONFIG_DESC_LEN + TUD_CDC_DESC_LEN + TUD_MSC_DESC_LEN,
+#endif
+#if defined(CFG_TUD_HID) && (CFG_TUD_HID == 1) && defined(CFG_TUD_MSC) && (CFG_TUD_MSC == 1)
+    USB_CASE_COMPOSITE_HID_MSC_TOTAL_LEN = TUD_CONFIG_DESC_LEN + TUD_HID_DESC_LEN + TUD_MSC_DESC_LEN,
 #endif
 #if defined(CFG_TUD_MSC) && (CFG_TUD_MSC == 1)
     USB_CASE_MSC_TOTAL_LEN = TUD_CONFIG_DESC_LEN + TUD_MSC_DESC_LEN,
@@ -311,6 +331,26 @@ static const uint8_t usb_case_cfg_desc_composite_cdc_msc[] = {
 };
 #endif
 
+#if defined(CFG_TUD_HID) && (CFG_TUD_HID == 1) && defined(CFG_TUD_MSC) && (CFG_TUD_MSC == 1)
+static const uint8_t usb_case_cfg_desc_composite_hid_msc[] = {
+    TUD_CONFIG_DESCRIPTOR(1, 2, 0, USB_CASE_COMPOSITE_HID_MSC_TOTAL_LEN, 0x80, 100),
+    TUD_HID_DESCRIPTOR(
+        USB_CASE_ITF_NUM_HID_MSC_HID,
+        USB_CASE_STRIDX_HID,
+        HID_ITF_PROTOCOL_NONE,
+        sizeof(usb_case_hid_report_desc),
+        USB_CASE_ENDPOINT_HID_MSC_HID_IN,
+        CFG_TUD_HID_EP_BUFSIZE,
+        10),
+    TUD_MSC_DESCRIPTOR(
+        USB_CASE_ITF_NUM_HID_MSC_MSC,
+        USB_CASE_STRIDX_MSC_HID_COMPOSITE,
+        USB_CASE_ENDPOINT_HID_MSC_MSC_OUT,
+        USB_CASE_ENDPOINT_HID_MSC_MSC_IN,
+        CFG_TUD_MSC_EP_BUFSIZE),
+};
+#endif
+
 #if defined(CFG_TUD_MSC) && (CFG_TUD_MSC == 1)
 static const uint8_t usb_case_cfg_desc_msc[] = {
     TUD_CONFIG_DESCRIPTOR(1, 1, 0, USB_CASE_MSC_TOTAL_LEN, 0x80, 100),
@@ -376,6 +416,18 @@ static const char *const usb_case_composite_cdc_msc_strings[] = {
 };
 #endif
 
+#if defined(CFG_TUD_HID) && (CFG_TUD_HID == 1) && defined(CFG_TUD_MSC) && (CFG_TUD_MSC == 1)
+static const char *const usb_case_composite_hid_msc_strings[] = {
+    "",
+    "RP2040 USB Research",
+    "usb_case_composite_hid_msc_demo HID+MSC baseline",
+    "",
+    "USB Case HID (inert)",
+    "",
+    "USB Case MSC read-only",
+};
+#endif
+
 static const char *const usb_case_msc_strings[] = {
     "",
     "RP2040 USB Research",
@@ -418,6 +470,11 @@ uint8_t const *tud_descriptor_configuration_cb(uint8_t index)
 #if defined(CFG_TUD_CDC) && (CFG_TUD_CDC == 1) && defined(CFG_TUD_MSC) && (CFG_TUD_MSC == 1)
     if (usb_case_is_composite_cdc_msc_persona()) {
         return usb_case_cfg_desc_composite_cdc_msc;
+    }
+#endif
+#if defined(CFG_TUD_HID) && (CFG_TUD_HID == 1) && defined(CFG_TUD_MSC) && (CFG_TUD_MSC == 1)
+    if (usb_case_is_composite_hid_msc_persona()) {
+        return usb_case_cfg_desc_composite_hid_msc;
     }
 #endif
 #if defined(CFG_TUD_MSC) && (CFG_TUD_MSC == 1)
@@ -477,6 +534,12 @@ uint16_t const *tud_descriptor_string_cb(uint8_t index, uint16_t langid)
     if (usb_case_is_composite_cdc_msc_persona()) {
         table = usb_case_composite_cdc_msc_strings;
         table_len = (uint8_t)(sizeof(usb_case_composite_cdc_msc_strings) / sizeof(usb_case_composite_cdc_msc_strings[0]));
+    } else
+#endif
+#if defined(CFG_TUD_HID) && (CFG_TUD_HID == 1) && defined(CFG_TUD_MSC) && (CFG_TUD_MSC == 1)
+    if (usb_case_is_composite_hid_msc_persona()) {
+        table = usb_case_composite_hid_msc_strings;
+        table_len = (uint8_t)(sizeof(usb_case_composite_hid_msc_strings) / sizeof(usb_case_composite_hid_msc_strings[0]));
     } else
 #endif
 #if defined(CFG_TUD_MSC) && (CFG_TUD_MSC == 1)

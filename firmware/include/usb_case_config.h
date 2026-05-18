@@ -33,6 +33,7 @@
 #define USB_CASE_PERSONA_COMPOSITE_CDC_HID 2u
 #define USB_CASE_PERSONA_MSC_BASELINE 3u
 #define USB_CASE_PERSONA_COMPOSITE_CDC_MSC 4u
+#define USB_CASE_PERSONA_COMPOSITE_HID_MSC 5u
 
 /*
  * Selection by case id:
@@ -41,6 +42,7 @@
  * - 002 -> composite CDC+HID persona (inert HID, no keyboard/mouse input behavior)
  * - 050/051/052/053/054/055/056/057/058/059 -> MSC read-only RAM-backed persona
  * - 060 -> composite CDC+MSC persona (CDC diagnostic + read-only RAM-backed MSC)
+ * - 061 -> composite HID+MSC persona (inert HID + read-only RAM-backed MSC)
  * Other IDs fall back to CDC/ACM for safe behavior.
  */
 #if (USB_CASE_ID == 1u)
@@ -49,6 +51,8 @@
 #define USB_CASE_PERSONA_ID USB_CASE_PERSONA_COMPOSITE_CDC_HID
 #elif (USB_CASE_ID == 60u)
 #define USB_CASE_PERSONA_ID USB_CASE_PERSONA_COMPOSITE_CDC_MSC
+#elif (USB_CASE_ID == 61u)
+#define USB_CASE_PERSONA_ID USB_CASE_PERSONA_COMPOSITE_HID_MSC
 #elif (USB_CASE_ID == 50u) || (USB_CASE_ID == 51u) || (USB_CASE_ID == 52u) || (USB_CASE_ID == 53u) || (USB_CASE_ID == 54u) || (USB_CASE_ID == 55u) || (USB_CASE_ID == 56u) || (USB_CASE_ID == 57u) || (USB_CASE_ID == 58u) || (USB_CASE_ID == 59u)
 #define USB_CASE_PERSONA_ID USB_CASE_PERSONA_MSC_BASELINE
 #else
